@@ -8,7 +8,7 @@ public class Account : AuditableEntity
     public string? Address { get; set; }
     public double TotalSales { get; set; }
     
-    public ICollection<Deal> Deals { get; set; }
-    public ICollection<Lead> Leads { get; set; }
-    public ICollection<Contact> Contacts { get; set; }
+    public virtual ICollection<Deal> Deals { get; set; }
+    public virtual ICollection<Lead> Leads { get; set; }
+    public virtual ICollection<Contact> Contacts { get; set; }
 }

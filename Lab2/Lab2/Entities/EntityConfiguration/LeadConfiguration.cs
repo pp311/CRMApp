@@ -1,3 +1,4 @@
+using Lab2.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,10 +12,10 @@ public class LeadConfiguration : IEntityTypeConfiguration<Lead>
             .WithMany(a => a.Leads)
             .HasForeignKey(l => l.AccountId);
         
-        builder.Property(l => l.Title).IsRequired().HasMaxLength(256);
+        builder.Property(l => l.Title).IsRequired().HasMaxLength((int)StringLength.Medium256);
         
-        builder.Property(l => l.Description).HasMaxLength(1024);
+        builder.Property(l => l.Description).HasMaxLength((int)StringLength.Long1024);
         
-        builder.Property(l => l.DisqualifiedDescription).HasMaxLength(256);
+        builder.Property(l => l.DisqualifiedDescription).HasMaxLength((int)StringLength.Long1024);
     }
 }

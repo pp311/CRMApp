@@ -12,6 +12,6 @@ public class Lead : AuditableEntity
     public string? DisqualifiedDescription { get; set; }
     
     public int AccountId { get; set; }
-    public Account? Account { get; set; }
-    public ICollection<Deal> Deals { get; set; }
+    public virtual Account? Account { get; set; }
+    public virtual ICollection<Deal> Deals { get; set; }
 }

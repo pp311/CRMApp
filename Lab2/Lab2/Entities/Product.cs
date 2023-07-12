@@ -8,5 +8,5 @@ public class Product : AuditableEntity
     public int Type { get; set; }
     public bool IsAvailable { get; set; }
     
-    public ICollection<DealProduct> DealProducts { get; set; } = null!;
+    public virtual ICollection<DealProduct> DealProducts { get; set; } = null!;
 }

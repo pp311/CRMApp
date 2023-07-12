@@ -9,8 +9,8 @@ public class Deal : AuditableEntity
     public int Status { get; set; }
     
     public int? LeadId { get; set; }
-    public Lead? Lead { get; set; }
+    public virtual Lead? Lead { get; set; }
     public int AccountId { get; set; }
-    public Account? Account { get; set; }
-    public ICollection<DealProduct> DealProducts { get; set; }
+    public virtual Account? Account { get; set; }
+    public virtual ICollection<DealProduct> DealProducts { get; set; }
 }

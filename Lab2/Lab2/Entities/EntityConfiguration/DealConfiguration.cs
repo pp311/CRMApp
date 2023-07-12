@@ -1,3 +1,4 @@
+using Lab2.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -15,9 +16,9 @@ public class DealConfiguration : IEntityTypeConfiguration<Deal>
             .WithMany(a => a.Deals)
             .HasForeignKey(d => d.AccountId);
         
-        builder.Property(d => d.Title).IsRequired().HasMaxLength(256);
+        builder.Property(d => d.Title).IsRequired().HasMaxLength((int)StringLength.Medium256);
         
-        builder.Property(d => d.Description).HasMaxLength(1024);
+        builder.Property(d => d.Description).HasMaxLength((int)StringLength.Long1024);
         
     }
 }
