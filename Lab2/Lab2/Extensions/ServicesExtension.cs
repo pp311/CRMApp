@@ -30,5 +30,6 @@ public static class ServicesExtension
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<IAccountService, AccountService>();
     }
 }

@@ -29,7 +29,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<ActionResult<PagedResult<ProductDto>>> GetAllProducts([FromQuery]ProductQueryParameters productQueryParameters)
+    public async Task<ActionResult<PagedResult<ProductDto>>> GetProductList([FromQuery]ProductQueryParameters productQueryParameters)
     {
         // Get products from service
         var products = await _productService.GetListAsync(productQueryParameters);
@@ -71,14 +71,10 @@ public class ProductController : ControllerBase
     [HttpDelete("{productId:int}")]
     public async Task<ActionResult> DeleteProduct(int productId)
     {
-        // 1. Check if product exists 
-        var product = await _productService.GetByIdAsync(productId);
-        if (product == null)
+        if (await _productService.DeleteAsync(productId))
         {
-            return NotFound();
+            return NoContent();
         }
-        // 2. Delete product
-        await _productService.DeleteAsync(productId);
-        return NoContent();
+        return NotFound();
     }
 }

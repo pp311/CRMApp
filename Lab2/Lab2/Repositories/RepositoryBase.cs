@@ -39,9 +39,13 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         if (entity != null) _context.Entry(entity).State = EntityState.Detached;
         return entity;
     }
-    
+
     // Get list with paging, filtering, ordering
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression, string? orderBy, int skip, int take, bool isDescending)
+    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression,
+                                                         string? orderBy,
+                                                         int skip,
+                                                         int take,
+                                                         bool isDescending)
     {
         // 1. Filtering with expression
         var query = DbSet.AsQueryable();
@@ -78,7 +82,7 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         if (expression == null)
         {
             return await DbSet.CountAsync();
-        } 
+        }
         return await DbSet.CountAsync(expression);
     }
 }

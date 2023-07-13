@@ -8,7 +8,7 @@ public interface IProductService
 {
     Task<PagedResult<ProductDto>> GetListAsync(ProductQueryParameters productQueryParameters);
     Task<ProductDto?> GetByIdAsync(int id);
-    Task<ProductDto> CreateAsync(ProductDto product);
-    Task<ProductDto> UpdateAsync(ProductDto product);
-    Task DeleteAsync(int id);
+    Task<ProductDto> CreateAsync(ProductDto productDto);
+    Task<ProductDto> UpdateAsync(ProductDto productDto);
+    Task<bool> DeleteAsync(int productId);
 }

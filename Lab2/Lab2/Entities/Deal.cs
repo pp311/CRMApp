@@ -7,10 +7,10 @@ public class Deal : AuditableEntity
     public double? EstimatedRevenue { get; set; }
     public double? ActualRevenue { get; set; }
     public int Status { get; set; }
-    
+
     public int? LeadId { get; set; }
-    public virtual Lead? Lead { get; set; }
+    public Lead? Lead { get; set; }
     public int AccountId { get; set; }
-    public virtual Account? Account { get; set; }
-    public virtual ICollection<DealProduct> DealProducts { get; set; }
+    public Account? Account { get; set; }
+    public ICollection<DealProduct> DealProducts { get; set; }
 }

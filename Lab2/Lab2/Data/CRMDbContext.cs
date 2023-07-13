@@ -19,7 +19,6 @@ public class CRMDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
-        optionsBuilder.UseLazyLoadingProxies();
     }
 
     public DbSet<Deal> Deals { get; set; }

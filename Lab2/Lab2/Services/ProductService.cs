@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using AutoMapper;
 using Lab2.Data;
 using Lab2.DTOs.Product;
@@ -20,7 +21,7 @@ public class ProductService : IProductService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    
+
     public async Task<PagedResult<ProductDto>> GetListAsync(ProductQueryParameters pqp)
     {
         int skip = (pqp.PageIndex - 1) * pqp.PageSize;
@@ -53,9 +54,9 @@ public class ProductService : IProductService
         return productDto;
     }
 
-    public async Task DeleteAsync(int productId)
+    public async Task<bool> DeleteAsync(int productId)
     {
-        _productRepository.Delete(new Product { Id = productId});
-        await _unitOfWork.CommitAsync();
+        _productRepository.Delete(new Product { Id = productId });
+        return await _unitOfWork.CommitAsync() > 0;
     }
 }
