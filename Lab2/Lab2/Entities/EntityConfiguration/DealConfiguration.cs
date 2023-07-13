@@ -9,12 +9,12 @@ public class DealConfiguration : IEntityTypeConfiguration<Deal>
     public void Configure(EntityTypeBuilder<Deal> builder)
     {
         builder.HasOne<Lead>(d => d.Lead)
-            .WithMany(l => l.Deals)
-            .HasForeignKey(d => d.LeadId);
+            .WithOne(l => l.Deal)
+            .HasForeignKey<Deal>(d => d.LeadId);
         
-        builder.HasOne<Account>(d => d.Account)
-            .WithMany(a => a.Deals)
-            .HasForeignKey(d => d.AccountId);
+        // builder.HasOne<Account>(d => d.Account)
+        //     .WithMany(a => a.Deals)
+        //     .HasForeignKey(d => d.AccountId);
         
         builder.Property(d => d.Title).IsRequired().HasMaxLength((int)StringLength.Medium256);
         

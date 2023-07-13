@@ -124,8 +124,8 @@ public class WeatherForecastController : ControllerBase
         var deal1 = new Deal { Title = "Deal 1", Status = 0 };
         var deal2 = new Deal { Title = "Deal 2", Status = 0 };
 
-        account1.Deals = new List<Deal> { deal1 };
-        account2.Deals = new List<Deal> { deal2 };
+        // account1.Deals = new List<Deal> { deal1 };
+        // account2.Deals = new List<Deal> { deal2 };
 
         _context.Add(account1);
         _context.Attach(account2);
@@ -163,7 +163,7 @@ public class WeatherForecastController : ControllerBase
         Console.WriteLine("Eager loading");
         Console.WriteLine("-----------------");
         var account1 = await _context.Accounts
-            .Include(a => a.Deals)
+            // .Include(a => a.Deals)
             .Include(a => a.Contacts)
             // .AsSplitQuery()
             .FirstOrDefaultAsync(a => a.Id == 1);
@@ -171,13 +171,13 @@ public class WeatherForecastController : ControllerBase
         Console.WriteLine("Lazy loading");
         Console.WriteLine("-----------------");
         var account2 = await _context.Accounts.FirstOrDefaultAsync(a => a.Id == 2);
-        var deals = account2.Deals;
+        // var deals = account2.Deals;
         var contacts = account2.Contacts;
 
         Console.WriteLine("Explicit loading");
         Console.WriteLine("-----------------");
         var account3 = await _context.Accounts.Where(a => a.Id == 3).FirstOrDefaultAsync();
-        await _context.Entry(account3).Collection(a => a.Deals).LoadAsync();
+        // await _context.Entry(account3).Collection(a => a.Deals).LoadAsync();
         await _context.Entry(account3).Collection(a => a.Contacts).LoadAsync();
 
         return Ok();
@@ -190,7 +190,7 @@ public class WeatherForecastController : ControllerBase
         var accounts = await _context.Accounts.ToListAsync();
         foreach (var account in accounts)
         {
-            result += $"Account {account.Id} has {account.Deals.Count} deals\n";
+            // result += $"Account {account.Id} has {account.Deals.Count} deals\n";
         }
         return Ok(result);
     }

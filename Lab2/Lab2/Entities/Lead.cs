@@ -13,5 +13,5 @@ public class Lead : AuditableEntity
     
     public int AccountId { get; set; }
     public Account? Account { get; set; }
-    public ICollection<Deal> Deals { get; set; }
+    public Deal? Deal { get; set; }
 }

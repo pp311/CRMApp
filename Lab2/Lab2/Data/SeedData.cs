@@ -9,9 +9,9 @@ public static class SeedData
 {
     private const string ProductCodePrefix = "PRO-";
     private const int NumberOfProducts = 10;
-    private const int NumberOfDeals = 30;
     private const int RangeProductsPerDeal = 1;
-    private const int NumberOfLeads = 100;
+    private const int NumberOfLeads = 30;
+    private const int NumberOfDeals = NumberOfLeads;
     private const int NumberOfAccounts = 25;
     private const int NumberOfContacts = 100;
     
@@ -56,21 +56,20 @@ public static class SeedData
             .RuleFor(d => d.Title, f => f.Lorem.Sentence(3,3))
             .RuleFor(d => d.Description, f => f.Lorem.Sentence(10, 20))
             .RuleFor(d => d.Status, f => f.Random.Int(0,2))
-            .RuleFor(d => d.EstimatedRevenue, f => f.Random.Int(5000, 500_000))
             .RuleFor(d => d.ActualRevenue, f => f.Random.Int(5000, 500_000))
-            .RuleFor(d => d.LeadId, f => f.Random.Int(1, NumberOfLeads))
-            .RuleFor(d => d.AccountId, f => f.Random.Int(1, NumberOfAccounts))
+            .RuleFor(d => d.LeadId, f => f.IndexFaker + 1)
+            // .RuleFor(d => d.AccountId, f => f.Random.Int(1, NumberOfAccounts))
             .Generate(NumberOfDeals);
         modelBuilder.Entity<Deal>().HasData(deals);
         
         for (var dealId = 1; dealId <= NumberOfDeals; dealId++)
         {
             var dealProducts = new Faker<DealProduct>()
+                .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
                 .RuleFor(dp => dp.DealId, () => dealId)
                 .RuleFor(dp => dp.ProductId, f => f.Random.Int(1, NumberOfProducts))
                 .RuleFor(dp => dp.Quantity, f => f.Random.Int(1, 100))
                 .RuleFor(dp => dp.PricePerUnit, f => f.Random.Int(10, 100))
-                .RuleFor(dp => dp.TotalAmount, f => f.Random.Int(100, 1000))
                 .Generate(RangeProductsPerDeal);
             modelBuilder.Entity<DealProduct>().HasData(dealProducts);
         }
