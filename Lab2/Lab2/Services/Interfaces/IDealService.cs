@@ -16,4 +16,5 @@ public interface IDealService
     Task<GetDealProductDto> AddProductToDealAsync(int dealId, AddDealProductDto addDealProductDto);
     Task<GetDealProductDto> UpdateDealProductAsync(UpdateDealProductDto updateDealProductDto);
     Task<bool> DeleteDealProductAsync(int dealId, int dealProductId);
+    Task<DealStatisticsDto> GetDealStatisticsAsync();
 }

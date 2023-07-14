@@ -95,4 +95,12 @@ public class LeadController : ControllerBase
         var updatedLeadDto = await _leadService.DisqualifyLeadAsync(leadId, disqualifyLeadDto);
         return Ok(updatedLeadDto);
     }
+    
+    [HttpGet("statistics")]
+    public async Task<ActionResult<LeadStatisticsDto>> GetLeadStatistics()
+    {
+        // Get lead statistics from service
+        return Ok(await _leadService.GetLeadStatisticsAsync());
+    }
 }
+

@@ -68,6 +68,11 @@ public class LeadService : ILeadService
         return _mapper.Map<LeadDto>(lead);
     }
 
+    public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
+    {
+        return await _leadRepository.GetLeadStatisticsAsync();
+    }
+
     public async Task<LeadDto?> GetByIdAsync(int id)
     {
         var lead = await _leadRepository.GetByIdAsync(id);

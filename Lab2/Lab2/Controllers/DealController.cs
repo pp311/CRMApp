@@ -138,4 +138,11 @@ public class DealController : ControllerBase
         var updatedDealProduct = await _dealService.UpdateDealProductAsync(updateDealProductDto);
         return Ok(updatedDealProduct);
     }
+    
+    [HttpGet("statistics")]
+    public async Task<ActionResult<DealStatisticsDto>> GetDealStatistics()
+    {
+        var dealStatistics = await _dealService.GetDealStatisticsAsync();
+        return Ok(dealStatistics);
+    }
 }

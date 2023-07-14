@@ -126,4 +126,9 @@ public class DealService : IDealService
         _dealProductRepository.Delete(dealProduct);
         return await _unitOfWork.CommitAsync() > 0;
     }
+
+    public async Task<DealStatisticsDto> GetDealStatisticsAsync()
+    {
+        return await _dealRepository.GetDealStatisticsAsync();
+    }
 }

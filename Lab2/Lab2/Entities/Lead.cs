@@ -6,7 +6,7 @@ public class Lead : AuditableEntity
     public string? Description { get; set; }
     public int? Source { get; set; }
     public int Status { get; set; }
-    public double? EstimatedRevenue { get; set; }
+    public double EstimatedRevenue { get; set; }
     public DateTime? EndedDate { get; set; }
     public int? DisqualifiedReason { get; set; }
     public string? DisqualifiedDescription { get; set; }

@@ -1,7 +1,9 @@
 using System.Linq.Expressions;
 using Lab2.Data;
+using Lab2.DTOs.Deal;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
+using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,5 +43,16 @@ namespace Lab2.Repositories
             return await GetPagedAndOrderedListAsync(query, dqp.OrderBy, skip, take, dqp.IsDescending);
         }
 
+        public async Task<DealStatisticsDto> GetDealStatisticsAsync()
+        {
+            return await DbSet.AsNoTracking().AsQueryable().Select(d => new DealStatisticsDto
+            {
+                OpenDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Open),
+                WonDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Won),
+                LostDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Lost),
+                AvarageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
+                TotalRevenue = DbSet.Sum(d1 => d1.ActualRevenue),
+            }).FirstAsync();
+        }
     }
 }

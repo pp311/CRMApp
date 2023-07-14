@@ -1,9 +1,11 @@
 using System.Linq.Expressions;
 using Lab2.Data;
+using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Repositories
 {
@@ -11,6 +13,18 @@ namespace Lab2.Repositories
     {
         public LeadRepository(CRMDbContext context) : base(context)
         {
+        }
+
+        public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
+        {
+            return await DbSet.AsNoTracking().AsQueryable().Select(l =>
+                new LeadStatisticsDto
+                {
+                    OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
+                    QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),
+                    DisqualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Disqualified),
+                    AvarageEstimatedRevenue = DbSet.Average(l => l.EstimatedRevenue),
+                }).FirstAsync();
         }
 
         public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(LeadQueryParameters lqp,

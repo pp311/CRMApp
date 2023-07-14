@@ -13,4 +13,5 @@ public interface ILeadService
     Task<bool> DeleteAsync(int leadId);
     Task<DealDto> QualififyLeadAsync(int leadId);
     Task<LeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto);
+    Task<LeadStatisticsDto> GetLeadStatisticsAsync();
 }

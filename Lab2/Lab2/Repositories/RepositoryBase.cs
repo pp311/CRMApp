@@ -108,4 +108,9 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         }
         return await DbSet.CountAsync(expression);
     }
+    
+    public async Task<double> AvarageAsync(Expression<Func<TEntity, double>> expression)
+    {
+        return await DbSet.AverageAsync(expression);
+    }
 }
