@@ -1,0 +1,33 @@
+2023-07-14 23:25:43.988 +07:00 [WRN] The ASP.NET Core developer certificate is not trusted. For information about trusting the ASP.NET Core developer certificate, see https://aka.ms/aspnet/https-trust-dev-cert.
+2023-07-14 23:25:44.186 +07:00 [INF] Now listening on: https://localhost:5000
+2023-07-14 23:25:44.187 +07:00 [INF] Now listening on: http://localhost:5001
+2023-07-14 23:25:44.190 +07:00 [INF] Application started. Press Ctrl+C to shut down.
+2023-07-14 23:25:44.191 +07:00 [INF] Hosting environment: Development
+2023-07-14 23:25:44.191 +07:00 [INF] Content root path: /home/pp311/Enlab/phuc.phan.intern2023/Lab2/Lab2
+2023-07-14 23:25:57.192 +07:00 [INF] Request starting HTTP/1.1 GET https://localhost:5000/api/product?orderBy=nAmE&Type=physical - -
+2023-07-14 23:25:57.231 +07:00 [INF] Request:
+Method: GET
+PathBase: 
+Path: /api/product
+2023-07-14 23:25:57.259 +07:00 [INF] Executing endpoint 'Lab2.Controllers.ProductController.GetProductList (Lab2)'
+2023-07-14 23:25:57.289 +07:00 [INF] Route matched with {action = "GetProductList", controller = "Product"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Lab2.DTOs.QueryParameters.PagedResult`1[Lab2.DTOs.Product.ProductDto]]] GetProductList(Lab2.DTOs.QueryParameters.ProductQueryParameters) on controller Lab2.Controllers.ProductController (Lab2).
+2023-07-14 23:26:00.311 +07:00 [INF] Executed DbCommand (58ms) [Parameters=[@__pqp_Type_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[CreatedAt], [p].[CreatedBy], [p].[IsAvailable], [p].[ModifiedAt], [p].[ModifiedBy], [p].[Name], [p].[Price], [p].[ProductCode], [p].[Type]
+FROM [Products] AS [p]
+WHERE [p].[Type] = @__pqp_Type_0
+ORDER BY [p].[Name]
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+2023-07-14 23:26:00.492 +07:00 [INF] Executed DbCommand (7ms) [Parameters=[@__pqp_Type_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT COUNT(*)
+FROM (
+    SELECT [p].[Id], [p].[Name]
+    FROM [Products] AS [p]
+    WHERE [p].[Type] = @__pqp_Type_0
+    ORDER BY [p].[Name]
+    OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+) AS [t]
+2023-07-14 23:26:00.532 +07:00 [INF] Executing OkObjectResult, writing value of type 'Lab2.DTOs.QueryParameters.PagedResult`1[[Lab2.DTOs.Product.ProductDto, Lab2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2023-07-14 23:26:00.642 +07:00 [INF] Executed action Lab2.Controllers.ProductController.GetProductList (Lab2) in 3346.1699ms
+2023-07-14 23:26:00.644 +07:00 [INF] Executed endpoint 'Lab2.Controllers.ProductController.GetProductList (Lab2)'
+2023-07-14 23:26:00.674 +07:00 [INF] Request finished HTTP/1.1 GET https://localhost:5000/api/product?orderBy=nAmE&Type=physical - - - 200 - application/json;+charset=utf-8 3484.5459ms
+2023-07-14 23:26:38.699 +07:00 [INF] Application is shutting down...

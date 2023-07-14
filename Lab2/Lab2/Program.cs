@@ -1,9 +1,15 @@
 using Lab2.Extensions;
 using Lab2.Middlewares;
+using Microsoft.AspNetCore.HttpLogging;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration.GetSection("Errorlog")).CreateLogger();   
+builder.Logging.AddSerilog(logger);
+builder.Logging.AddSerilog(errorLogger);
 builder.Services.AddControllers();
 builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
@@ -11,9 +17,15 @@ builder.Services.ConfigureServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddHttpLogging(logging =>
+{
+    logging.LoggingFields = HttpLoggingFields.RequestMethod |
+                            HttpLoggingFields.RequestPath;
+});
 
 var app = builder.Build();
 
+app.UseHttpLogging();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
