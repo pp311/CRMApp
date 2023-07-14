@@ -1,5 +1,6 @@
 using System.Data.Common;
 using System.Net;
+using Lab2.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ public class CustomExceptionHandlerMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<CustomExceptionHandlerMiddleware> _logger;
     private readonly IWebHostEnvironment _env;
-    
+
     public CustomExceptionHandlerMiddleware(RequestDelegate next, ILogger<CustomExceptionHandlerMiddleware> logger, IWebHostEnvironment env)
     {
         _next = next;
@@ -33,6 +34,7 @@ public class CustomExceptionHandlerMiddleware
             var response = context.Response;
             response.ContentType = "application/json";
             var message = ex.Message;
+            _logger.LogError(ex, ex.Message);
 
             switch (ex)
             {
@@ -53,6 +55,9 @@ public class CustomExceptionHandlerMiddleware
                 case NotImplementedException:
                     response.StatusCode = (int)HttpStatusCode.NotImplemented;
                     break;
+                case InvalidUpdateException:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
                 default:
                     response.StatusCode = (int)HttpStatusCode.InternalServerError;
                     break;
@@ -62,8 +67,8 @@ public class CustomExceptionHandlerMiddleware
             var pd = new ProblemDetails
             {
                 Title = message,
-                Detail = isDevelopment ? ex.StackTrace : null,
                 Status = response.StatusCode,
+                Detail = isDevelopment ? ex.StackTrace : null,
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
             };
             pd.Extensions.Add("traceId", context.TraceIdentifier);

@@ -1,6 +1,5 @@
 using Lab2.DTOs.Product;
 using Lab2.DTOs.QueryParameters;
-using Lab2.Entities;
 
 namespace Lab2.Services.Interfaces;
 

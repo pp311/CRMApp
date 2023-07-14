@@ -3,8 +3,8 @@ using Lab2.Enums;
 
 namespace Lab2.DTOs.QueryParameters;
 
-public class ProductQueryParameters : PagingParameters
+public class LeadQueryParameters : PagingParameters
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public ProductType? Type { get; set; }
+    public LeadStatus? Status { get; set; }
 }

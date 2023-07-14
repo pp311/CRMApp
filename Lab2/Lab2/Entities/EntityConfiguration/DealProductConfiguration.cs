@@ -7,8 +7,8 @@ public class DealProductConfiguration : IEntityTypeConfiguration<DealProduct>
 {
     public void Configure(EntityTypeBuilder<DealProduct> builder)
     {
-        builder.HasKey(dp => new {dp.DealId, dp.ProductId});
-        
+        builder.HasKey(dp => new { dp.DealId, dp.ProductId, dp.Id });
+
         builder.HasOne(dp => dp.Deal)
             .WithMany(d => d.DealProducts)
             .HasForeignKey(dp => dp.DealId);

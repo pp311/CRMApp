@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using System.Runtime.InteropServices.ComTypes;
 using AutoMapper;
 using Lab2.Data;
@@ -24,12 +25,11 @@ public class ProductService : IProductService
 
     public async Task<PagedResult<ProductDto>> GetListAsync(ProductQueryParameters pqp)
     {
-        int skip = (pqp.PageIndex - 1) * pqp.PageSize;
-        int take = pqp.PageSize;
-        var products = await _productRepository.GetListAsync(null, pqp.OrderBy, skip, take, pqp.IsDescending);
-        var productCount = await _productRepository.CountAsync();
+        // 1. Get products based on filter function and paging parameters
+        // 2. Get total count for paging
+        var (products, productCount) = await _productRepository.GetProductPagedListAsync(pqp);
+        // 3. Map and return
         var result = _mapper.Map<List<ProductDto>>(products);
-
         return new PagedResult<ProductDto>(result, productCount, pqp.PageIndex, pqp.PageSize);
     }
 
@@ -48,8 +48,10 @@ public class ProductService : IProductService
 
     public async Task<ProductDto> UpdateAsync(ProductDto productDto)
     {
-        var product = _mapper.Map<Product>(productDto);
-        _productRepository.Update(product);
+        // 1. Get product from database
+        var product = await _productRepository.GetByIdAsync(productDto.Id);
+        // 2. Update product 
+        _mapper.Map(productDto, product);
         await _unitOfWork.CommitAsync();
         return productDto;
     }

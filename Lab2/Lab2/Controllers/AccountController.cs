@@ -1,4 +1,7 @@
 using Lab2.DTOs.Account;
+using Lab2.DTOs.Contact;
+using Lab2.DTOs.Deal;
+using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +23,12 @@ public class AccountController : ControllerBase
     public async Task<ActionResult<AccountDto>> GetAccountById(int accountId)
     {
         // Get account from service, if not found return 404
-        var account = await _accountService.GetByIdAsync(accountId);
-        if (account == null)
+        var accountDto = await _accountService.GetByIdAsync(accountId);
+        if (accountDto == null)
         {
             return NotFound();
         }
-        return Ok(account);
+        return Ok(accountDto);
     }
 
     [HttpGet]
@@ -58,8 +61,7 @@ public class AccountController : ControllerBase
         // 2. If dto id is not provided, set it  
         accountDto.Id = accountId;
         // 3. Check if account exists
-        var account = await _accountService.GetByIdAsync(accountId);
-        if (account == null)
+        if (await _accountService.GetByIdAsync(accountId) == null)
             return NotFound();
         // 4. Update account
         var updatedAccountDto = await _accountService.UpdateAsync(accountDto);
@@ -72,5 +74,44 @@ public class AccountController : ControllerBase
         if (await _accountService.DeleteAsync(accountId))
             return NoContent();
         return NotFound();
+    }
+
+    [HttpGet("{accountId:int}/leads")]
+    public async Task<ActionResult<PagedResult<LeadDto>>> GetLeadsByAccountId(int accountId, [FromQuery] LeadQueryParameters lqp)
+    {
+        // Check if account exists
+        if (await _accountService.GetByIdAsync(accountId) == null)
+        {
+            return NotFound();
+        }
+        // Get leadlist when account exists
+        var leads = await _accountService.GetLeadListByAccountIdAsync(accountId, lqp);
+        return Ok(leads);
+    }
+
+    [HttpGet("{accountId:int}/contacts")]
+    public async Task<ActionResult<PagedResult<ContactDto>>> GetContactsByAccountId(int accountId, [FromQuery] ContactQueryParameters cqp)
+    {
+        // Check if account exists
+        if (await _accountService.GetByIdAsync(accountId) == null)
+        {
+            return NotFound();
+        }
+        // Get contactlist when account exists
+        var contacts = await _accountService.GetContactListByAccountIdAsync(accountId, cqp);
+        return Ok(contacts);
+    }
+
+    [HttpGet("{accountId:int}/deals")]
+    public async Task<ActionResult<PagedResult<DealDto>>> GetDealsByAccountId(int accountId, [FromQuery] DealQueryParameters dqp)
+    {
+        // Check if account exists
+        if (await _accountService.GetByIdAsync(accountId) == null)
+        {
+            return NotFound();
+        }
+        // Get deallist when account exists
+        var deals = await _accountService.GetDealListByAccountIdAsync(accountId, dqp);
+        return Ok(deals);
     }
 }

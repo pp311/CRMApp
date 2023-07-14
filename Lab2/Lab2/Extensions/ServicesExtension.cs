@@ -25,11 +25,15 @@ public static class ServicesExtension
         services.AddScoped<IDealRepository, DealRepository>();
         services.AddScoped<ILeadRepository, LeadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IDealProductRepository, DealProductRepository>();
     }
 
     public static void ConfigureServices(this IServiceCollection services)
     {
         services.AddScoped<IProductService, ProductService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IContactService, ContactService>();
+        services.AddScoped<IDealService, DealService>();
+        services.AddScoped<ILeadService, LeadService>();
     }
 }

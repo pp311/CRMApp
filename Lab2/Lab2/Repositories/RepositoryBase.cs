@@ -3,6 +3,7 @@ using Lab2.Data;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
+using Lab2.Entities;
 
 namespace Lab2.Repositories;
 
@@ -20,11 +21,20 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 
     public void Add(TEntity entity)
     {
+        if (typeof(AuditableEntity).IsAssignableFrom(typeof(TEntity)))
+        {
+            (entity as AuditableEntity)!.CreatedAt = DateTime.UtcNow;
+            (entity as AuditableEntity)!.ModifiedAt = DateTime.UtcNow;
+        }
         DbSet.Add(entity);
     }
 
     public void Update(TEntity entity)
     {
+        if (typeof(AuditableEntity).IsAssignableFrom(typeof(TEntity)))
+        {
+            (entity as AuditableEntity)!.ModifiedAt = DateTime.UtcNow;
+        }
         DbSet.Update(entity);
     }
 
@@ -33,15 +43,42 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         DbSet.Remove(entity);
     }
 
-    public async Task<TEntity?> GetByIdAsync(int id)
+    public virtual async Task<TEntity?> GetByIdAsync(int id)
     {
         var entity = await DbSet.FindAsync(id);
-        if (entity != null) _context.Entry(entity).State = EntityState.Detached;
+        // if (entity != null) _context.Entry(entity).State = EntityState.Detached;
         return entity;
     }
 
+    // This method is used to get list with paging and ordering based on a filtered query
+    // Use in repository layer only
+    protected async Task<(IEnumerable<TEntity>, int)> GetPagedAndOrderedListAsync(IQueryable<TEntity> query,
+                                                                      string? orderBy,
+                                                                      int skip,
+                                                                      int take,
+                                                                      bool isDescending)
+    {
+        // 1. If orderBy provided, check if the property exists in TEntity and apply the order 
+        if (!string.IsNullOrEmpty(orderBy))
+        {
+            // If field not exist, early return the list
+            var properties = typeof(TEntity).GetProperties();
+            var orderByProperty =
+                properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
+            if (orderByProperty == null) return (await query.ToListAsync(), await query.CountAsync());
+            // Apply the order, default is ascending
+            query = isDescending ? query.OrderBy(orderByProperty.Name + " desc") : query.OrderBy(orderByProperty.Name);
+        }
+        // 2. If skip and take provided, apply them 
+        if (skip >= 0 && take >= 0)
+        {
+            query = query.Skip(skip).Take(take);
+        }
+        return (await query.ToListAsync(), await query.CountAsync());
+    }
+
     // Get list with paging, filtering, ordering
-    public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression,
+    public async Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedListAsync(Expression<Func<TEntity, bool>>? expression,
                                                          string? orderBy,
                                                          int skip,
                                                          int take,
@@ -53,24 +90,10 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         {
             query = query.Where(expression);
         }
-        // 2. If orderBy provided, check if the property exists in TEntity and apply the order 
-        if (!string.IsNullOrEmpty(orderBy))
-        {
-            // If field not exist, early return the list
-            var properties = typeof(TEntity).GetProperties();
-            var orderByProperty =
-                properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
-            if (orderByProperty == null) return await query.ToListAsync();
-            // Apply the order, default is ascending
-            query = isDescending ? query.OrderBy(orderByProperty.Name + " desc") : query.OrderBy(orderByProperty.Name);
-            // 3. If skip and take provided, apply them (only use skip&take with OrderBy)
-            if (skip >= 0 && take >= 0)
-            {
-                query = query.Skip(skip).Take(take);
-            }
-        }
-        return await query.ToListAsync();
+        // 
+        return await GetPagedAndOrderedListAsync(query, orderBy, skip, take, isDescending);
     }
+
 
     public async Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> expression)
     {
