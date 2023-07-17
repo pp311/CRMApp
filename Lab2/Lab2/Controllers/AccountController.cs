@@ -22,21 +22,14 @@ public class AccountController : ControllerBase
     [HttpGet("{accountId:int}")]
     public async Task<ActionResult<AccountDto>> GetAccountById(int accountId)
     {
-        // Get account from service, if not found return 404
         var accountDto = await _accountService.GetByIdAsync(accountId);
-        if (accountDto == null)
-        {
-            return NotFound();
-        }
-        return Ok(accountDto);
+        return accountDto == null ? NotFound() : Ok(accountDto);
     }
 
     [HttpGet]
     public async Task<ActionResult<PagedResult<AccountDto>>> GetAccountList([FromQuery] AccountQueryParameters accountQueryParameters)
     {
-        // Get accounts from service
-        var accounts = await _accountService.GetListAsync(accountQueryParameters);
-        return Ok(accounts);
+        return Ok(await _accountService.GetListAsync(accountQueryParameters));
     }
 
     [HttpPost]
@@ -53,17 +46,15 @@ public class AccountController : ControllerBase
     [HttpPut("{accountId:int}")]
     public async Task<ActionResult<AccountDto>> UpdateAccount(int accountId, [FromBody] AccountDto? accountDto)
     {
-        // 1. Check:
-        // - if dto provided
-        // - if dto id is provided and equal to path parameter
-        if ((accountDto == null) || (accountDto.Id != default && accountDto.Id != accountId))
+        if (accountDto == null)
             return BadRequest();
-        // 2. If dto id is not provided, set it  
         accountDto.Id = accountId;
-        // 3. Check if account exists
+        
+        // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
             return NotFound();
-        // 4. Update account
+        
+        // Update account
         var updatedAccountDto = await _accountService.UpdateAsync(accountDto);
         return Ok(updatedAccountDto);
     }
@@ -71,20 +62,18 @@ public class AccountController : ControllerBase
     [HttpDelete("{accountId:int}")]
     public async Task<ActionResult> DeleteAccount(int accountId)
     {
-        if (await _accountService.DeleteAsync(accountId))
-            return NoContent();
-        return NotFound();
+        await _accountService.DeleteAsync(accountId);
+        return NoContent();
     }
 
     [HttpGet("{accountId:int}/leads")]
-    public async Task<ActionResult<PagedResult<LeadDto>>> GetLeadsByAccountId(int accountId, [FromQuery] LeadQueryParameters lqp)
+    public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadsByAccountId(int accountId, [FromQuery] LeadQueryParameters lqp)
     {
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
-        {
             return NotFound();
-        }
-        // Get leadlist when account exists
+        
+        // Get lead list when account exists
         var leads = await _accountService.GetLeadListByAccountIdAsync(accountId, lqp);
         return Ok(leads);
     }
@@ -94,10 +83,9 @@ public class AccountController : ControllerBase
     {
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
-        {
             return NotFound();
-        }
-        // Get contactlist when account exists
+        
+        // Get contact list when account exists
         var contacts = await _accountService.GetContactListByAccountIdAsync(accountId, cqp);
         return Ok(contacts);
     }
@@ -107,10 +95,9 @@ public class AccountController : ControllerBase
     {
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
-        {
             return NotFound();
-        }
-        // Get deallist when account exists
+        
+        // Get deal list when account exists
         var deals = await _accountService.GetDealListByAccountIdAsync(accountId, dqp);
         return Ok(deals);
     }

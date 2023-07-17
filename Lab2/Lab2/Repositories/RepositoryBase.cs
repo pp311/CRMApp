@@ -52,52 +52,65 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 
     // This method is used to get list with paging and ordering based on a filtered query
     // Use in repository layer only
-    protected async Task<(IEnumerable<TEntity>, int)> GetPagedAndOrderedListAsync(IQueryable<TEntity> query,
-                                                                      string? orderBy,
-                                                                      int skip,
-                                                                      int take,
-                                                                      bool isDescending)
+    protected async Task<(IEnumerable<TEntity>, int)> GetPagedListFromQueryableAsync(IQueryable<TEntity> query,
+                                                                                     string? orderBy,
+                                                                                     int skip,
+                                                                                     int take,
+                                                                                     bool isDescending)
     {
-        // 1. If orderBy provided, check if the property exists in TEntity and apply the order 
+        // 1. If orderBy provided, check if the orderBy field exists in TEntity and apply the order 
         if (!string.IsNullOrEmpty(orderBy))
         {
-            // If field not exist, early return the list
             var properties = typeof(TEntity).GetProperties();
             var orderByProperty =
                 properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
-            if (orderByProperty == null) return (await query.ToListAsync(), await query.CountAsync());
-            // Apply the order, default is ascending
-            query = isDescending ? query.OrderBy(orderByProperty.Name + " desc") : query.OrderBy(orderByProperty.Name);
+
+            if (orderByProperty != null)
+            {
+                // Apply the order, default is ascending
+                query = isDescending ? query.OrderBy(orderByProperty.Name + " desc") : query.OrderBy(orderByProperty.Name);
+            }
         }
+        // Count total items before paging
+        var totalCount = await query.CountAsync();
         // 2. If skip and take provided, apply them 
-        if (skip >= 0 && take >= 0)
-        {
+        if (skip >= 0  && take > 0)
             query = query.Skip(skip).Take(take);
-        }
-        return (await query.ToListAsync(), await query.CountAsync());
+        
+        return (await query.ToListAsync(), totalCount);
     }
 
     // Get list with paging, filtering, ordering
     public async Task<(IEnumerable<TEntity> Items, int TotalCount)> GetPagedListAsync(Expression<Func<TEntity, bool>>? expression,
-                                                         string? orderBy,
-                                                         int skip,
-                                                         int take,
-                                                         bool isDescending)
+                                                                                     string? orderBy,
+                                                                                     int skip,
+                                                                                     int take,
+                                                                                     bool isDescending)
     {
-        // 1. Filtering with expression
+        // Filtering with expression
         var query = DbSet.AsQueryable();
         if (expression != null)
         {
             query = query.Where(expression);
         }
-        // 
-        return await GetPagedAndOrderedListAsync(query, orderBy, skip, take, isDescending);
+        // Paging and ordering
+        return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
     }
 
 
     public async Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> expression)
     {
         return await DbSet.Where(expression).ToListAsync();
+    }
+    
+    public async Task<TEntity?> GetFirstByConditionAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await DbSet.FirstOrDefaultAsync(expression);
+    }
+
+    public async Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> expression)
+    {
+        return await DbSet.AnyAsync(expression);
     }
 
     public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? expression = null)
@@ -109,7 +122,7 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         return await DbSet.CountAsync(expression);
     }
     
-    public async Task<double> AvarageAsync(Expression<Func<TEntity, double>> expression)
+    public async Task<double> AverageAsync(Expression<Func<TEntity, double>> expression)
     {
         return await DbSet.AverageAsync(expression);
     }

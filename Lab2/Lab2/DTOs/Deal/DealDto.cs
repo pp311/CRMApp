@@ -15,8 +15,6 @@ public class DealDto
     [MaxLength((int)StringLength.Long1024)]
     public string? Description { get; set; }
 
-    // public double? EstimatedRevenue { get; set; }
-
     public double? ActualRevenue { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]

@@ -4,9 +4,11 @@ using Lab2.Enums;
 
 namespace Lab2.DTOs.Lead;
 
-public class LeadDto
+public class UpdateLeadDto
 {
     public int Id { get; set; }
+    
+    public int AccountId { get; set; }
 
     [MaxLength((int)StringLength.Medium256)]
     public string? Title { get; set; }
@@ -17,12 +19,12 @@ public class LeadDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public LeadSource? Source { get; set; }
 
+    [Required]
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public LeadStatus Status { get; set; }
+    public LeadStatus? Status { get; set; }
 
-    public double? EstimatedRevenue { get; set; }
-
-    public DateTime? EndedDate { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "Estimated revenue must be positive")]
+    public double EstimatedRevenue { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public LeadDisqualifiedReason? DisqualifiedReason { get; set; }

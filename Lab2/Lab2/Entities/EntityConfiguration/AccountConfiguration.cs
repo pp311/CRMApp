@@ -15,7 +15,7 @@ public class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(a => a.Email).HasMaxLength((int)StringLength.Medium256);
         
         builder.Property(a => a.Phone).HasMaxLength((int)StringLength.Short32);
-        
-        
+
+        builder.HasIndex(a => new { a.Phone, a.Email }).IsUnique();
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
-[Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+[Route("api/[controller]")]
 public class LeadController : ControllerBase
 {
     private readonly ILeadService _leadService;
@@ -18,7 +18,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpGet("{leadId:int}")]
-    public async Task<ActionResult<LeadDto>> GetLeadById(int leadId)
+    public async Task<ActionResult<GetLeadDto>> GetLeadById(int leadId)
     {
         // Get lead from service, if not found return 404
         var leadDto = await _leadService.GetByIdAsync(leadId);
@@ -30,7 +30,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<LeadDto>>> GetLeadList([FromQuery] LeadQueryParameters leadQueryParameters)
+    public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadList([FromQuery] LeadQueryParameters leadQueryParameters)
     {
         // Get leads from service
         var leads = await _leadService.GetListAsync(leadQueryParameters);
@@ -38,7 +38,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<LeadDto>> CreateLead([FromBody] AddLeadDto? leadDto)
+    public async Task<ActionResult<GetLeadDto>> CreateLead([FromBody] AddLeadDto? leadDto)
     {
         // 1. Check if dto provided
         if (leadDto == null)
@@ -49,19 +49,15 @@ public class LeadController : ControllerBase
     }
 
     [HttpPut("{leadId:int}")]
-    public async Task<ActionResult<LeadDto>> UpdateLead(int leadId, [FromBody] LeadDto? leadDto)
+    public async Task<ActionResult<GetLeadDto>> UpdateLead(int leadId, [FromBody] UpdateLeadDto? leadDto)
     {
-        // 1. Check:
-        // - if dto provided
-        // - if dto id is provided and equal to path parameter
-        if ((leadDto == null) || (leadDto.Id != default && leadDto.Id != leadId))
+        if (leadDto == null)
             return BadRequest();
-        // 2. If dto id is not provided, set it  
         leadDto.Id = leadId;
-        // 3. Check if lead exists
+        
         if (await _leadService.GetByIdAsync(leadId) == null)
             return NotFound();
-        // 4. Update lead
+        
         var updatedLeadDto = await _leadService.UpdateAsync(leadDto);
         return Ok(updatedLeadDto);
     }
@@ -69,8 +65,7 @@ public class LeadController : ControllerBase
     [HttpDelete("{leadId:int}")]
     public async Task<ActionResult> DeleteLead(int leadId)
     {
-        if (await _leadService.DeleteAsync(leadId))
-            return NotFound();
+        await _leadService.DeleteAsync(leadId);
         return NoContent();
     }
 
@@ -81,12 +76,12 @@ public class LeadController : ControllerBase
         if (await _leadService.GetByIdAsync(leadId) == null)
             return NotFound();
         // 2. Qualify lead
-        var deal = await _leadService.QualififyLeadAsync(leadId);
+        var deal = await _leadService.QualifyLeadAsync(leadId);
         return CreatedAtRoute("GetDealById", new { leadId = deal.Id }, deal);
     }
 
     [HttpPost("{leadId:int}/disqualify-lead")]
-    public async Task<ActionResult<LeadDto>> DisqualifyLead(int leadId, [FromBody] DisqualifyLeadDto? disqualifyLeadDto)
+    public async Task<ActionResult<GetLeadDto>> DisqualifyLead(int leadId, [FromBody] DisqualifyLeadDto? disqualifyLeadDto)
     {
         // 1. Check if lead exists
         if (await _leadService.GetByIdAsync(leadId) == null)

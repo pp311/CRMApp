@@ -6,12 +6,12 @@ namespace Lab2.Services.Interfaces;
 
 public interface ILeadService
 {
-    Task<PagedResult<LeadDto>> GetListAsync(LeadQueryParameters lqp);
-    Task<LeadDto?> GetByIdAsync(int id);
-    Task<LeadDto> CreateAsync(AddLeadDto leadDto);
-    Task<LeadDto> UpdateAsync(LeadDto leadDto);
-    Task<bool> DeleteAsync(int leadId);
-    Task<DealDto> QualififyLeadAsync(int leadId);
-    Task<LeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto);
+    Task<PagedResult<GetLeadDto>> GetListAsync(LeadQueryParameters lqp);
+    Task<GetLeadDto?> GetByIdAsync(int id);
+    Task<GetLeadDto> CreateAsync(AddLeadDto leadDto);
+    Task<GetLeadDto> UpdateAsync(UpdateLeadDto leadDto);
+    Task DeleteAsync(int leadId);
+    Task<DealDto> QualifyLeadAsync(int leadId);
+    Task<GetLeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto);
     Task<LeadStatisticsDto> GetLeadStatisticsAsync();
 }

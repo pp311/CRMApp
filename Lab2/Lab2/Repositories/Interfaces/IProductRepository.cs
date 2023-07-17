@@ -7,7 +7,12 @@ namespace Lab2.Repositories.Interfaces
 {
     public interface IProductRepository : IRepositoryBase<Product>
     {
-        Task<(IEnumerable<Product> Items, int TotalCount)> GetProductPagedListAsync(ProductQueryParameters pqp,
+        Task<(IEnumerable<Product> Items, int TotalCount)> GetProductPagedListAsync(string? search,
+                                                                                    ProductType? type,
+                                                                                    string? orderBy,
+                                                                                    int skip,
+                                                                                    int take,
+                                                                                    bool isDescending,  
                                                                                     Expression<Func<Product, bool>>? expression = null);
     }
 }

@@ -8,7 +8,13 @@ namespace Lab2.Repositories.Interfaces
 {
     public interface ILeadRepository : IRepositoryBase<Lead>
     {
-        Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(LeadQueryParameters lqp, Expression<Func<Lead, bool>>? expression = null);
+        Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(string? search,
+                                                                                LeadStatus? status,
+                                                                                string? orderBy,
+                                                                                int skip,
+                                                                                int take,
+                                                                                bool isDescending,
+                                                                                Expression<Func<Lead, bool>>? condition = null);
         Task<LeadStatisticsDto> GetLeadStatisticsAsync();
     }
 

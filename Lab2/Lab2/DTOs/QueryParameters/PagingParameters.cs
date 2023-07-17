@@ -2,7 +2,7 @@ namespace Lab2.DTOs.QueryParameters;
 
 public class PagingParameters
 {
-    private const int MaxPageSize = 50;
+    private const int MaxPageSize = 1000;
     private const int DefaultPageSize = 10;
     public int PageIndex { get; set; } = 1;
     private int _pageSize = DefaultPageSize;

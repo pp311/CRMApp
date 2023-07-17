@@ -11,7 +11,6 @@ public class AddLeadDto
     [MaxLength((int)StringLength.Medium256)]
     public string? Title { get; set; }
 
-    [Required]
     public int AccountId { get; set; }
 
     [MaxLength((int)StringLength.Long1024)]
@@ -20,5 +19,6 @@ public class AddLeadDto
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public LeadSource? Source { get; set; }
 
-    public double? EstimatedRevenue { get; set; }
+    [Range(0, double.MaxValue, ErrorMessage = "Estimated revenue must be positive")]
+    public double EstimatedRevenue { get; set; }
 }

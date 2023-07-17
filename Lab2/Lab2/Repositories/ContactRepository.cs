@@ -12,23 +12,24 @@ namespace Lab2.Repositories
         {
         }
 
-        public async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(ContactQueryParameters cqp, Expression<Func<Contact, bool>>? expression = null)
+        public async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(string? search,
+                                                                                                 string? orderBy,
+                                                                                                 int skip,
+                                                                                                 int take,
+                                                                                                 bool isDescending,
+                                                                                                 Expression<Func<Contact, bool>>? condition)
         {
             var query = DbSet.AsQueryable();
-            // 1. Filtering with expression and search
-            if (expression != null)
-            {
-                query = query.Where(expression);
-            }
-            if (!string.IsNullOrWhiteSpace(cqp.Search))
-            {
-                cqp.Search = cqp.Search.Trim().ToLower();
-                query = query.Where(c => c.Name.ToLower().Contains(cqp.Search));
-            }
-            // 2. Ordering and paging
-            int skip = (cqp.PageIndex - 1) * cqp.PageSize;
-            int take = cqp.PageSize;
-            return await GetPagedAndOrderedListAsync(query, cqp.OrderBy, skip, take, cqp.IsDescending);
+            // 1. Filtering with expression
+            if (condition != null)
+                query = query.Where(condition);
+            
+            // 2. Search by name
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(c => c.Name.ToLower().Contains(search.Trim().ToLower()));
+            
+            // 3. Ordering and paging
+            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
         }
     }
 }

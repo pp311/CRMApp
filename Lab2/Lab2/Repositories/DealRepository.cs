@@ -20,27 +20,31 @@ namespace Lab2.Repositories
             return await DbSet.Include(d => d.Lead).FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(DealQueryParameters dqp, Expression<Func<Deal, bool>>? expression = null)
+        public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(string? search,
+                                                                                DealStatus? status, 
+                                                                                string? orderBy,
+                                                                                int skip,
+                                                                                int take,
+                                                                                bool isDescending,
+                                                                                Expression<Func<Deal, bool>>? condition)
         {
-            var query = DbSet.AsQueryable();
-            // 1. Filtering with expression, search and status
-            if (expression != null)
+            var query = DbSet.Include(d => d.Lead).AsNoTracking();
+            // 1. Filtering with expression
+            if (condition != null)
+                query = query.Where(condition);
+            
+            // 2. Search by title
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(d => d.Title.ToLower().Contains(search.Trim().ToLower()));
+            
+            // 3. Filter by status
+            if (status != null)
             {
-                query = query.Include(d => d.Lead).Where(expression);
+                query = query.Where(l => l.Status == (int)status);
             }
-            if (!string.IsNullOrWhiteSpace(dqp.Search))
-            {
-                dqp.Search = dqp.Search.Trim().ToLower();
-                query = query.Where(d => d.Title.ToLower().Contains(dqp.Search));
-            }
-            if (dqp.Status != null)
-            {
-                query = query.Where(l => l.Status == (int)dqp.Status);
-            }
-            // 2. Ordering and paging
-            int skip = (dqp.PageIndex - 1) * dqp.PageSize;
-            int take = dqp.PageSize;
-            return await GetPagedAndOrderedListAsync(query, dqp.OrderBy, skip, take, dqp.IsDescending);
+            
+            // 4. Ordering and paging
+            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
         }
 
         public async Task<DealStatisticsDto> GetDealStatisticsAsync()

@@ -17,5 +17,7 @@ public class ContactConfiguration : IEntityTypeConfiguration<Contact>
         builder.Property(c => c.Email).IsRequired().HasMaxLength((int)StringLength.Medium256);
         
         builder.Property(c => c.Phone).HasMaxLength((int)StringLength.Short32);
+        
+        builder.HasIndex(c => new { c.Phone, c.Email }).IsUnique();
     }
 }

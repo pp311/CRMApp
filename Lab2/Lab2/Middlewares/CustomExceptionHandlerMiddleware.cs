@@ -1,10 +1,6 @@
-using System.Data.Common;
 using System.Net;
 using Lab2.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Lab2.Middlewares;
@@ -15,7 +11,9 @@ public class CustomExceptionHandlerMiddleware
     private readonly ILogger<CustomExceptionHandlerMiddleware> _logger;
     private readonly IWebHostEnvironment _env;
 
-    public CustomExceptionHandlerMiddleware(RequestDelegate next, ILogger<CustomExceptionHandlerMiddleware> logger, IWebHostEnvironment env)
+    public CustomExceptionHandlerMiddleware(RequestDelegate next, 
+                                            ILogger<CustomExceptionHandlerMiddleware> logger, 
+                                            IWebHostEnvironment env)
     {
         _next = next;
         _logger = logger;
@@ -38,19 +36,11 @@ public class CustomExceptionHandlerMiddleware
 
             switch (ex)
             {
-                case DbUpdateException dbException:
-                    if (dbException.InnerException is SqlException sqlException)
-                        switch (sqlException.Number)
-                        {
-                            // Duplicated unique field
-                            case 2601:
-                                response.StatusCode = (int)HttpStatusCode.BadRequest;
-                                message = "Duplicated unique field";
-                                break;
-                            default:
-                                response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                                break;
-                        }
+                case EntityValidationException:
+                    response.StatusCode = (int)HttpStatusCode.BadRequest;
+                    break;
+                case EntityNotFoundException:
+                    response.StatusCode = (int)HttpStatusCode.NotFound;
                     break;
                 case NotImplementedException:
                     response.StatusCode = (int)HttpStatusCode.NotImplemented;
@@ -63,13 +53,12 @@ public class CustomExceptionHandlerMiddleware
                     break;
             }
 
-            var isDevelopment = _env.IsDevelopment();
             var pd = new ProblemDetails
             {
                 Title = message,
                 Status = response.StatusCode,
-                Detail = isDevelopment ? ex.StackTrace : null,
-                Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+                Detail = _env.IsDevelopment() ? ex.StackTrace : null,
+                // Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
             };
             pd.Extensions.Add("traceId", context.TraceIdentifier);
 

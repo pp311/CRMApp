@@ -1,10 +1,10 @@
-using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using Lab2.Data;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
+using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Repositories
 {
@@ -14,27 +14,32 @@ namespace Lab2.Repositories
         {
         }
 
-        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetProductPagedListAsync(ProductQueryParameters pqp, Expression<Func<Product, bool>>? expression)
+        public async Task<(IEnumerable<Product> Items, int TotalCount)> GetProductPagedListAsync(string? search,
+                                                                                    ProductType? type,
+                                                                                    string? orderBy,
+                                                                                    int skip,
+                                                                                    int take,
+                                                                                    bool isDescending,  
+                                                                                    Expression<Func<Product, bool>>? expression = null)
         {
             var query = DbSet.AsQueryable();
-            // 1. Filtering with expression, search and type
+            // 1. Filtering with expression
             if (expression != null)
-            {
                 query = query.Where(expression);
-            }
-            if (!string.IsNullOrWhiteSpace(pqp.Search))
+            
+            // 2. Search by name and product code
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                pqp.Search = pqp.Search.Trim().ToLower();
-                query = query.Where(p => p.Name.ToLower().Contains(pqp.Search) || p.ProductCode.ToLower().Contains(pqp.Search));
+                search = search.Trim().ToLower();
+                query = query.Where(p => p.Name.ToLower().Contains(search) 
+                                         || p.ProductCode.ToLower().Contains(search));
             }
-            if (pqp.Type != null)
-            {
-                query = query.Where(p => p.Type == (int)pqp.Type);
-            }
-            // 2. Ordering and paging
-            int skip = (pqp.PageIndex - 1) * pqp.PageSize;
-            int take = pqp.PageSize;
-            return await GetPagedAndOrderedListAsync(query, pqp.OrderBy, skip, take, pqp.IsDescending);
+            // 3. Filter by type
+            if (type != null)
+                query = query.Where(p => p.Type == (int)type);
+            
+            // 4. Ordering and paging
+            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
         }
     }
 }

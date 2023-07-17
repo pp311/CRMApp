@@ -14,53 +14,46 @@ namespace Lab2.Repositories
         {
         }
 
-        public async Task<DealProduct?> GetByIdAsync(int dealProductId, int dealId)
+        public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
+                                                                                    string? orderBy,
+                                                                                    int skip,
+                                                                                    int take,
+                                                                                    bool isDescending,
+                                                                                    Expression<Func<DealProduct, bool>>? condition)
         {
-            return await DbSet.Include(dp => dp.Product)
-                                         .FirstOrDefaultAsync(dp => dp.Id == dealProductId && dp.DealId == dealId);
-        }
-
-        public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(DealProductQueryParameters dpqp,
-                                                                                                   Expression<Func<DealProduct, bool>>? expression = null)
-        {
-            var query = DbSet.Include(dp => dp.Product).AsQueryable();
-            // 1. Filtering with expression, search and type
-            if (expression != null)
+            var query = DbSet.Include(dp => dp.Product).AsNoTracking();
+            // 1. Filtering with condition
+            if (condition != null)
+                query = query.Where(condition);
+            
+            // 2. Search by name and product code
+            if (!string.IsNullOrWhiteSpace(search))
             {
-                query = query.Where(expression);
+                search = search.Trim().ToLower();
+                query = query.Where(dp => dp.Product!.Name.ToLower().Contains(search) 
+                                          || dp.Product.ProductCode.ToLower().Contains(search));
             }
-            if (!string.IsNullOrWhiteSpace(dpqp.Search))
+            // 3. If orderBy provided, check if the orderBy field valid and apply the order 
+            if (!string.IsNullOrEmpty(orderBy))
             {
-                dpqp.Search = dpqp.Search.Trim().ToLower();
-                query = query.Where(dp => dp.Product!.Name.ToLower().Contains(dpqp.Search) || dp.Product.ProductCode.ToLower().Contains(dpqp.Search));
-            }
-            // 2. Calculate for paging
-            int skip = (dpqp.PageIndex - 1) * dpqp.PageSize;
-            int take = dpqp.PageSize;
-
-            // 3. If orderBy provided, check if the property exists in TEntity and apply the order 
-            if (!string.IsNullOrEmpty(dpqp.OrderBy))
-            {
-                dpqp.OrderBy = dpqp.OrderBy.Trim().ToLower();
-                dpqp.OrderBy = dpqp.OrderBy switch
+                orderBy = orderBy.Trim().ToLower() switch
                 {
                     "name" => "Product.Name",
                     "productcode" => "Product.ProductCode",
                     "priceperunit" => "PricePerUnit",
                     "quantity" => "Quantity",
                     "totalamount" => "PricePerUnit * Quantity",
-                    _ => null
+                    _ => "Id"
                 };
-                if (dpqp.OrderBy == null) return (await query.ToListAsync(), await query.CountAsync());
-                // Apply the order, default is ascending
-                query = dpqp.IsDescending ? query.OrderBy(dpqp.OrderBy + " desc") : query.OrderBy(dpqp.OrderBy);
+                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
             }
-            // 4. If skip and take provided, apply them 
-            if (skip >= 0 && take >= 0)
-            {
+            // 4. Count total items before paging
+            var totalCount = await query.CountAsync();
+            // 5. Calculate for paging
+            if (skip >= 0 && take > 0)
                 query = query.Skip(skip).Take(take);
-            }
-            return (await query.ToListAsync(), await query.CountAsync());
+            
+            return (await query.ToListAsync(), totalCount);
         }
     }
 }

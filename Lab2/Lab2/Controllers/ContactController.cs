@@ -33,18 +33,23 @@ public class ContactController : ControllerBase
         var contacts = await _contactService.GetListAsync(contactQueryParameters);
         return Ok(contacts);
     }
+    
+    [HttpPost]
+    public async Task<ActionResult<ContactDto>> CreateContact([FromBody] ContactDto? contactDto)
+    {
+        if (contactDto == null)
+            return BadRequest();
+        var createdContact = await _contactService.CreateAsync(contactDto);
+        return CreatedAtAction(nameof(GetContactById), new {contactId = createdContact.Id}, createdContact);
+    }
 
     [HttpPut("{contactId:int}")]
     public async Task<ActionResult<ContactDto>> UpdateContact(int contactId, [FromBody] ContactDto? contactDto)
     {
-        // 1. Check:
-        // - if dto provided
-        // - if dto id is provided and equal to path parameter
-        if ((contactDto == null) || (contactDto.Id != default && contactDto.Id != contactId))
+        if (contactDto == null)
             return BadRequest();
-        // 2. If dto id is not provided, set it
         contactDto.Id = contactId;
-        // 3. Update contact
+        
         var updatedContact = await _contactService.UpdateAsync(contactDto);
         return Ok(updatedContact);
     }
@@ -52,10 +57,7 @@ public class ContactController : ControllerBase
     [HttpDelete("{contactId:int}")]
     public async Task<ActionResult> DeleteContact(int contactId)
     {
-        if (await _contactService.DeleteAsync(contactId))
-        {
-            return NoContent();
-        }
-        return NotFound();
+        await _contactService.DeleteAsync(contactId);
+        return NoContent();
     }
 }

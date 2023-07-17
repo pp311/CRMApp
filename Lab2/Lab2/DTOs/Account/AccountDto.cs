@@ -18,6 +18,6 @@ public class AccountDto
 
     [MaxLength((int)StringLength.Medium256)]
     public string? Address { get; set; }
-
+    
     public double TotalSales { get; set; }
 }

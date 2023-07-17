@@ -16,7 +16,7 @@ public class MappingProfile : Profile
 
         CreateMap<Account, AccountDto>().ReverseMap();
 
-        CreateMap<Lead, LeadDto>().ReverseMap();
+        CreateMap<Lead, GetLeadDto>().ReverseMap();
         CreateMap<AddLeadDto, Lead>();
 
         CreateMap<Contact, ContactDto>().ReverseMap();

@@ -17,38 +17,39 @@ namespace Lab2.Repositories
 
         public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
         {
-            return await DbSet.AsNoTracking().AsQueryable().Select(l =>
+            return await DbSet.AsNoTracking().AsQueryable().Select(lead =>
                 new LeadStatisticsDto
                 {
                     OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
                     QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),
                     DisqualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Disqualified),
-                    AvarageEstimatedRevenue = DbSet.Average(l => l.EstimatedRevenue),
+                    AverageEstimatedRevenue = DbSet.Average(l => l.EstimatedRevenue),
                 }).FirstAsync();
         }
 
-        public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(LeadQueryParameters lqp,
-                                                                                           Expression<Func<Lead, bool>>? expression = null)
+        public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(string? search,
+                                                                                LeadStatus? status,
+                                                                                string? orderBy,
+                                                                                int skip,
+                                                                                int take,
+                                                                                bool isDescending,
+                                                                                Expression<Func<Lead, bool>>? condition = null)
         {
             var query = DbSet.AsQueryable();
-            // 1. Filtering with expression, search and status
-            if (expression != null)
-            {
-                query = query.Where(expression);
-            }
-            if (!string.IsNullOrWhiteSpace(lqp.Search))
-            {
-                lqp.Search = lqp.Search.Trim().ToLower();
-                query = query.Where(l => l.Title.ToLower().Contains(lqp.Search));
-            }
-            if (lqp.Status != null)
-            {
-                query = query.Where(l => l.Status == (int)lqp.Status);
-            }
-            // 2. Ordering and paging
-            int skip = (lqp.PageIndex - 1) * lqp.PageSize;
-            int take = lqp.PageSize;
-            return await GetPagedAndOrderedListAsync(query, lqp.OrderBy, skip, take, lqp.IsDescending);
+            // 1. Filtering with condition
+            if (condition != null)
+                query = query.Where(condition);
+            
+            // 2. Search by title
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(l => l.Title.ToLower().Contains(search.Trim().ToLower()));
+            
+            // 3. Filter by status
+            if (status != null)
+                query = query.Where(l => l.Status == (int)status);
+            
+            // 4. Ordering and paging
+            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
         }
     }
 }

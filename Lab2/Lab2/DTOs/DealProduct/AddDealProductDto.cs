@@ -4,11 +4,14 @@ namespace Lab2.DTOs.Deal;
 
 public class AddDealProductDto
 {
-    [Required]
+    public int DealId { get; set; }
+    
     public int ProductId { get; set; }
-    [Required]
+    
+    [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
     public int Quantity { get; set; }
-    [Required]
+    
+    [Range(0, double.MaxValue, ErrorMessage = "Price per unit must be positive")]
     public double PricePerUnit { get; set; }
 }
 

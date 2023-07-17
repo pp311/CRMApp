@@ -50,19 +50,17 @@ public class ProductController : ControllerBase
     [HttpPut("{productId:int}")]
     public async Task<ActionResult<ProductDto>> UpdateProduct(int productId, [FromBody] ProductDto? productDto)
     {
-        // 1. Check:
-        // - if dto provided
-        // - if dto id is provided and equal to path parameter
-        if ((productDto == null) || (productDto.Id != default && productDto.Id != productId))
+        if (productDto == null)
             return BadRequest();
-        // 2. If dto id is not provided, set it  
         productDto.Id = productId;
-        // 3. Check if product exists
+        
+        // Check if product exists
         if (await _productService.GetByIdAsync(productId) == null)
         {
             return NotFound();
         }
-        // 4. Update product
+        
+        // Update product
         var updatedProductDto = await _productService.UpdateAsync(productDto);
         return Ok(updatedProductDto);
     }
@@ -70,10 +68,7 @@ public class ProductController : ControllerBase
     [HttpDelete("{productId:int}")]
     public async Task<ActionResult> DeleteProduct(int productId)
     {
-        if (await _productService.DeleteAsync(productId))
-        {
-            return NoContent();
-        }
-        return NotFound();
+        await _productService.DeleteAsync(productId);
+        return NoContent();
     }
 }

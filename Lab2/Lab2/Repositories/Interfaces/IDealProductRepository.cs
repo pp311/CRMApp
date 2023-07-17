@@ -6,8 +6,11 @@ namespace Lab2.Repositories.Interfaces
 {
     public interface IDealProductRepository : IRepositoryBase<DealProduct>
     {
-        Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(DealProductQueryParameters dpqp,
-                                                                                            Expression<Func<DealProduct, bool>>? expression = null);
-        Task<DealProduct?> GetByIdAsync(int dealProductId, int dealId);
+        Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
+                                                                                    string? orderBy,
+                                                                                    int skip,
+                                                                                    int take,
+                                                                                    bool isDescending,
+                                                                                    Expression<Func<DealProduct, bool>>? condition = null);
     }
 }

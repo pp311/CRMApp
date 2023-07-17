@@ -65,7 +65,7 @@ public static class SeedData
         for (var dealId = 1; dealId <= NumberOfDeals; dealId++)
         {
             var dealProducts = new Faker<DealProduct>()
-                .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
+                .RuleFor(dp => dp.Id, f => dealId)
                 .RuleFor(dp => dp.DealId, () => dealId)
                 .RuleFor(dp => dp.ProductId, f => f.Random.Int(1, NumberOfProducts))
                 .RuleFor(dp => dp.Quantity, f => f.Random.Int(1, 100))
