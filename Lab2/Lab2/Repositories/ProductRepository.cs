@@ -5,6 +5,7 @@ using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Repositories
 {
@@ -22,7 +23,7 @@ namespace Lab2.Repositories
                                                                                     bool isDescending,  
                                                                                     Expression<Func<Product, bool>>? expression = null)
         {
-            var query = DbSet.AsQueryable();
+            var query = DbSet.AsNoTracking();
             // 1. Filtering with expression
             if (expression != null)
                 query = query.Where(expression);
@@ -38,8 +39,11 @@ namespace Lab2.Repositories
             if (type != null)
                 query = query.Where(p => p.Type == (int)type);
             
-            // 4. Ordering and paging
-            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
+            // 4. Ordering
+            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            
+            // 5. Paging
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

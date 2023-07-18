@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using Lab2.Data;
 using Lab2.DTOs.Lead;
-using Lab2.DTOs.QueryParameters;
+using System.Linq.Dynamic.Core;
 using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
@@ -13,6 +13,11 @@ namespace Lab2.Repositories
     {
         public LeadRepository(CRMDbContext context) : base(context)
         {
+        }
+        
+        public override async Task<Lead?> GetByIdAsync(int id)
+        {
+            return await DbSet.Include(l => l.Account).FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
@@ -35,7 +40,7 @@ namespace Lab2.Repositories
                                                                                 bool isDescending,
                                                                                 Expression<Func<Lead, bool>>? condition = null)
         {
-            var query = DbSet.AsQueryable();
+            var query = DbSet.Include(l => l.Account).AsNoTracking();
             // 1. Filtering with condition
             if (condition != null)
                 query = query.Where(condition);
@@ -48,8 +53,25 @@ namespace Lab2.Repositories
             if (status != null)
                 query = query.Where(l => l.Status == (int)status);
             
-            // 4. Ordering and paging
-            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
+            // 4. Ordering
+            if (!string.IsNullOrEmpty(orderBy))
+            {
+                orderBy = orderBy.Trim().ToLower() switch
+                {
+                    "title" => "Title",
+                    "customer" => "Account.Name",
+                    "customername" => "Account.Name",
+                    "accountname" => "Account.Name",
+                    "accountid" => "AccountId",
+                    "estimatedrevenue" => "EstimatedRevenue",
+                    "source" => "Source",
+                    _ => "Id"
+                };
+                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
+            }
+            
+            // 5. Paging
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

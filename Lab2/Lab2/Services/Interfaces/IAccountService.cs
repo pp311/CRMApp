@@ -8,12 +8,12 @@ namespace Lab2.Services.Interfaces;
 
 public interface IAccountService
 {
-    Task<AccountDto?> GetByIdAsync(int accountId);
-    Task<PagedResult<AccountDto>> GetListAsync(AccountQueryParameters accountQueryParameters);
-    Task<AccountDto> CreateAsync(AccountDto accountDto);
-    Task<AccountDto> UpdateAsync(AccountDto accountDto);
+    Task<GetAccountDto?> GetByIdAsync(int accountId);
+    Task<PagedResult<GetAccountDto>> GetListAsync(AccountQueryParameters accountQueryParameters);
+    Task<GetAccountDto> CreateAsync(UpsertAccountDto accountDto);
+    Task<GetAccountDto> UpdateAsync(int accountId, UpsertAccountDto accountDto);
     Task DeleteAsync(int accountId);
-    Task<PagedResult<ContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters contactQueryParameters);
+    Task<PagedResult<GetContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters contactQueryParameters);
     Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters leadQueryParameters);
-    Task<PagedResult<DealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dealQueryParameters);
+    Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dealQueryParameters);
 }

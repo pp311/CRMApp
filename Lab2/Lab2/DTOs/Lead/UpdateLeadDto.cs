@@ -6,8 +6,6 @@ namespace Lab2.DTOs.Lead;
 
 public class UpdateLeadDto
 {
-    public int Id { get; set; }
-    
     public int AccountId { get; set; }
 
     [MaxLength((int)StringLength.Medium256)]

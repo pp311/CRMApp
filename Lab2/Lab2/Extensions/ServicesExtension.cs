@@ -35,5 +35,6 @@ public static class ServicesExtension
         services.AddScoped<IContactService, ContactService>();
         services.AddScoped<IDealService, DealService>();
         services.AddScoped<ILeadService, LeadService>();
+        services.AddScoped<IDealProductService, DealProductService>();
     }
 }

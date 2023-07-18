@@ -6,9 +6,7 @@ using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
-var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration.GetSection("Errorlog")).CreateLogger();   
-// builder.Logging.AddSerilog(logger);
+var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();   
 builder.Logging.AddSerilog(errorLogger);
 builder.Services.AddHttpLogging(logging =>
 {
@@ -17,7 +15,7 @@ builder.Services.AddHttpLogging(logging =>
 });
 
 builder.Services.AddControllers();
-
+builder.Services.AddProblemDetails();
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigureRepositories();

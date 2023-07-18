@@ -1,4 +1,4 @@
-namespace Lab2.DTOs.Deal;
+namespace Lab2.DTOs.DealProduct;
 
 public class GetDealProductDto
 {

@@ -20,20 +20,20 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("{accountId:int}")]
-    public async Task<ActionResult<AccountDto>> GetAccountById(int accountId)
+    public async Task<ActionResult<GetAccountDto>> GetAccountById(int accountId)
     {
         var accountDto = await _accountService.GetByIdAsync(accountId);
         return accountDto == null ? NotFound() : Ok(accountDto);
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<AccountDto>>> GetAccountList([FromQuery] AccountQueryParameters accountQueryParameters)
+    public async Task<ActionResult<PagedResult<GetAccountDto>>> GetAccountList([FromQuery] AccountQueryParameters accountQueryParameters)
     {
         return Ok(await _accountService.GetListAsync(accountQueryParameters));
     }
 
     [HttpPost]
-    public async Task<ActionResult<AccountDto>> CreateAccount([FromBody] AccountDto? accountDto)
+    public async Task<ActionResult<GetAccountDto>> CreateAccount([FromBody] UpsertAccountDto? accountDto)
     {
         // 1. Check if dto provided
         if (accountDto == null)
@@ -44,18 +44,17 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("{accountId:int}")]
-    public async Task<ActionResult<AccountDto>> UpdateAccount(int accountId, [FromBody] AccountDto? accountDto)
+    public async Task<ActionResult<GetAccountDto>> UpdateAccount(int accountId, [FromBody] UpsertAccountDto? accountDto)
     {
         if (accountDto == null)
             return BadRequest();
-        accountDto.Id = accountId;
         
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
             return NotFound();
         
         // Update account
-        var updatedAccountDto = await _accountService.UpdateAsync(accountDto);
+        var updatedAccountDto = await _accountService.UpdateAsync(accountId, accountDto);
         return Ok(updatedAccountDto);
     }
 
@@ -79,7 +78,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("{accountId:int}/contacts")]
-    public async Task<ActionResult<PagedResult<ContactDto>>> GetContactsByAccountId(int accountId, [FromQuery] ContactQueryParameters cqp)
+    public async Task<ActionResult<PagedResult<UpsertContactDto>>> GetContactsByAccountId(int accountId, [FromQuery] ContactQueryParameters cqp)
     {
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)
@@ -91,7 +90,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpGet("{accountId:int}/deals")]
-    public async Task<ActionResult<PagedResult<DealDto>>> GetDealsByAccountId(int accountId, [FromQuery] DealQueryParameters dqp)
+    public async Task<ActionResult<PagedResult<GetDealDto>>> GetDealsByAccountId(int accountId, [FromQuery] DealQueryParameters dqp)
     {
         // Check if account exists
         if (await _accountService.GetByIdAsync(accountId) == null)

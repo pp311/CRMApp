@@ -9,6 +9,8 @@ public class GetLeadDto
     public int Id { get; set; }
     
     public int AccountId { get; set; }
+    
+    public string? AccountName { get; set; }
 
     public string? Title { get; set; }
 

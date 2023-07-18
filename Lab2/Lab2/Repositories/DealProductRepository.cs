@@ -14,6 +14,12 @@ namespace Lab2.Repositories
         {
         }
 
+        public override async Task<DealProduct?> GetByIdAsync(int id)
+        {
+            return await DbSet.Include(dp => dp.Product)
+                            .FirstOrDefaultAsync(dp => dp.Id == id);
+        }
+
         public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
                                                                                     string? orderBy,
                                                                                     int skip,
@@ -47,13 +53,8 @@ namespace Lab2.Repositories
                 };
                 query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
             }
-            // 4. Count total items before paging
-            var totalCount = await query.CountAsync();
-            // 5. Calculate for paging
-            if (skip >= 0 && take > 0)
-                query = query.Skip(skip).Take(take);
-            
-            return (await query.ToListAsync(), totalCount);
+
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

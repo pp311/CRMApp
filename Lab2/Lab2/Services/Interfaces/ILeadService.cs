@@ -9,9 +9,9 @@ public interface ILeadService
     Task<PagedResult<GetLeadDto>> GetListAsync(LeadQueryParameters lqp);
     Task<GetLeadDto?> GetByIdAsync(int id);
     Task<GetLeadDto> CreateAsync(AddLeadDto leadDto);
-    Task<GetLeadDto> UpdateAsync(UpdateLeadDto leadDto);
+    Task<GetLeadDto> UpdateAsync(int leadId, UpdateLeadDto leadDto);
     Task DeleteAsync(int leadId);
-    Task<DealDto> QualifyLeadAsync(int leadId);
+    Task<GetDealDto> QualifyLeadAsync(int leadId);
     Task<GetLeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto);
     Task<LeadStatisticsDto> GetLeadStatisticsAsync();
 }

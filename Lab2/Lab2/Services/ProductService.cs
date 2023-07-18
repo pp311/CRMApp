@@ -22,18 +22,18 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
     
-    private async Task ValidateSavingProduct(ProductDto productDto)
-    {
+    private async Task ValidateSavingProduct(UpsertProductDto productDto, int productId = 0) 
+    { 
         // Validate product code uniqueness
         if (!string.IsNullOrEmpty(productDto.ProductCode))
         {
            if (await _productRepository.IsExistAsync(p => p.ProductCode == productDto.ProductCode 
-                                                           && p.Id != productDto.Id))
+                                                           && p.Id != productId))
                throw new EntityValidationException($"Product code {productDto.ProductCode} is already existed"); 
         } 
     }
 
-    public async Task<PagedResult<ProductDto>> GetListAsync(ProductQueryParameters pqp)
+    public async Task<PagedResult<GetProductDto>> GetListAsync(ProductQueryParameters pqp)
     {
         // 1. Get products based on filter and paging parameters
         // 2. Get total count for paging
@@ -44,41 +44,47 @@ public class ProductService : IProductService
                                                                                          take: pqp.PageSize,
                                                                                          isDescending: pqp.IsDescending);
         // 3. Map and return
-        var result = _mapper.Map<List<ProductDto>>(products);
-        return new PagedResult<ProductDto>(result, productCount, pqp.PageIndex, pqp.PageSize);
+        var result = _mapper.Map<List<GetProductDto>>(products);
+        return new PagedResult<GetProductDto>(result, productCount, pqp.PageIndex, pqp.PageSize);
     }
     
-    public async Task<ProductDto?> GetByIdAsync(int id)
+    public async Task<GetProductDto?> GetByIdAsync(int id)
     {
-        return _mapper.Map<ProductDto>(await _productRepository.GetByIdAsync(id));
+        return _mapper.Map<GetProductDto>(await _productRepository.GetByIdAsync(id));
     }
 
-    public async Task<ProductDto> CreateAsync(ProductDto productDto)
+    public async Task<GetProductDto> CreateAsync(UpsertProductDto productDto)
     {
         await ValidateSavingProduct(productDto);
         
         var product = _mapper.Map<Product>(productDto);
         _productRepository.Add(product);
         await _unitOfWork.CommitAsync();
-        return _mapper.Map<ProductDto>(product);
+        return _mapper.Map<GetProductDto>(product);
     }
 
-    public async Task<ProductDto> UpdateAsync(ProductDto productDto)
+    public async Task<GetProductDto> UpdateAsync(int productId, UpsertProductDto productDto)
     {
         // 1. Validate product code uniqueness
-        await ValidateSavingProduct(productDto);
+        await ValidateSavingProduct(productDto, productId);
+        
         // 2. Get product from database
-        var product = await _productRepository.GetByIdAsync(productDto.Id);
+        var product = await _productRepository.GetByIdAsync(productId);
         if (product == null)
-            throw new EntityNotFoundException($"Product with id {productDto.Id} not found");
+            throw new EntityNotFoundException($"Product with id {productId} not found");
+        
         // 3. Update product 
         _mapper.Map(productDto, product);
         await _unitOfWork.CommitAsync();
-        return productDto;
+        return _mapper.Map<GetProductDto>(product);
     }
 
     public async Task DeleteAsync(int productId)
     {
+        // 1. Check if product exists
+        if (!await _productRepository.IsExistAsync(p => p.Id == productId))
+            throw new EntityNotFoundException($"Product with id {productId} not found");
+        
         _productRepository.Delete(new Product { Id = productId });
         await _unitOfWork.CommitAsync();
     }

@@ -4,19 +4,23 @@ using Lab2.Enums;
 
 namespace Lab2.DTOs.Deal;
 
-public class DealDto
+public class GetDealDetailDto
 {
     public int Id { get; set; }
-
-    [Required]
-    [MaxLength((int)StringLength.Medium256)]
+    
+    public int LeadId { get; set; }
+    
+    public int AccountId { get; set; }
+    
+    public string? AccountName { get; set; }
+    
     public string Title { get; set; } = null!;
-
-    [MaxLength((int)StringLength.Long1024)]
+    
     public string? Description { get; set; }
-
-    public double? ActualRevenue { get; set; }
-
+    public double EstimatedRevenue { get; set; }
+    
+    public double ActualRevenue { get; set; }
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public DealStatus Status { get; set; }
 }

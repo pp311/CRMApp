@@ -5,9 +5,9 @@ namespace Lab2.Services.Interfaces;
 
 public interface IProductService
 {
-    Task<PagedResult<ProductDto>> GetListAsync(ProductQueryParameters productQueryParameters);
-    Task<ProductDto?> GetByIdAsync(int id);
-    Task<ProductDto> CreateAsync(ProductDto productDto);
-    Task<ProductDto> UpdateAsync(ProductDto productDto);
+    Task<PagedResult<GetProductDto>> GetListAsync(ProductQueryParameters productQueryParameters);
+    Task<GetProductDto?> GetByIdAsync(int id);
+    Task<GetProductDto> CreateAsync(UpsertProductDto productDto);
+    Task<GetProductDto> UpdateAsync(int productId, UpsertProductDto productDto);
     Task DeleteAsync(int productId);
 }

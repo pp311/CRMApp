@@ -1,7 +1,9 @@
+using System.Xml;
 using AutoMapper;
 using Lab2.DTOs.Account;
 using Lab2.DTOs.Contact;
 using Lab2.DTOs.Deal;
+using Lab2.DTOs.DealProduct;
 using Lab2.DTOs.Lead;
 using Lab2.DTOs.Product;
 using Lab2.Entities;
@@ -12,19 +14,30 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Product, ProductDto>().ReverseMap();
+        CreateMap<Product, GetProductDto>();
+        CreateMap<UpsertProductDto, Product>();
 
-        CreateMap<Account, AccountDto>().ReverseMap();
+        CreateMap<UpsertAccountDto, Account>();
+        CreateMap<Account, GetAccountDto>();
 
-        CreateMap<Lead, GetLeadDto>().ReverseMap();
+        CreateMap<Lead, GetLeadDto>()
+            .ForMember(dto => dto.AccountName, opt => opt.MapFrom(lead => lead.Account!.Name));
+        CreateMap<UpdateLeadDto, Lead>();
         CreateMap<AddLeadDto, Lead>();
 
-        CreateMap<Contact, ContactDto>().ReverseMap();
+        CreateMap<UpsertContactDto, Contact>();
+        CreateMap<Contact, GetContactDto>()
+            .ForMember(dto => dto.AccountName, opt => opt.MapFrom(c => c.Account!.Name));
 
-        CreateMap<Deal, DealDto>().ReverseMap();
-        CreateMap<Deal, GetDealDto>().ForMember(dto => dto.EstimatedRevenue, opt => opt.MapFrom(deal => deal.Lead!.EstimatedRevenue));
+        CreateMap<Deal, GetDealDto>();
+        CreateMap<Deal, GetDealDetailDto>()
+            .ForMember(dto => dto.EstimatedRevenue, opt => opt.MapFrom(deal => deal.Lead!.EstimatedRevenue))
+            .ForMember(dto => dto.AccountName, opt => opt.MapFrom(deal => deal.Lead!.Account!.Name))
+            .ForMember(dto => dto.AccountId, opt => opt.MapFrom(deal => deal.Lead!.AccountId));
+        CreateMap<UpdateDealDto, Deal>();
 
         CreateMap<AddDealProductDto, DealProduct>();
+        CreateMap<UpdateDealProductDto, DealProduct>();
         CreateMap<DealProduct, GetDealProductDto>()
             .ForMember(dto => dto.TotalAmount, opt => opt.MapFrom(dp => dp.Quantity * dp.PricePerUnit))
             .ForMember(dto => dto.ProductCode, opt => opt.MapFrom(dp => dp.Product!.ProductCode))

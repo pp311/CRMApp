@@ -45,40 +45,50 @@ public class LeadService : ILeadService
 
     public async Task DeleteAsync(int leadId)
     {
+        // 1. Check if lead exists
+        if (!await _leadRepository.IsExistAsync(l => l.Id == leadId))
+            throw new EntityNotFoundException($"Lead with id {leadId} not found");
+        
         _leadRepository.Delete(new Lead { Id = leadId });
         await _unitOfWork.CommitAsync();
     }
     
-    public async Task<GetLeadDto> UpdateAsync(UpdateLeadDto leadDto) 
+    public async Task<GetLeadDto> UpdateAsync(int leadId, UpdateLeadDto leadDto) 
     {
         // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadDto.Id);
+        var lead = await _leadRepository.GetByIdAsync(leadId);
         if (lead == null)
-            throw new EntityNotFoundException($"Lead with id {leadDto.Id} not found");
+            throw new EntityNotFoundException($"Lead with id {leadId} not found");
         
-        // 2. If lead is already ended (qualified or disqualified), throw exception
-        if (lead.Status is (int)LeadStatus.Qualified or (int)LeadStatus.Disqualified)
-            throw new InvalidUpdateException("Cannot update ended (qualified or disqualified) lead");
-        
-        // 3. Check leadDto: if status is not disqualified, reason must be null
+        // 2. Check leadDto: if status is not disqualified, reason must be null
         if (leadDto.Status != LeadStatus.Disqualified && leadDto.DisqualifiedReason != null)
             throw new InvalidUpdateException("Disqualification reason must be null if status is not disqualified");
         
-        // 4. If account is changed, check if new account exists
+        // 3. If account is changed, check if new account exists
         if (lead.AccountId != leadDto.AccountId)
         {
             if (!await _dealRepository.IsExistAsync(d => d.Id == leadDto.AccountId))
                 throw new EntityNotFoundException($"Account with id {leadDto.AccountId} not found");
         }
         
-        // 5. Update Lead
-        _mapper.Map(leadDto, lead);
+        // 4. If lead is already ended (qualified or disqualified), only changes in source and desc fields are allowed
+        if (lead.Status is (int)LeadStatus.Qualified or (int)LeadStatus.Disqualified)
+        {
+            lead.Source = (int?)leadDto.Source; 
+            lead.Description = leadDto.Description;
+        }
+        else
+        {
+            _mapper.Map(leadDto, lead);
+        }
         await _unitOfWork.CommitAsync();
         return _mapper.Map<GetLeadDto>(lead);
     }
     
     public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
     {
+        var leadStatistics = await _leadRepository.GetLeadStatisticsAsync();
+        leadStatistics.AverageEstimatedRevenue = Math.Round(leadStatistics.AverageEstimatedRevenue, 2);
         return await _leadRepository.GetLeadStatisticsAsync();
     }
 
@@ -125,7 +135,7 @@ public class LeadService : ILeadService
         return _mapper.Map<GetLeadDto>(lead);
     }
 
-    public async Task<DealDto> QualifyLeadAsync(int leadId)
+    public async Task<GetDealDto> QualifyLeadAsync(int leadId)
     {
         // 1. Get lead from database
         var lead = await _leadRepository.GetByIdAsync(leadId);
@@ -149,7 +159,7 @@ public class LeadService : ILeadService
         await _unitOfWork.CommitAsync();
         
         // 5. Return deal
-        return _mapper.Map<DealDto>(deal);
+        return _mapper.Map<GetDealDto>(deal);
     }
 
 }

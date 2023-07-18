@@ -5,18 +5,12 @@ namespace Lab2.Services.Interfaces;
 
 public interface IDealService
 {
-    Task<GetDealDto?> GetByIdAsync(int id);
-    Task<PagedResult<DealDto>> GetListAsync(DealQueryParameters dqp);
+    Task<GetDealDetailDto?> GetByIdAsync(int id);
+    Task<PagedResult<GetDealDetailDto>> GetListAsync(DealQueryParameters dqp);
     // Task<DealDto> CreateAsync(DealDto deal);
-    Task<DealDto> UpdateAsync(DealDto dealDto);
+    Task<GetDealDetailDto> UpdateAsync(int dealId, UpdateDealDto dealDto);
     Task DeleteAsync(int id);
-    Task<GetDealDto> MarkDealAsWonAsync(int dealId);
-    Task<GetDealDto> MarkDealAsLostAsync(int dealId);
+    Task<GetDealDetailDto> MarkDealAsWonAsync(int dealId);
+    Task<GetDealDetailDto> MarkDealAsLostAsync(int dealId);
     Task<DealStatisticsDto> GetDealStatisticsAsync();
-
-    Task<GetDealProductDto?> GetDealProductByIdAsync(int dealProductId);
-    Task<PagedResult<GetDealProductDto>> GetDealProductListAsync(int dealId, DealProductQueryParameters dpqp);
-    Task<GetDealProductDto> AddProductToDealAsync(AddDealProductDto addDealProductDto);
-    Task<GetDealProductDto> UpdateDealProductAsync(UpdateDealProductDto updateDealProductDto);
-    Task DeleteDealProductAsync(int dealProductId);
 }

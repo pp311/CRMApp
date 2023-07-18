@@ -3,6 +3,7 @@ using Lab2.Data;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Repositories
 {
@@ -12,6 +13,11 @@ namespace Lab2.Repositories
         {
         }
 
+        public override async Task<Contact?> GetByIdAsync(int id)
+        {
+            return await DbSet.Include(c => c.Account).FirstOrDefaultAsync(c => c.Id == id);
+        }
+
         public async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(string? search,
                                                                                                  string? orderBy,
                                                                                                  int skip,
@@ -19,17 +25,25 @@ namespace Lab2.Repositories
                                                                                                  bool isDescending,
                                                                                                  Expression<Func<Contact, bool>>? condition)
         {
-            var query = DbSet.AsQueryable();
+            var query = DbSet.Include(c => c.Account).AsNoTracking();
             // 1. Filtering with expression
             if (condition != null)
                 query = query.Where(condition);
             
-            // 2. Search by name
+            // 2. Search by name, phone, email
             if (!string.IsNullOrWhiteSpace(search))
-                query = query.Where(c => c.Name.ToLower().Contains(search.Trim().ToLower()));
+            {
+                search = search.Trim().ToLower();
+                query = query.Where(c => c.Name.ToLower().Contains(search) ||
+                                                (c.Phone != null && c.Phone.ToLower().Contains(search)) ||
+                                                c.Email.ToLower().Contains(search));
+            }
             
-            // 3. Ordering and paging
-            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
+            // 3. Ordering
+            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            
+            // 4. Paging
+            return await GetPagedListFromQueryableAsync(query,  skip, take);
         }
     }
 }

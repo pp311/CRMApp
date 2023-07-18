@@ -5,9 +5,9 @@ namespace Lab2.Services.Interfaces;
 
 public interface IContactService
 {
-    Task<ContactDto?> GetByIdAsync(int id);
-    Task<PagedResult<ContactDto>> GetListAsync(ContactQueryParameters cqp);
-    Task<ContactDto> CreateAsync(ContactDto contactDto);
-    Task<ContactDto> UpdateAsync(ContactDto contactDto);
+    Task<GetContactDto?> GetByIdAsync(int id);
+    Task<PagedResult<GetContactDto>> GetListAsync(ContactQueryParameters cqp);
+    Task<GetContactDto> CreateAsync(UpsertContactDto upsertContactDto);
+    Task<GetContactDto> UpdateAsync(int contactId, UpsertContactDto upsertContactDto);
     Task DeleteAsync(int contactId);
 }

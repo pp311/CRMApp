@@ -53,12 +53,11 @@ public class LeadController : ControllerBase
     {
         if (leadDto == null)
             return BadRequest();
-        leadDto.Id = leadId;
         
         if (await _leadService.GetByIdAsync(leadId) == null)
             return NotFound();
         
-        var updatedLeadDto = await _leadService.UpdateAsync(leadDto);
+        var updatedLeadDto = await _leadService.UpdateAsync(leadId, leadDto);
         return Ok(updatedLeadDto);
     }
 
@@ -70,14 +69,14 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost("{leadId:int}/qualify-lead")]
-    public async Task<ActionResult<DealDto>> QualifyLead(int leadId)
+    public async Task<ActionResult<GetDealDto>> QualifyLead(int leadId)
     {
         // 1. Check if lead exists
         if (await _leadService.GetByIdAsync(leadId) == null)
             return NotFound();
         // 2. Qualify lead
         var deal = await _leadService.QualifyLeadAsync(leadId);
-        return CreatedAtRoute("GetDealById", new { leadId = deal.Id }, deal);
+        return CreatedAtRoute( new { dealId = deal.Id, controller = "Deal", action = nameof(DealController.GetDealById) }, deal);
     }
 
     [HttpPost("{leadId:int}/disqualify-lead")]

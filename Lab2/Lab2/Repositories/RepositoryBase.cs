@@ -50,17 +50,30 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         return entity;
     }
 
-    // This method is used to get list with paging and ordering based on a filtered query
     // Use in repository layer only
     protected async Task<(IEnumerable<TEntity>, int)> GetPagedListFromQueryableAsync(IQueryable<TEntity> query,
-                                                                                     string? orderBy,
                                                                                      int skip,
-                                                                                     int take,
-                                                                                     bool isDescending)
+                                                                                     int take)
     {
-        // 1. If orderBy provided, check if the orderBy field exists in TEntity and apply the order 
+        // Count total items before paging
+        var totalCount = await query.CountAsync();
+        
+        // If skip and take provided, apply them 
+        if (skip >= 0  && take > 0)
+            query = query.Skip(skip).Take(take);
+        
+        return (await query.ToListAsync(), totalCount);
+    }
+
+    // Apply sorting if the orderBy field exists in TEntity,
+    // If sorting field is in join table, you must write custom sorting logic
+    protected IQueryable<TEntity> ApplySortingIfFieldExistsQueryable(IQueryable<TEntity> query,
+                                                                     string? orderBy,
+                                                                     bool isDescending = false)
+    {
         if (!string.IsNullOrEmpty(orderBy))
         {
+            // Check if the orderBy field exists in TEntity
             var properties = typeof(TEntity).GetProperties();
             var orderByProperty =
                 properties.FirstOrDefault(p => string.Equals(p.Name, orderBy, StringComparison.OrdinalIgnoreCase));
@@ -71,13 +84,7 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
                 query = isDescending ? query.OrderBy(orderByProperty.Name + " desc") : query.OrderBy(orderByProperty.Name);
             }
         }
-        // Count total items before paging
-        var totalCount = await query.CountAsync();
-        // 2. If skip and take provided, apply them 
-        if (skip >= 0  && take > 0)
-            query = query.Skip(skip).Take(take);
-        
-        return (await query.ToListAsync(), totalCount);
+        return query;
     }
 
     // Get list with paging, filtering, ordering
@@ -88,13 +95,15 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
                                                                                      bool isDescending)
     {
         // Filtering with expression
-        var query = DbSet.AsQueryable();
+        var query = DbSet.AsNoTracking();
         if (expression != null)
         {
             query = query.Where(expression);
         }
-        // Paging and ordering
-        return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
+        // If orderBy provided, check if the orderBy field exists in TEntity and apply the order 
+        query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+        
+        return await GetPagedListFromQueryableAsync(query, skip, take);
     }
 
 

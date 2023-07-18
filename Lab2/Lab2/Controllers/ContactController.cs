@@ -17,7 +17,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpGet("{contactId:int}")]
-    public async Task<ActionResult<ContactDto>> GetContactById(int contactId)
+    public async Task<ActionResult<GetContactDto>> GetContactById(int contactId)
     {
         var contact = await _contactService.GetByIdAsync(contactId);
         if (contact == null)
@@ -28,14 +28,14 @@ public class ContactController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<PagedResult<ContactDto>>> GetContactList([FromQuery] ContactQueryParameters contactQueryParameters)
+    public async Task<ActionResult<PagedResult<GetContactDto>>> GetContactList([FromQuery] ContactQueryParameters contactQueryParameters)
     {
         var contacts = await _contactService.GetListAsync(contactQueryParameters);
         return Ok(contacts);
     }
     
     [HttpPost]
-    public async Task<ActionResult<ContactDto>> CreateContact([FromBody] ContactDto? contactDto)
+    public async Task<ActionResult<GetContactDto>> CreateContact([FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
             return BadRequest();
@@ -44,19 +44,24 @@ public class ContactController : ControllerBase
     }
 
     [HttpPut("{contactId:int}")]
-    public async Task<ActionResult<ContactDto>> UpdateContact(int contactId, [FromBody] ContactDto? contactDto)
+    public async Task<ActionResult<GetContactDto>> UpdateContact(int contactId, [FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
             return BadRequest();
-        contactDto.Id = contactId;
         
-        var updatedContact = await _contactService.UpdateAsync(contactDto);
+        if (await _contactService.GetByIdAsync(contactId) == null)
+            return NotFound();
+        
+        var updatedContact = await _contactService.UpdateAsync(contactId, contactDto);
         return Ok(updatedContact);
     }
 
     [HttpDelete("{contactId:int}")]
     public async Task<ActionResult> DeleteContact(int contactId)
     {
+        if (await _contactService.GetByIdAsync(contactId) == null)
+            return NotFound();
+        
         await _contactService.DeleteAsync(contactId);
         return NoContent();
     }

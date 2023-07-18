@@ -9,6 +9,6 @@ public class Account : AuditableEntity
     public double TotalSales { get; set; }
     
     // public ICollection<Deal> Deals { get; set; }
-    public ICollection<Lead> Leads { get; set; }
-    public ICollection<Contact> Contacts { get; set; }
+    public ICollection<Lead> Leads { get; set; } = new List<Lead>();
+    public ICollection<Contact> Contacts { get; set; } = new List<Contact>();
 }

@@ -14,10 +14,12 @@ namespace Lab2.Repositories
         public DealRepository(CRMDbContext context) : base(context)
         {
         }
-
+        
         public override async Task<Deal?> GetByIdAsync(int id)
         {
-            return await DbSet.Include(d => d.Lead).FirstOrDefaultAsync(d => d.Id == id);
+            return await DbSet.Include(d => d.Lead)
+                       .ThenInclude(l => l!.Account)
+                       .FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(string? search,
@@ -28,7 +30,7 @@ namespace Lab2.Repositories
                                                                                 bool isDescending,
                                                                                 Expression<Func<Deal, bool>>? condition)
         {
-            var query = DbSet.Include(d => d.Lead).AsNoTracking();
+            var query = DbSet.Include(d => d.Lead).ThenInclude(l => l!.Account).AsNoTracking();
             // 1. Filtering with expression
             if (condition != null)
                 query = query.Where(condition);
@@ -39,12 +41,13 @@ namespace Lab2.Repositories
             
             // 3. Filter by status
             if (status != null)
-            {
                 query = query.Where(l => l.Status == (int)status);
-            }
             
-            // 4. Ordering and paging
-            return await GetPagedListFromQueryableAsync(query, orderBy, skip, take, isDescending);
+            // 4. Ordering
+            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            
+            // 5. Paging
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
 
         public async Task<DealStatisticsDto> GetDealStatisticsAsync()
@@ -54,7 +57,7 @@ namespace Lab2.Repositories
                 OpenDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Open),
                 WonDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Won),
                 LostDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Lost),
-                AvarageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
+                AverageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
                 TotalRevenue = DbSet.Sum(d1 => d1.ActualRevenue),
             }).FirstAsync();
         }
