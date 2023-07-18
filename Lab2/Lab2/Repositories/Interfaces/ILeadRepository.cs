@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Lab2.DomainModels;
 using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
@@ -15,7 +16,7 @@ namespace Lab2.Repositories.Interfaces
                                                                                 int take,
                                                                                 bool isDescending,
                                                                                 Expression<Func<Lead, bool>>? condition = null);
-        Task<LeadStatisticsDto> GetLeadStatisticsAsync();
+        Task<LeadStatistics> GetLeadStatisticsAsync();
     }
 
 }

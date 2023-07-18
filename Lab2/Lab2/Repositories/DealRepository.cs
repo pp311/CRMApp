@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Lab2.Data;
+using Lab2.DomainModels;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
@@ -50,16 +51,17 @@ namespace Lab2.Repositories
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
 
-        public async Task<DealStatisticsDto> GetDealStatisticsAsync()
+        public async Task<DealStatistics> GetDealStatisticsAsync()
         {
-            return await DbSet.AsNoTracking().AsQueryable().Select(d => new DealStatisticsDto
-            {
-                OpenDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Open),
-                WonDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Won),
-                LostDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Lost),
-                AverageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
-                TotalRevenue = DbSet.Sum(d1 => d1.ActualRevenue),
-            }).FirstAsync();
+            return await DbSet.AsNoTracking().AsQueryable().Select(d => 
+                       new DealStatistics
+                        {
+                            OpenDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Open),
+                            WonDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Won),
+                            LostDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Lost),
+                            AverageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
+                            TotalRevenue = DbSet.Sum(d1 => d1.ActualRevenue),
+                        }).FirstAsync();
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Lab2.Data;
 using Lab2.DTOs.Lead;
 using System.Linq.Dynamic.Core;
+using Lab2.DomainModels;
 using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Repositories.Interfaces;
@@ -20,10 +21,10 @@ namespace Lab2.Repositories
             return await DbSet.Include(l => l.Account).FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<LeadStatisticsDto> GetLeadStatisticsAsync()
+        public async Task<LeadStatistics> GetLeadStatisticsAsync()
         {
             return await DbSet.AsNoTracking().AsQueryable().Select(lead =>
-                new LeadStatisticsDto
+                new LeadStatistics
                 {
                     OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
                     QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),

@@ -82,7 +82,7 @@ public class DealService : IDealService
         var statistics = await _dealRepository.GetDealStatisticsAsync();
         statistics.AverageRevenue = Math.Round(statistics.AverageRevenue, 2);
         statistics.TotalRevenue = Math.Round(statistics.TotalRevenue, 2);
-        return statistics;
+        return _mapper.Map<DealStatisticsDto>(statistics);
     }
 
     public async Task<GetDealDetailDto> MarkDealAsWonAsync(int dealId)

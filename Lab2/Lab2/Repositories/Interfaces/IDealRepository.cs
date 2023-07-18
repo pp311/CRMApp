@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Lab2.DomainModels;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
@@ -15,6 +16,6 @@ namespace Lab2.Repositories.Interfaces
                                                                                 int take,
                                                                                 bool isDescending,
                                                                                 Expression<Func<Deal, bool>>? condition = null);
-        Task<DealStatisticsDto> GetDealStatisticsAsync();
+        Task<DealStatistics> GetDealStatisticsAsync();
     }
 }

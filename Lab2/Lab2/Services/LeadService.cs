@@ -89,7 +89,7 @@ public class LeadService : ILeadService
     {
         var leadStatistics = await _leadRepository.GetLeadStatisticsAsync();
         leadStatistics.AverageEstimatedRevenue = Math.Round(leadStatistics.AverageEstimatedRevenue, 2);
-        return await _leadRepository.GetLeadStatisticsAsync();
+        return _mapper.Map<LeadStatisticsDto>(leadStatistics);
     }
 
     public async Task<GetLeadDto?> GetByIdAsync(int id)

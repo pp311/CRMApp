@@ -1,5 +1,6 @@
 using System.Xml;
 using AutoMapper;
+using Lab2.DomainModels;
 using Lab2.DTOs.Account;
 using Lab2.DTOs.Contact;
 using Lab2.DTOs.Deal;
@@ -24,6 +25,7 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.AccountName, opt => opt.MapFrom(lead => lead.Account!.Name));
         CreateMap<UpdateLeadDto, Lead>();
         CreateMap<AddLeadDto, Lead>();
+        CreateMap<LeadStatistics, LeadStatisticsDto>();
 
         CreateMap<UpsertContactDto, Contact>();
         CreateMap<Contact, GetContactDto>()
@@ -35,6 +37,7 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.AccountName, opt => opt.MapFrom(deal => deal.Lead!.Account!.Name))
             .ForMember(dto => dto.AccountId, opt => opt.MapFrom(deal => deal.Lead!.AccountId));
         CreateMap<UpdateDealDto, Deal>();
+        CreateMap<DealStatistics, DealStatisticsDto>();
 
         CreateMap<AddDealProductDto, DealProduct>();
         CreateMap<UpdateDealProductDto, DealProduct>();
