@@ -15,6 +15,7 @@ public class UpsertProductDto
     public string? Name { get; set; }
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
+    [EnumDataType(typeof(ProductType))]
     public ProductType Type { get; set; }
     
     [Range(0, double.MaxValue, ErrorMessage = "Price must be positive")]

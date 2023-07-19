@@ -98,10 +98,12 @@ public class ContactService : IContactService
         // Check phone and email uniqueness
         await ValidateSavingContact(upsertContactDto, contactId);
         
-        // Check if account of the contact is exist
-        if (!await _accountRepository.IsExistAsync(a => a.Id == upsertContactDto.AccountId))
+        // Check if account of the contact is exist when updating account id
+        if (upsertContactDto.AccountId != contact.AccountId &&
+            !await _accountRepository.IsExistAsync(a => a.Id == upsertContactDto.AccountId))
+        {
             throw new EntityNotFoundException($"Account with id {upsertContactDto.AccountId} not found");
-        
+        }
         
         _mapper.Map(upsertContactDto, contact);
         await _unitOfWork.CommitAsync();

@@ -15,8 +15,9 @@ public class AddLeadDto
 
     [MaxLength((int)StringLength.Long1024)]
     public string? Description { get; set; }
-
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
+    [EnumDataType(typeof(LeadSource))]
     public LeadSource? Source { get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "Estimated revenue must be positive")]
