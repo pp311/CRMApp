@@ -1,9 +1,11 @@
 using Lab2.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Data;
 
-public class CRMDbContext : DbContext
+public class CRMDbContext : IdentityDbContext<User, IdentityRole<int>, int>
 {
     public CRMDbContext(DbContextOptions<CRMDbContext> options) : base(options)
     {

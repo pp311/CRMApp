@@ -1,8 +1,10 @@
 using Lab2.Data;
+using Lab2.Entities;
 using Lab2.Repositories;
 using Lab2.Repositories.Interfaces;
 using Lab2.Services;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Extensions;
@@ -36,5 +38,22 @@ public static class ServicesExtension
         services.AddScoped<IDealService, DealService>();
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IDealProductService, DealProductService>();
+    }
+    
+    public static void ConfigureIdentity(this IServiceCollection services)
+    {
+        services.AddIdentity<User, IdentityRole<int>>(options =>
+            {
+                options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                
+                options.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<CRMDbContext>()
+            .AddDefaultTokenProviders();
     }
 }

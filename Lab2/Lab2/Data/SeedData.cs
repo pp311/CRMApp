@@ -1,6 +1,7 @@
 using Bogus;
 using Lab2.Entities;
 using Lab2.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Data;
@@ -9,12 +10,13 @@ public static class SeedData
 {
     private const string ProductCodePrefix = "PRO-";
     private const int NumberOfProducts = 10;
-    private const int RangeProductsPerDeal = 1;
+    private const int RangeProductsPerDeal = 5;
     private const int NumberOfLeads = 30;
     private const int NumberOfDeals = NumberOfLeads;
     private const int NumberOfAccounts = 25;
     private const int NumberOfContacts = 100;
-
+    private const int NumberOfUsers = 15;
+    
     public static void AddSeedData(this ModelBuilder modelBuilder)
     {
         var accounts = new Faker<Account>()
@@ -37,7 +39,7 @@ public static class SeedData
             .RuleFor(l => l.EndedDate, (f, l) => l.Status >= 2 ? f.Date.Past() : null)
             .RuleFor(l => l.DisqualifiedReason, (f, l) => l.Status == (int)LeadStatus.Disqualified ? f.Random.Int(0, 4) : null)
             .RuleFor(l => l.DisqualifiedDescription, (f, l) => l.Status == (int)LeadStatus.Disqualified ? f.Lorem.Sentence(10, 20) : null)
-            .RuleFor(l => l.AccountId, f => f.Random.Int(1, NumberOfAccounts))
+            .RuleFor(l => l.AccountId, f => f.PickRandom(accounts).Id)
             .Generate(NumberOfLeads);
         modelBuilder.Entity<Lead>().HasData(leads);
 
@@ -61,26 +63,36 @@ public static class SeedData
             // .RuleFor(d => d.AccountId, f => f.Random.Int(1, NumberOfAccounts))
             .Generate(NumberOfDeals);
         modelBuilder.Entity<Deal>().HasData(deals);
-
-        for (var dealId = 1; dealId <= NumberOfDeals; dealId++)
-        {
-            var dealProducts = new Faker<DealProduct>()
-                .RuleFor(dp => dp.Id, f => dealId)
-                .RuleFor(dp => dp.DealId, () => dealId)
-                .RuleFor(dp => dp.ProductId, f => f.Random.Int(1, NumberOfProducts))
-                .RuleFor(dp => dp.Quantity, f => f.Random.Int(1, 100))
-                .RuleFor(dp => dp.PricePerUnit, f => f.Random.Int(10, 100))
-                .Generate(RangeProductsPerDeal);
-            modelBuilder.Entity<DealProduct>().HasData(dealProducts);
-        }
-
+        
+        var dealProducts = new Faker<DealProduct>()
+            .RuleFor(dp => dp.Id, f => f.IndexFaker + 1)
+            .RuleFor(dp => dp.DealId, f => f.PickRandom(deals).Id)
+            .RuleFor(dp => dp.ProductId, f => f.PickRandom(products).Id)
+            .RuleFor(dp => dp.Quantity, f => f.Random.Int(1, 100))
+            .RuleFor(dp => dp.PricePerUnit, f => f.Random.Int(10, 100))
+            .Generate(RangeProductsPerDeal);
+        modelBuilder.Entity<DealProduct>().HasData(dealProducts);
+        
         var contacts = new Faker<Contact>()
             .RuleFor(c => c.Id, f => f.IndexFaker + 1)
             .RuleFor(c => c.Name, f => f.Name.FullName())
             .RuleFor(c => c.Email, f => f.Internet.Email())
             .RuleFor(c => c.Phone, f => f.Phone.PhoneNumber())
-            .RuleFor(c => c.AccountId, f => f.Random.Int(1, NumberOfAccounts))
+            .RuleFor(c => c.AccountId, f => f.PickRandom(accounts).Id)
             .Generate(NumberOfContacts);
         modelBuilder.Entity<Contact>().HasData(contacts);
+
+        var users = new Faker<User>()
+            // +2 because of the admin has id 1
+            .RuleFor(u => u.Id, f => f.IndexFaker + 2)
+            .RuleFor(u => u.Name, f => f.Name.FullName())
+            .RuleFor(u => u.Email, f => f.Internet.Email())
+            .Generate(NumberOfUsers);
+        modelBuilder.Entity<User>().HasData(users);
+
+        foreach (var usersRole in users)
+        {
+            modelBuilder.Entity<IdentityUserRole<int>>().HasData(new IdentityUserRole<int> {UserId =  usersRole.Id, RoleId = 2});
+        }
     }
 }

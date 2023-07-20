@@ -10,8 +10,7 @@ var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Confi
 builder.Logging.AddSerilog(errorLogger);
 builder.Services.AddHttpLogging(logging =>
 {
-    logging.LoggingFields = HttpLoggingFields.RequestMethod |
-                            HttpLoggingFields.RequestPath;
+    logging.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath;
 });
 
 builder.Services.AddControllers();
@@ -20,8 +19,9 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureServices();
-builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureIdentity();
 
+builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
