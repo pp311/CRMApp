@@ -1,10 +1,10 @@
 using System.Linq.Expressions;
 using Lab2.Data;
 using Lab2.DomainModels;
-using Lab2.DTOs.Deal;
-using Lab2.DTOs.QueryParameters;
+using System.Linq.Dynamic.Core;
 using Lab2.Entities;
 using Lab2.Enums;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +25,7 @@ namespace Lab2.Repositories
 
         public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(string? search,
                                                                                 DealStatus? status, 
-                                                                                string? orderBy,
+                                                                                DealSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
@@ -45,7 +45,15 @@ namespace Lab2.Repositories
                 query = query.Where(l => l.Status == (int)status);
             
             // 4. Ordering
-            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            if (orderBy == null)
+                return await GetPagedListFromQueryableAsync(query, skip, take);
+            
+            var sortingField = orderBy switch
+            {
+                DealSortBy.Title => DealSortBy.Title.ToString(),
+                _ => DealSortBy.Id.ToString()
+            };
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
             
             // 5. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);

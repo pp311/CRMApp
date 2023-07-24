@@ -4,6 +4,7 @@ using Lab2.DTOs.Deal;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
+using Lab2.Enums.Sorting;
 
 namespace Lab2.Repositories.Interfaces
 {
@@ -11,7 +12,7 @@ namespace Lab2.Repositories.Interfaces
     {
         Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(string? search,
                                                                                 DealStatus? status,
-                                                                                string? orderBy,
+                                                                                DealSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,

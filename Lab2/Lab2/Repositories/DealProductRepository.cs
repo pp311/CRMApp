@@ -3,6 +3,7 @@ using System.Linq.Dynamic.Core;
 using Lab2.Data;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,7 @@ namespace Lab2.Repositories
         }
 
         public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
-                                                                                    string? orderBy,
+                                                                                    DealProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
                                                                                     bool isDescending,
@@ -40,19 +41,18 @@ namespace Lab2.Repositories
                                           || dp.Product.ProductCode.ToLower().Contains(search));
             }
             // 3. If orderBy provided, check if the orderBy field valid and apply the order 
-            if (!string.IsNullOrEmpty(orderBy))
+            if (orderBy == null) 
+                return await GetPagedListFromQueryableAsync(query, skip, take);
+            
+            var sortingField = orderBy switch
             {
-                orderBy = orderBy.Trim().ToLower() switch
-                {
-                    "name" => "Product.Name",
-                    "productcode" => "Product.ProductCode",
-                    "priceperunit" => "PricePerUnit",
-                    "quantity" => "Quantity",
-                    "totalamount" => "PricePerUnit * Quantity",
-                    _ => "Id"
-                };
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
-            }
+                DealProductSortBy.ProductCode => "Product.ProductCode",
+                DealProductSortBy.PricePerUnit => DealProductSortBy.PricePerUnit.ToString(),
+                DealProductSortBy.Quantity => DealProductSortBy.Quantity.ToString(),
+                DealProductSortBy.TotalAmount => "PricePerUnit * Quantity",
+                _ => "Product.Name"
+            };
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
 
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }

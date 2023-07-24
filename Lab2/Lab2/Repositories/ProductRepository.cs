@@ -4,6 +4,7 @@ using Lab2.Data;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace Lab2.Repositories
 
         public async Task<(IEnumerable<Product> Items, int TotalCount)> GetProductPagedListAsync(string? search,
                                                                                     ProductType? type,
-                                                                                    string? orderBy,
+                                                                                    ProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
                                                                                     bool isDescending,  
@@ -39,10 +40,21 @@ namespace Lab2.Repositories
             if (type != null)
                 query = query.Where(p => p.Type == (int)type);
             
-            // 4. Ordering
-            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            // 4. Early return if no sorting
+            if (orderBy == null)
+                return await GetPagedListFromQueryableAsync(query, skip, take);
             
-            // 5. Paging
+            // 5. Sorting
+            var sortingField = orderBy switch {
+                ProductSortBy.Name => ProductSortBy.Name.ToString(),
+                ProductSortBy.ProductCode => ProductSortBy.ProductCode.ToString(),
+                ProductSortBy.Price => ProductSortBy.Price.ToString(),
+                _ => ProductSortBy.Id.ToString()
+            };
+            
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
+            
+            // 6. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }

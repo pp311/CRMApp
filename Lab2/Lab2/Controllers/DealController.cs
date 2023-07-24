@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/deals")]
 public class DealController : ControllerBase
 {
     private readonly IDealService _dealService;

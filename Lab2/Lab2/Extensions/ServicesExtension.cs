@@ -1,13 +1,16 @@
 using System.Text;
 using Lab2.Data;
+using Lab2.Logging;
 using Lab2.Entities;
 using Lab2.Repositories;
 using Lab2.Repositories.Interfaces;
 using Lab2.Services;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Lab2.Extensions;
@@ -41,6 +44,23 @@ public static class ServicesExtension
         services.AddScoped<IDealService, DealService>();
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IDealProductService, DealProductService>();
+    }
+    
+    public static void ConfigureSerilog(this ILoggingBuilder builder, IConfiguration configuration)
+    {
+        var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();   
+        builder.AddSerilog(errorLogger);
+    }
+    
+    public static void ConfigureLogging(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHttpLogging(logging =>
+        {
+            logging.LoggingFields = HttpLoggingFields.RequestMethod |
+                                    HttpLoggingFields.RequestPath;
+        });
+
+        services.AddSingleton<IExceptionLogger, ExceptionLogger>();
     }
     
     public static void ConfigureIdentity(this IServiceCollection services)

@@ -12,7 +12,7 @@ public class PagingParameters
         set => _pageSize = Enumerable.Range(1, MaxPageSize).Contains(value) ? value : DefaultPageSize;
     }
 
-    public string? OrderBy { get; set; }
+    // public string? OrderBy { get; set; }
     public bool IsDescending { get; set; }
     public string Search { get; set; } = "";
 }

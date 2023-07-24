@@ -1,14 +1,13 @@
 using Lab2.Extensions;
+using Lab2.Logging;
 using Lab2.Middlewares;
-using Microsoft.AspNetCore.HttpLogging;
-using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();   
-builder.Logging.AddSerilog(errorLogger);
-builder.Services.AddHttpLogging(opt => opt.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath);
+builder.Logging.ConfigureSerilog(builder.Configuration);
+
+builder.Services.ConfigureLogging(builder.Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
@@ -34,7 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<CustomExceptionHandlerMiddleware>();
+app.UseCustomExceptionHandler(builder.Environment, app.Services.GetRequiredService<IExceptionLogger>());
 
 app.UseHttpsRedirection();
 

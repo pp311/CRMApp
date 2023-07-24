@@ -1,7 +1,8 @@
 using System.Linq.Expressions;
 using Lab2.Data;
-using Lab2.DTOs.QueryParameters;
+using System.Linq.Dynamic.Core;
 using Lab2.Entities;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +20,7 @@ namespace Lab2.Repositories
         }
 
         public async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(string? search,
-                                                                                                 string? orderBy,
+                                                                                                 ContactSortBy? orderBy,
                                                                                                  int skip,
                                                                                                  int take,
                                                                                                  bool isDescending,
@@ -40,7 +41,17 @@ namespace Lab2.Repositories
             }
             
             // 3. Ordering
-            query = ApplySortingIfFieldExistsQueryable(query, orderBy, isDescending);
+            if (orderBy == null)
+                return await GetPagedListFromQueryableAsync(query, skip, take);
+
+            var sortingField = orderBy switch
+            {
+                ContactSortBy.Name => ContactSortBy.Name.ToString(),
+                ContactSortBy.Phone => ContactSortBy.Phone.ToString(),
+                ContactSortBy.Email => ContactSortBy.Email.ToString(),
+                _ => ContactSortBy.Id.ToString()
+            };
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
             
             // 4. Paging
             return await GetPagedListFromQueryableAsync(query,  skip, take);
