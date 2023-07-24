@@ -2,6 +2,7 @@ using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
 using Lab2.Data;
 using Lab2.Entities;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,7 @@ namespace Lab2.Repositories
         }
         
         public async Task<(IEnumerable<Account> Items, int TotalCount)> GetAccountPagedListAsync(string? search,
-                                                                                                 string? orderBy,
+                                                                                                 AccountSortBy? orderBy,
                                                                                                  int skip,
                                                                                                  int take,
                                                                                                  bool isDescending,
@@ -33,17 +34,20 @@ namespace Lab2.Repositories
                                                 (c.Phone != null && c.Phone.ToLower().Contains(search)) ||
                                                 (c.Email != null && c.Email.ToLower().Contains(search)));
             }
-            // 3. Can only sort by name and email
-            if (!string.IsNullOrEmpty(orderBy))
-            {
-                orderBy = orderBy.Trim().ToLower() switch
-                {
-                    "name" => "Name",
-                    "email" => "Email",
-                    _ => "Id"
-                };
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
-            }
+            
+            // 3. Early return if no sorting
+            if (orderBy == null)
+                return await GetPagedListFromQueryableAsync(query, skip, take);
+            
+            // 4. Sorting
+            var sortingField = orderBy switch {
+                AccountSortBy.Name => AccountSortBy.Name.ToString(),
+                AccountSortBy.Phone => AccountSortBy.Phone.ToString(),
+                AccountSortBy.Email => AccountSortBy.Email.ToString(),
+                AccountSortBy.Address => AccountSortBy.Address.ToString(),
+                _ => AccountSortBy.Id.ToString()
+            };
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
 
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }

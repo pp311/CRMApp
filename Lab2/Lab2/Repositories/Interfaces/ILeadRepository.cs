@@ -4,6 +4,7 @@ using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
+using Lab2.Enums.Sorting;
 
 namespace Lab2.Repositories.Interfaces
 {
@@ -11,7 +12,7 @@ namespace Lab2.Repositories.Interfaces
     {
         Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(string? search,
                                                                                 LeadStatus? status,
-                                                                                string? orderBy,
+                                                                                LeadSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,

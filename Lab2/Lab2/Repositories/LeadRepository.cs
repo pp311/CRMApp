@@ -5,6 +5,7 @@ using System.Linq.Dynamic.Core;
 using Lab2.DomainModels;
 using Lab2.Entities;
 using Lab2.Enums;
+using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,7 +36,7 @@ namespace Lab2.Repositories
 
         public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(string? search,
                                                                                 LeadStatus? status,
-                                                                                string? orderBy,
+                                                                                LeadSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
@@ -55,22 +56,20 @@ namespace Lab2.Repositories
                 query = query.Where(l => l.Status == (int)status);
             
             // 4. Ordering
-            if (!string.IsNullOrEmpty(orderBy))
-            {
-                orderBy = orderBy.Trim().ToLower() switch
-                {
-                    "title" => "Title",
-                    "customer" => "Account.Name",
-                    "customername" => "Account.Name",
-                    "accountname" => "Account.Name",
-                    "accountid" => "AccountId",
-                    "estimatedrevenue" => "EstimatedRevenue",
-                    "source" => "Source",
-                    _ => "Id"
-                };
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy);
-            }
+            if (orderBy == null) 
+                return await GetPagedListFromQueryableAsync(query, skip, take);
             
+            var sortingField = orderBy switch
+            {
+                LeadSortBy.Title => LeadSortBy.Title.ToString(),
+                LeadSortBy.AccountName => "Account.Name",
+                LeadSortBy.AccountId => LeadSortBy.AccountId.ToString(),
+                LeadSortBy.EstimatedRevenue => LeadSortBy.EstimatedRevenue.ToString(),
+                LeadSortBy.Source => LeadSortBy.Source.ToString(),
+                _ => LeadSortBy.Id.ToString()
+            };
+            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
+
             // 5. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
