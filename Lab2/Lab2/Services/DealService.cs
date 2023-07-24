@@ -121,8 +121,12 @@ public class DealService : IDealService
 
         // 3. Update deal
         deal.Status = (int)DealStatus.Lost;
+        
+        // 4. Recalculate account's total sales (sum of all deal's actual revenues)
+        var account = await _accountRepository.GetByIdAsync(deal.Lead!.AccountId);
+        account!.TotalSales += deal.ActualRevenue;
 
-        // 4. Save changes
+        // 5. Save changes
         await _unitOfWork.CommitAsync();
         return _mapper.Map<GetDealDetailDto>(deal);
     }
