@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/contacts")]
 public class ContactController : ControllerBase
 {
     private readonly IContactService _contactService;

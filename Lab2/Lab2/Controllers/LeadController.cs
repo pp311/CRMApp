@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/leads")]
 public class LeadController : ControllerBase
 {
     private readonly ILeadService _leadService;
