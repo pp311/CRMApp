@@ -8,10 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var errorLogger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();   
 builder.Logging.AddSerilog(errorLogger);
-builder.Services.AddHttpLogging(logging =>
-{
-    logging.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath;
-});
+builder.Services.AddHttpLogging(opt => opt.LoggingFields = HttpLoggingFields.RequestMethod | HttpLoggingFields.RequestPath);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
@@ -20,6 +17,7 @@ builder.Services.ConfigureDbContext(builder.Configuration);
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureIdentity();
+builder.Services.ConfigureAuthentication(builder.Configuration);
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +38,7 @@ app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
