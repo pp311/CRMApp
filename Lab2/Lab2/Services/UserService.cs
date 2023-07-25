@@ -41,6 +41,11 @@ public class UserService : IUserService
     
     public async Task<GetUserDto> CreateAsync(CreateUserDto dto)
     {
+        // 1. Check if user with the same email exists
+        if (await _userManager.FindByEmailAsync(dto.Email) != null)
+            throw new InvalidUpdateException($"User with email {dto.Email} already exists");
+        
+        // 2. Create user
         var user = _mapper.Map<User>(dto);
         
         var result = await _userManager.CreateAsync(user, dto.Password);
@@ -48,25 +53,30 @@ public class UserService : IUserService
         if (result.Succeeded) 
             return _mapper.Map<GetUserDto>(user);
         
-        var errors = result.Errors.Select(e => e.Description).ToString() ?? "";
-        throw new InvalidUpdateException(errors);
+        var errors = result.Errors.Select(e => e.Description).ToList();
+        throw new InvalidUpdateException(string.Join("\n", errors));
     }
     
     public async Task<GetUserDto> UpdateAsync(int id, UpdateUserDto dto)
     {
+        // 1. Get user from database
         var user = await _userManager.FindByIdAsync(id.ToString());
         if (user == null)
             throw new EntityNotFoundException($"User with id {id} not found");
         
-        _mapper.Map(dto, user);
+        //2. If email changed, check if new email is not taken
+        if (user.Email != dto.Email && await _userManager.FindByEmailAsync(dto.Email) != null)
+            throw new InvalidUpdateException($"User with email {dto.Email} already exists");
         
+        // 3. Update user
+        _mapper.Map(dto, user);
         var result = await _userManager.UpdateAsync(user);
         
         if (result.Succeeded) 
             return _mapper.Map<GetUserDto>(user);
         
-        var errors = result.Errors.Select(e => e.Description).ToString() ?? "";
-        throw new InvalidUpdateException(errors);
+        var errors = result.Errors.Select(e => e.Description).ToList();
+        throw new InvalidUpdateException(string.Join("\n", errors));
     }
     
     public async Task DeleteAsync(int id)
@@ -80,14 +90,14 @@ public class UserService : IUserService
         if (result.Succeeded) 
             return;
         
-        var errors = result.Errors.Select(e => e.Description).ToString() ?? "";
-        throw new InvalidUpdateException(errors);
+        var errors = result.Errors.Select(e => e.Description).ToList();
+        throw new InvalidUpdateException(string.Join('\n', errors));
     }
 
-    public async Task ChangePasswordAsync(ChangePasswordDto dto)
+    public async Task ChangePasswordAsync(int userId, ChangePasswordDto dto)
     {
         // 1. Check if user exists by email
-        var user = await _userManager.FindByEmailAsync(dto.Email) 
+        var user = await _userManager.FindByIdAsync(userId.ToString()) 
                    ?? throw new EntityNotFoundException("User not found");
         
         // 2. Check if old password is correct
@@ -98,8 +108,8 @@ public class UserService : IUserService
         var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
         if (!result.Succeeded)
         {
-            var errors = result.Errors.Select(e => e.Description).ToString() ?? "";
-            throw new InvalidUpdateException(errors);
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            throw new InvalidUpdateException(string.Join('\n', errors));
         }
     }
 }

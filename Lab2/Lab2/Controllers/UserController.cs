@@ -57,7 +57,7 @@ public class UserController : ControllerBase
         if (await _userService.GetByIdAsync(userId) == null)
             return NotFound();
         
-        await _userService.ChangePasswordAsync(dto);
+        await _userService.ChangePasswordAsync(userId, dto);
         return NoContent();
     }
 }

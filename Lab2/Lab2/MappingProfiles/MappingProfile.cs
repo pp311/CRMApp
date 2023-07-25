@@ -48,5 +48,9 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.Name, opt => opt.MapFrom(dp => dp.Product!.Name));
 
         CreateMap<User, GetUserDto>();
+        CreateMap<CreateUserDto, User>()
+            .ForMember(u => u.UserName, opt => opt.MapFrom(dto => dto.Email));
+        CreateMap<UpdateUserDto, User>()
+            .ForMember(u => u.UserName, opt => opt.MapFrom(dto => dto.Email));
     }
 }
