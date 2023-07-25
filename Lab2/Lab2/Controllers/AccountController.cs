@@ -1,9 +1,11 @@
+using Lab2.Constant;
 using Lab2.DTOs.Account;
 using Lab2.DTOs.Contact;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -33,6 +35,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetAccountDto>> CreateAccount([FromBody] UpsertAccountDto? accountDto)
     {
         // 1. Check if dto provided
@@ -44,6 +47,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPut("{accountId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetAccountDto>> UpdateAccount(int accountId, [FromBody] UpsertAccountDto? accountDto)
     {
         if (accountDto == null)
@@ -59,6 +63,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpDelete("{accountId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteAccount(int accountId)
     {
         await _accountService.DeleteAsync(accountId);

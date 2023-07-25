@@ -44,6 +44,7 @@ public static class ServicesExtension
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IDealProductService, DealProductService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IAuthService, AuthService>(); 
     }
     
     public static void ConfigureIdentity(this IServiceCollection services)

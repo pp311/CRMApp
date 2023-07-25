@@ -13,13 +13,14 @@ builder.Services.ConfigureLogging();
 builder.Services.ConfigureConfigurations(builder.Configuration);
 
 builder.Services.AddControllers();
-builder.Services.AddProblemDetails();
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureIdentity();
+
 builder.Services.ConfigureAuthentication(builder.Configuration);
+builder.Services.ConfigureAuthorization();
 
 builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddEndpointsApiExplorer();
@@ -38,7 +39,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCustomExceptionHandler(builder.Environment, app.Services.GetRequiredService<IExceptionLogger>());
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 app.UseRouting();
 app.UseAuthentication();

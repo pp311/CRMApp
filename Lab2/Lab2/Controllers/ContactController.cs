@@ -1,6 +1,8 @@
+using Lab2.Constant;
 using Lab2.DTOs.Contact;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -35,6 +37,7 @@ public class ContactController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetContactDto>> CreateContact([FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
@@ -44,6 +47,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpPut("{contactId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetContactDto>> UpdateContact(int contactId, [FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
@@ -57,6 +61,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpDelete("{contactId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteContact(int contactId)
     {
         if (await _contactService.GetByIdAsync(contactId) == null)

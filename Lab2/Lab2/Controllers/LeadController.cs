@@ -1,7 +1,9 @@
+using Lab2.Constant;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -38,6 +40,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetLeadDto>> CreateLead([FromBody] AddLeadDto? leadDto)
     {
         // 1. Check if dto provided
@@ -49,6 +52,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPut("{leadId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetLeadDto>> UpdateLead(int leadId, [FromBody] UpdateLeadDto? leadDto)
     {
         if (leadDto == null)
@@ -62,6 +66,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpDelete("{leadId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteLead(int leadId)
     {
         await _leadService.DeleteAsync(leadId);
@@ -69,6 +74,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost("{leadId:int}/qualify-lead")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealDto>> QualifyLead(int leadId)
     {
         // 1. Check if lead exists
@@ -80,6 +86,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost("{leadId:int}/disqualify-lead")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetLeadDto>> DisqualifyLead(int leadId, [FromBody] DisqualifyLeadDto? disqualifyLeadDto)
     {
         // 1. Check if lead exists

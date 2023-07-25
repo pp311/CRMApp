@@ -1,6 +1,8 @@
+using Lab2.Constant;
 using Lab2.DTOs.QueryParameters;
 using Lab2.DTOs.User;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -31,6 +33,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
     {
         var user = await _userService.CreateAsync(dto);
@@ -38,6 +41,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPut("{userId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOrOwner)]
     public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserDto dto)
     {
         var user = await _userService.UpdateAsync(userId, dto);
@@ -45,6 +49,7 @@ public class UserController : ControllerBase
     }
     
     [HttpDelete("{userId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<IActionResult> DeleteUser(int userId)
     {
         await _userService.DeleteAsync(userId);
@@ -52,6 +57,7 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("{userId:int}/change-password")]
+    [Authorize(Policy = AuthPolicy.AdminOrOwner)]
     public async Task<IActionResult> ChangePassword(int userId, [FromBody] ChangePasswordDto dto)
     {
         if (await _userService.GetByIdAsync(userId) == null)

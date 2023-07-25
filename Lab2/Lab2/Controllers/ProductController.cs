@@ -1,6 +1,8 @@
+using Lab2.Constant;
 using Lab2.DTOs.Product;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -36,6 +38,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetProductDto>> CreateProduct([FromBody] UpsertProductDto? productDto)
     {
         // 1. Check if dto provided
@@ -48,6 +51,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{productId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetProductDto>> UpdateProduct(int productId, [FromBody] UpsertProductDto? productDto)
     {
         if (productDto == null)
@@ -63,6 +67,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{productId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteProduct(int productId)
     {
         await _productService.DeleteAsync(productId);

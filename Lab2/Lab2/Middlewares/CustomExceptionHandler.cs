@@ -4,6 +4,7 @@ using Lab2.Exceptions;
 using Lab2.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Lab2.Middlewares;
 

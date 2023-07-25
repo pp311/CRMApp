@@ -1,4 +1,5 @@
 using AutoMapper;
+using Lab2.Constant;
 using Lab2.DTOs.QueryParameters;
 using Lab2.DTOs.User;
 using Lab2.Entities;
@@ -50,11 +51,18 @@ public class UserService : IUserService
         
         var result = await _userManager.CreateAsync(user, dto.Password);
         
-        if (result.Succeeded) 
-            return _mapper.Map<GetUserDto>(user);
+        // 3. Set role
+        if (result.Succeeded)
+        {
+            await _userManager.AddToRoleAsync(user, AppRole.User);
+        }
+        else
+        {
+            var errors = result.Errors.Select(e => e.Description).ToList();
+            throw new InvalidUpdateException(string.Join('\n', errors));
+        }
         
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        throw new InvalidUpdateException(string.Join("\n", errors));
+        return _mapper.Map<GetUserDto>(user);
     }
     
     public async Task<GetUserDto> UpdateAsync(int id, UpdateUserDto dto)

@@ -1,5 +1,9 @@
+using System.Security.Claims;
 using System.Text;
+using Lab2.Configuration;
+using Lab2.Constant;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Lab2.Extensions;
@@ -9,9 +13,14 @@ public static class AuthExtension
     public static void ConfigureAuthentication(this IServiceCollection services,
                                                IConfiguration configuration)
     {
-        var jwtSettings = configuration.GetSection("JwtSettings");
+        var jwtSettings = configuration.GetSection("JwtSettings").Get<JwtSettings>() 
+                          ?? throw new NullReferenceException("JwtSettings not found");
 
-        services.AddAuthentication()
+        services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme,
                 options =>
                 {
@@ -21,13 +30,30 @@ public static class AuthExtension
                         ValidateAudience = true, //The receiver of the token is a valid recipient 
                         ValidateLifetime = true, //The token has not expired
                         ValidateIssuerSigningKey = true, //The signing key is valid and is trusted by the server
-                        ValidIssuer = jwtSettings["validIssuer"],
-                        ValidAudience = jwtSettings["validAudience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                            .GetBytes(jwtSettings.GetSection("securityKey").Value 
-                                      ?? throw new InvalidOperationException("No security key found"))),
+                        ValidIssuer = jwtSettings.ValidIssuer,
+                        ValidAudience = jwtSettings.ValidAudience,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecurityKey)),
                     };
                 });
+    }
+    
+    public static void ConfigureAuthorization(this IServiceCollection services)
+    {
+        services.AddAuthorization(options =>
+        {
+            // Require authenticated user by default
+            options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();   
+            
+            options.AddPolicy(AuthPolicy.AdminOnly, policy => policy.RequireRole(AppRole.Admin));
+            
+            options.AddPolicy(AuthPolicy.AdminOrOwner, policy => policy.RequireAssertion(context =>
+            {
+                var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var requestUserId = new HttpContextAccessor().HttpContext?.Request.RouteValues["userId"]?.ToString();
+                
+                return context.User.IsInRole(AppRole.Admin) || userId == requestUserId; 
+            }));
+        });
     }
     
 }

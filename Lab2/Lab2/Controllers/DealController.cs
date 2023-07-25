@@ -1,7 +1,9 @@
+using Lab2.Constant;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.DealProduct;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Lab2.Controllers;
@@ -38,6 +40,7 @@ public class DealController : ControllerBase
     }
 
     [HttpPut("{dealId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealDetailDto>> UpdateDeal(int dealId, [FromBody] UpdateDealDto? dealDto)
     {
         if (dealDto == null)
@@ -48,6 +51,7 @@ public class DealController : ControllerBase
     }
 
     [HttpDelete("{dealId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteDeal(int dealId)
     {
         await _dealService.DeleteAsync(dealId);
@@ -55,6 +59,7 @@ public class DealController : ControllerBase
     }
 
     [HttpPost("{dealId:int}/won")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealDetailDto>> MarkDealAsWon(int dealId)
     {
         var wonDealDto = await _dealService.MarkDealAsWonAsync(dealId);
@@ -62,6 +67,7 @@ public class DealController : ControllerBase
     }
     
     [HttpPost("{dealId:int}/lost")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealDetailDto>> MarkDealAsLost(int dealId)
     {
         var lostDealDto = await _dealService.MarkDealAsLostAsync(dealId);
@@ -87,6 +93,7 @@ public class DealController : ControllerBase
     }
 
     [HttpPost("{dealId:int}/products")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealProductDto>> AddProductToDeal(int dealId, [FromBody] AddDealProductDto? dealProductDto)
     {
         if (dealProductDto == null)
@@ -100,6 +107,7 @@ public class DealController : ControllerBase
     }
     
     [HttpDelete("{dealId:int}/products/{dealProductId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteDealProduct(int dealProductId, int dealId)
     {
         var dealProduct = await _dealProductService.GetDealProductByIdAsync(dealProductId);
@@ -127,6 +135,7 @@ public class DealController : ControllerBase
     }
     
     [HttpPut("{dealId:int}/products/{dealProductId:int}")]
+    [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealProductDto>> UpdateDealProduct(int dealId, int dealProductId, [FromBody] UpdateDealProductDto? updateDealProductDto)
     {
         if (updateDealProductDto == null)
