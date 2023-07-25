@@ -7,6 +7,7 @@ using Lab2.DTOs.Deal;
 using Lab2.DTOs.DealProduct;
 using Lab2.DTOs.Lead;
 using Lab2.DTOs.Product;
+using Lab2.DTOs.User;
 using Lab2.Entities;
 
 namespace Lab2.MappingProfiles;
@@ -45,5 +46,7 @@ public class MappingProfile : Profile
             .ForMember(dto => dto.TotalAmount, opt => opt.MapFrom(dp => dp.Quantity * dp.PricePerUnit))
             .ForMember(dto => dto.ProductCode, opt => opt.MapFrom(dp => dp.Product!.ProductCode))
             .ForMember(dto => dto.Name, opt => opt.MapFrom(dp => dp.Product!.Name));
+
+        CreateMap<User, GetUserDto>();
     }
 }

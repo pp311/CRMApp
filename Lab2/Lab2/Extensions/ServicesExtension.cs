@@ -1,7 +1,9 @@
 using System.Text;
+using Lab2.Configuration;
 using Lab2.Data;
 using Lab2.Logging;
 using Lab2.Entities;
+using Lab2.Identity;
 using Lab2.Repositories;
 using Lab2.Repositories.Interfaces;
 using Lab2.Services;
@@ -34,6 +36,10 @@ public static class ServicesExtension
         services.AddScoped<ILeadRepository, LeadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IDealProductRepository, DealProductRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
+        
+        // services.AddScoped<IUserStore<User>, CustomUserStore>();
+        // services.AddScoped<UserManager<User>, CustomUserManager>();
     }
 
     public static void ConfigureServices(this IServiceCollection services)
@@ -44,6 +50,7 @@ public static class ServicesExtension
         services.AddScoped<IDealService, DealService>();
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IDealProductService, DealProductService>();
+        services.AddScoped<IUserService, UserService>();
     }
     
     public static void ConfigureSerilog(this ILoggingBuilder builder, IConfiguration configuration)
@@ -102,5 +109,10 @@ public static class ServicesExtension
                                       ?? throw new InvalidOperationException("No security key found"))),
                     };
                 });
+    }
+    
+    public static void ConfigureConfigurations(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
     }
 }

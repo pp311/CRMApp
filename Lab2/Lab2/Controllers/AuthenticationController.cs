@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Lab2.DTOs.Authentication;
 using Lab2.Entities;
+using Lab2.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -13,51 +14,20 @@ namespace Lab2.Controllers;
 [Route("api/auth")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly UserManager<User> _userManager;
-    private readonly IConfigurationSection _jwtSettings;
+    private readonly AuthService _authService;
 
-    public AuthenticationController(UserManager<User> userManager,
-                                    IConfiguration configuration)
+    public AuthenticationController(AuthService authService) 
     {
-        _userManager = userManager;
-        _jwtSettings = configuration.GetSection("jwtSettings");
+        _authService = authService;
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    public async Task<IActionResult> Login([FromBody] LoginDto? loginDto)
     {
-        var user = await _userManager.FindByEmailAsync(loginDto.Email);
+        if (loginDto == null)
+            return BadRequest();
 
-        if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
-        {
-            return Unauthorized();
-        } 
-        
-        var tokenString = await GenerateJwtToken(user);
-        return Ok(new { Token = tokenString});
+        return Ok(await _authService.LoginAsync(loginDto));
     }
     
-    private async Task<string> GenerateJwtToken(User user)
-    {
-        var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.GetSection("securityKey").Value
-            ?? throw new InvalidOperationException("Security key is null")));
-        var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-        var role = (await _userManager.GetRolesAsync(user)).First();
-        
-        var tokenOptions = new JwtSecurityToken(
-            issuer: _jwtSettings["validIssuer"],
-            audience: _jwtSettings["validAudience"],
-            claims: new List<Claim>
-            {
-                new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Name, user.Name),
-                new(ClaimTypes.Email, user.Email!),
-                new(ClaimTypes.Role, role) 
-            },
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings["expiryInMinutes"])),
-            signingCredentials: signingCredentials);
-        
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-        return tokenString;
-    }
 }
