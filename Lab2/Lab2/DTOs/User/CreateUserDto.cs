@@ -8,6 +8,7 @@ public class CreateUserDto
     [MaxLength((int)StringLength.Medium256)]
     public string Name { get; set; } = null!;
     
+    [EmailAddress]
     [MaxLength((int)StringLength.Medium256)]
     public string Email { get; set; } = null!;
     

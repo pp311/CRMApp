@@ -87,6 +87,9 @@ public static class SeedData
             .RuleFor(u => u.Id, f => f.IndexFaker + 2)
             .RuleFor(u => u.Name, f => f.Name.FullName())
             .RuleFor(u => u.Email, f => f.Internet.Email())
+            .RuleFor(u => u.UserName, (f, u) => u.Email)
+            .RuleFor(u => u.PasswordHash, () => new PasswordHasher<object>().HashPassword(null, "Admin@123"))
+            .RuleFor(u => u.SecurityStamp, () => Guid.NewGuid().ToString())
             .Generate(NumberOfUsers);
         modelBuilder.Entity<User>().HasData(users);
 

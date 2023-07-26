@@ -1,14 +1,7 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Lab2.DTOs.Authentication;
-using Lab2.Entities;
-using Lab2.Services;
 using Lab2.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Lab2.Controllers;
 
@@ -32,5 +25,21 @@ public class AuthenticationController : ControllerBase
 
         return Ok(await _authService.LoginAsync(loginDto));
     }
-    
+
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto? dto)
+    {
+        if (dto == null)
+            return BadRequest();
+        return Ok(await _authService.CreateTokenFromRefreshTokenAsync(dto.RefreshToken));
+    }
+
+    [HttpPost("revoke-token")]
+    public async Task<IActionResult> RevokeRefreshToken([FromBody] RefreshTokenDto? dto)
+    {
+        if (dto == null)
+            return BadRequest();
+        await _authService.RevokeRefreshTokenAsync(dto.RefreshToken);
+        return NoContent();
+    }
 }

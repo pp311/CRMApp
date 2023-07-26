@@ -23,16 +23,16 @@ public static class CustomExceptionHandler
                 logger.LogError(exception);
 
                 switch (exception) {
-                    case EntityValidationException:
-                        response.StatusCode = (int)HttpStatusCode.BadRequest;
-                        break;
                     case EntityNotFoundException:
                         response.StatusCode = (int)HttpStatusCode.NotFound;
                         break;
                     case NotImplementedException:
                         response.StatusCode = (int)HttpStatusCode.NotImplemented;
                         break;
+                    case EntityValidationException:
                     case InvalidUpdateException:
+                    case InvalidPasswordException:
+                    case InvalidRefreshTokenException:
                         response.StatusCode = (int)HttpStatusCode.BadRequest;
                         break;
                     default:

@@ -22,6 +22,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             Email = "admin@gmail.com",
             NormalizedEmail = "ADMIN@GMAIL.COM",
             EmailConfirmed = true,
+            SecurityStamp = Guid.NewGuid().ToString(),
             Id = 1
         });
     }
