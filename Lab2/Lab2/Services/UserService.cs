@@ -4,6 +4,7 @@ using Lab2.DTOs.QueryParameters;
 using Lab2.DTOs.User;
 using Lab2.Entities;
 using Lab2.Exceptions;
+using Lab2.Helper;
 using Lab2.Repositories.Interfaces;
 using Lab2.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,8 @@ namespace Lab2.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
+    // Currently userRepo is only for getting list of users with paging and ordering
+    // If more repo related to user is needed, I will use UnitOfWork
     private readonly IUserRepository _userRepository;
     private readonly IMapper _mapper;
     
@@ -36,7 +39,7 @@ public class UserService : IUserService
     
     public async Task<GetUserDto?> GetByIdAsync(int id)
     {
-        var user = await _userRepository.GetByIdAsync(id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
         return _mapper.Map<GetUserDto>(user);
     }
     
@@ -53,14 +56,9 @@ public class UserService : IUserService
         
         // 3. Set role
         if (result.Succeeded)
-        {
             await _userManager.AddToRoleAsync(user, AppRole.User);
-        }
         else
-        {
-            var errors = result.Errors.Select(e => e.Description).ToList();
-            throw new InvalidUpdateException(string.Join('\n', errors));
-        }
+            throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
         
         return _mapper.Map<GetUserDto>(user);
     }
@@ -68,9 +66,8 @@ public class UserService : IUserService
     public async Task<GetUserDto> UpdateAsync(int id, UpdateUserDto dto)
     {
         // 1. Get user from database
-        var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user == null)
-            throw new EntityNotFoundException($"User with id {id} not found");
+        var user = await _userManager.FindByIdAsync(id.ToString())
+                ?? throw new EntityNotFoundException($"User with id {id} not found");
         
         //2. If email changed, check if new email is not taken
         if (user.Email != dto.Email && await _userManager.FindByEmailAsync(dto.Email) != null)
@@ -83,23 +80,20 @@ public class UserService : IUserService
         if (result.Succeeded) 
             return _mapper.Map<GetUserDto>(user);
         
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        throw new InvalidUpdateException(string.Join("\n", errors));
+        throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
     
     public async Task DeleteAsync(int id)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user == null)
-            throw new EntityNotFoundException($"User with id {id} not found");
+        var user = await _userManager.FindByIdAsync(id.ToString())
+            ?? throw new EntityNotFoundException($"User with id {id} not found");
         
         var result = await _userManager.DeleteAsync(user);
         
         if (result.Succeeded) 
             return;
         
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        throw new InvalidUpdateException(string.Join('\n', errors));
+        throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
 
     public async Task ChangePasswordAsync(int userId, ChangePasswordDto dto)
@@ -115,9 +109,6 @@ public class UserService : IUserService
         // 3. Change password
         var result = await _userManager.ChangePasswordAsync(user, dto.OldPassword, dto.NewPassword);
         if (!result.Succeeded)
-        {
-            var errors = result.Errors.Select(e => e.Description).ToList();
-            throw new InvalidUpdateException(string.Join('\n', errors));
-        }
+            throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
 }

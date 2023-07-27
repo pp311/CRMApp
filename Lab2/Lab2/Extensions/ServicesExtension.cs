@@ -1,15 +1,12 @@
 using Lab2.Configuration;
 using Lab2.Data;
-using Lab2.Logging;
 using Lab2.Entities;
 using Lab2.Repositories;
 using Lab2.Repositories.Interfaces;
 using Lab2.Services;
 using Lab2.Services.Interfaces;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace Lab2.Extensions;
 

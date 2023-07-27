@@ -1,16 +1,14 @@
 using System.Net;
 using System.Text.Json;
 using Lab2.Exceptions;
-using Lab2.Logging;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 
 namespace Lab2.Middlewares;
 
 public static class CustomExceptionHandler
 {
-    public static void UseCustomExceptionHandler(this IApplicationBuilder app, IWebHostEnvironment env, IExceptionLogger logger)
+    public static void UseCustomExceptionHandler(this IApplicationBuilder app, IWebHostEnvironment env)
     {
         app.UseExceptionHandler(exceptionHandlerApp =>
         {
@@ -20,8 +18,7 @@ public static class CustomExceptionHandler
                 response.ContentType = "application/json";
                 var exception = context.Features.Get<IExceptionHandlerFeature>()?.Error;
                 var message = exception?.Message;
-                logger.LogError(exception);
-
+                
                 switch (exception) {
                     case EntityNotFoundException:
                         response.StatusCode = (int)HttpStatusCode.NotFound;

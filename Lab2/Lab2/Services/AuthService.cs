@@ -1,11 +1,11 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 using Lab2.Configuration;
 using Lab2.DTOs.Authentication;
 using Lab2.Entities;
 using Lab2.Exceptions;
+using Lab2.Helper;
 using Lab2.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -47,34 +47,30 @@ public class AuthService : IAuthService
         if (result.Succeeded)
             return tokenDto;
         
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        throw new InvalidUpdateException(string.Join('\n', errors));
+        throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
 
     public async Task<TokenDto> CreateTokenFromRefreshTokenAsync(string refreshToken)
     {
         // 1. Get user from database
-        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken)
-            ?? throw new InvalidRefreshTokenException("Refresh token is invalid!");
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
         
-        // 2. Check if refreshToken is valid 
-        if ((user.RefreshToken == null) || (user.RefreshToken != refreshToken) || (user.RefreshTokenLifetime < DateTime.Now))
+        // 2. Check if user and refreshToken is valid 
+        if (user == null || user.RefreshTokenLifetime < DateTime.Now)
             throw new InvalidRefreshTokenException("Refresh token is invalid!");
 
         // 3. Generate new access token and refresh token
         var tokenDto = await GenerateTokenAsync(user);
         
         // 4. Save Refresh token to database
-        user.RefreshToken = tokenDto.RefreshToken;
-        user.RefreshTokenLifetime = tokenDto.RefreshTokenExpires;
+        (user.RefreshToken, user.RefreshTokenLifetime) = (tokenDto.RefreshToken, tokenDto.RefreshTokenExpires);
         var result = await _userManager.UpdateAsync(user);
         
         // 5. Return tokenDto
         if (result.Succeeded)
             return tokenDto;
         
-        var errors = result.Errors.Select(e => e.Description).ToList();
-        throw new InvalidUpdateException(string.Join('\n', errors));
+        throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
 
     public async Task RevokeRefreshTokenAsync(string refreshToken)
@@ -84,17 +80,11 @@ public class AuthService : IAuthService
             ?? throw new InvalidRefreshTokenException("Refresh token is invalid!");
         
         // 2. Remove refresh token
-        user.RefreshToken = null;
-        user.RefreshTokenLifetime = null;
-
-        // 3. Save changes
+        (user.RefreshToken, user.RefreshTokenLifetime) = (null, null);
         var result = await _userManager.UpdateAsync(user);
 
         if (!result.Succeeded)
-        {
-            var errors = result.Errors.Select(e => e.Description).ToList();
-            throw new InvalidUpdateException(string.Join('\n', errors));
-        }
+            throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
     }
 
     // Helper methods for AuthService

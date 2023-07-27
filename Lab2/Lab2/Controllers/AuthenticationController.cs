@@ -27,6 +27,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
+    [AllowAnonymous]
     public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenDto? dto)
     {
         if (dto == null)

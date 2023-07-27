@@ -1,4 +1,3 @@
-using Lab2.Logging;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
 
@@ -19,7 +18,5 @@ public static class LoggingExtension
             logging.LoggingFields = HttpLoggingFields.RequestMethod |
                                     HttpLoggingFields.RequestPath;
         });
-
-        services.AddSingleton<IExceptionLogger, ExceptionLogger>();
     }
 }

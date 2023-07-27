@@ -1,5 +1,4 @@
 using Lab2.Extensions;
-using Lab2.Logging;
 using Lab2.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,17 +28,14 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseHttpLogging();
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-app.UseCustomExceptionHandler(builder.Environment, app.Services.GetRequiredService<IExceptionLogger>());
+app.UseHttpLogging();
+app.UseCustomExceptionHandler(builder.Environment);
 
-// app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseRouting();
 app.UseAuthentication();
