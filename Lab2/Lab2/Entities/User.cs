@@ -6,5 +6,6 @@ public class User : IdentityUser<int>
 {
     public string Name { get; set; } = null!;
     public string? RefreshToken { get; set; }
+    public string? LastRefreshToken { get; set; }
     public DateTime? RefreshTokenLifetime { get; set; }
 }

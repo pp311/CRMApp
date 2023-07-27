@@ -53,20 +53,32 @@ public class AuthService : IAuthService
     public async Task<TokenDto> CreateTokenFromRefreshTokenAsync(string refreshToken)
     {
         // 1. Get user from database
-        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken ||
+                                                                      u.LastRefreshToken == refreshToken);
         
-        // 2. Check if user and refreshToken is valid 
+        // 2. If refresh token is the old one, revoke refresh token to prevent attacker from using it
+        if (user?.LastRefreshToken == refreshToken)
+        {
+            (user.RefreshToken, user.RefreshTokenLifetime) = (null, null);
+            await _userManager.UpdateAsync(user);
+            throw new InvalidRefreshTokenException("Refresh token is invalid!");
+        }
+        
+        // 3. Check if user and refreshToken is valid 
         if (user == null || user.RefreshTokenLifetime < DateTime.Now)
             throw new InvalidRefreshTokenException("Refresh token is invalid!");
 
-        // 3. Generate new access token and refresh token
+        // 4. Generate new access token and refresh token
         var tokenDto = await GenerateTokenAsync(user);
         
-        // 4. Save Refresh token to database
-        (user.RefreshToken, user.RefreshTokenLifetime) = (tokenDto.RefreshToken, tokenDto.RefreshTokenExpires);
+        // 5. Save Refresh token to database
+        user.LastRefreshToken = user.RefreshToken;
+        user.RefreshToken = tokenDto.RefreshToken;
+        user.RefreshTokenLifetime = tokenDto.RefreshTokenExpires;
+        
         var result = await _userManager.UpdateAsync(user);
         
-        // 5. Return tokenDto
+        // 6. Return tokenDto
         if (result.Succeeded)
             return tokenDto;
         
