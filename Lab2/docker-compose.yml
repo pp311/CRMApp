@@ -1,0 +1,30 @@
+﻿services:
+  lab2.api:
+    image: lab2
+    build:
+      context: .
+      dockerfile: Lab2/Dockerfile
+    ports:
+        - "5001:80"
+        - "5000:443"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=Admin123
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/lab2.pfx
+      - ConnectionStrings__DefaultConnection=Server=lab2.db;Database=CRM3DB;User=sa;Password=Admin123;TrustServerCertificate=True
+    volumes:
+        - ~/.aspnet/https:/https:ro
+    depends_on: 
+      - lab2.db
+  lab2.db:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Admin123
+    ports:
+        - "1433:1433"
+    volumes:
+        - lab2data:/var/opt/mssql
+volumes:
+  lab2data:

@@ -36,7 +36,7 @@ public class AuthService : IAuthService
             throw new InvalidPasswordException("Invalid password");
         
         // 3. Generate token
-        var tokenDto = await GenerateTokenAsync(user);
+        var tokenDto = await GenerateTokensAsync(user);
         
         // 4. Save refresh token
         user.RefreshToken = tokenDto.RefreshToken;
@@ -61,15 +61,15 @@ public class AuthService : IAuthService
         {
             (user.RefreshToken, user.RefreshTokenLifetime) = (null, null);
             await _userManager.UpdateAsync(user);
-            throw new InvalidRefreshTokenException("Refresh token is invalid!");
+            throw new InvalidRefreshTokenException("Refresh token is already used!");
         }
         
         // 3. Check if user and refreshToken is valid 
         if (user == null || user.RefreshTokenLifetime < DateTime.Now)
-            throw new InvalidRefreshTokenException("Refresh token is invalid!");
+            throw new InvalidRefreshTokenException("Refresh token is outdated!");
 
         // 4. Generate new access token and refresh token
-        var tokenDto = await GenerateTokenAsync(user);
+        var tokenDto = await GenerateTokensAsync(user);
         
         // 5. Save Refresh token to database
         user.LastRefreshToken = user.RefreshToken;
@@ -100,7 +100,7 @@ public class AuthService : IAuthService
     }
 
     // Helper methods for AuthService
-    private async Task<TokenDto> GenerateTokenAsync(User user)
+    private async Task<TokenDto> GenerateTokensAsync(User user)
     {
         // 1. Create header and signature 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecurityKey));

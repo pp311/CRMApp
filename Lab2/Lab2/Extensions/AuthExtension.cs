@@ -26,10 +26,10 @@ public static class AuthExtension
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        ValidateIssuer = true, //The issuer is the actual server that created the token
-                        ValidateAudience = true, //The receiver of the token is a valid recipient 
-                        ValidateLifetime = true, //The token has not expired
-                        ValidateIssuerSigningKey = true, //The signing key is valid and is trusted by the server
+                        ValidateIssuer = true, 
+                        ValidateAudience = true,  
+                        ValidateLifetime = true, 
+                        ValidateIssuerSigningKey = true, 
                         ValidIssuer = jwtSettings.ValidIssuer,
                         ValidAudience = jwtSettings.ValidAudience,
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecurityKey)),
