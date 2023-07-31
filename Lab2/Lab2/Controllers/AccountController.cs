@@ -64,10 +64,6 @@ public class AccountController : ControllerBase
         if (accountDto == null)
             return BadRequest();
         
-        // Check if account exists
-        if (await _accountService.GetByIdAsync(accountId) == null)
-            return NotFound();
-        
         // Update account
         var updatedAccountDto = await _accountService.UpdateAsync(accountId, accountDto);
         return Ok(updatedAccountDto);
@@ -84,11 +80,6 @@ public class AccountController : ControllerBase
     [HttpGet("{accountId:int}/leads")]
     public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadsByAccountId(int accountId, [FromQuery] LeadQueryParameters lqp)
     {
-        // Check if account exists
-        if (await _accountService.GetByIdAsync(accountId) == null)
-            return NotFound();
-        
-        // Get lead list when account exists
         var leads = await _leadService.GetLeadListByAccountIdAsync(accountId, lqp);
         return Ok(leads);
     }
@@ -96,11 +87,6 @@ public class AccountController : ControllerBase
     [HttpGet("{accountId:int}/contacts")]
     public async Task<ActionResult<PagedResult<UpsertContactDto>>> GetContactsByAccountId(int accountId, [FromQuery] ContactQueryParameters cqp)
     {
-        // Check if account exists
-        if (await _accountService.GetByIdAsync(accountId) == null)
-            return NotFound();
-        
-        // Get contact list when account exists
         var contacts = await _contactService.GetContactListByAccountIdAsync(accountId, cqp);
         return Ok(contacts);
     }
@@ -108,11 +94,6 @@ public class AccountController : ControllerBase
     [HttpGet("{accountId:int}/deals")]
     public async Task<ActionResult<PagedResult<GetDealDto>>> GetDealsByAccountId(int accountId, [FromQuery] DealQueryParameters dqp)
     {
-        // Check if account exists
-        if (await _accountService.GetByIdAsync(accountId) == null)
-            return NotFound();
-        
-        // Get deal list when account exists
         var deals = await _dealService.GetDealListByAccountIdAsync(accountId, dqp);
         return Ok(deals);
     }

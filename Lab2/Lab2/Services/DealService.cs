@@ -61,6 +61,9 @@ public class DealService : IDealService
     
     public async Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dqp)
     {
+        if (!await _accountRepository.IsAccountExistAsync(accountId))
+            throw new EntityNotFoundException($"Account with id {accountId} not found");
+        
         var (deals, dealCount) = await _dealRepository.GetDealPagedListAsync(search: dqp.Search,
                                                                              status: dqp.Status,
                                                                              orderBy: dqp.OrderBy,

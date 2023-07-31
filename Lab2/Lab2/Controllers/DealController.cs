@@ -26,10 +26,10 @@ public class DealController : ControllerBase
     public async Task<ActionResult<GetDealDto>> GetDealById(int dealId)
     {
         var deal = await _dealService.GetByIdAsync(dealId);
+        
         if (deal == null)
-        {
             return NotFound();
-        }
+        
         return Ok(deal);
     }
 
@@ -83,13 +83,13 @@ public class DealController : ControllerBase
     }
     
     [HttpGet("{dealId:int}/products")]
-    public async Task<ActionResult<PagedResult<GetDealProductDto>>> GetDealProducts(int dealId, [FromQuery] DealProductQueryParameters dealProductQueryParameters)
+    public async Task<ActionResult<PagedResult<GetDealProductDto>>> GetDealProducts(int dealId, [FromQuery] DealProductQueryParameters dpqp)
     {
         // 1. Check if deal exists
         if (await _dealService.GetByIdAsync(dealId) == null)
             return NotFound();
         
-        var dealProducts = await _dealProductService.GetDealProductListAsync(dealId, dealProductQueryParameters);
+        var dealProducts = await _dealProductService.GetDealProductListAsync(dealId, dpqp);
         return Ok(dealProducts);
     }
 
@@ -100,9 +100,6 @@ public class DealController : ControllerBase
         if (dealProductDto == null)
             return BadRequest();
         
-        if (await _dealService.GetByIdAsync(dealId) == null)
-            return NotFound();
-        
         var newDealProductDto = await _dealProductService.AddProductToDealAsync(dealId, dealProductDto);
         return CreatedAtAction( nameof(GetDealProductById),new { dealId, dealProductId = newDealProductDto.Id }, newDealProductDto);
     }
@@ -111,14 +108,7 @@ public class DealController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteDealProduct(int dealProductId, int dealId)
     {
-        var dealProduct = await _dealProductService.GetDealProductByIdAsync(dealProductId);
-        var deal = await _dealService.GetByIdAsync(dealId);
-        
-        // Check if dealProduct exists and if it belongs to the deal
-        if (dealProduct == null || deal == null || dealProduct.DealId != dealId)
-            return NotFound();
-        
-        await _dealProductService.DeleteDealProductAsync(dealProductId);
+        await _dealProductService.DeleteDealProductAsync(dealProductId, dealId);
         return NoContent();
     }
 
@@ -126,10 +116,9 @@ public class DealController : ControllerBase
     public async Task<ActionResult<GetDealProductDto>> GetDealProductById(int dealId, int dealProductId)
     {
         var dealProduct = await _dealProductService.GetDealProductByIdAsync(dealProductId);
-        var deal = await _dealService.GetByIdAsync(dealId);
         
         // Check if dealProduct exists and if it belongs to the deal
-        if (dealProduct == null || deal == null || dealProduct.DealId != dealId)
+        if (dealProduct == null || dealProduct.DealId != dealId)
             return NotFound();
         
         return Ok(dealProduct);
@@ -142,14 +131,7 @@ public class DealController : ControllerBase
         if (updateDealProductDto == null)
             return BadRequest();
 
-        var dealProduct = await _dealProductService.GetDealProductByIdAsync(dealProductId);
-        var deal = await _dealService.GetByIdAsync(dealId);
-        
-        // Check if dealProduct exists and if it belongs to the deal
-        if (dealProduct == null || deal == null || dealProduct.DealId != dealId)
-            return NotFound();
-        
-        var updatedDealProduct = await _dealProductService.UpdateDealProductAsync(dealProductId, updateDealProductDto);
+        var updatedDealProduct = await _dealProductService.UpdateDealProductAsync(dealProductId, dealId, updateDealProductDto);
         return Ok(updatedDealProduct);
     }
 }

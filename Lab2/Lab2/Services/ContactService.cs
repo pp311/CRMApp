@@ -66,6 +66,9 @@ public class ContactService : IContactService
     
     public async Task<PagedResult<GetContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters cqp)
     {
+        if (!await _accountRepository.IsAccountExistAsync(accountId))
+            throw new EntityNotFoundException($"Account with id {accountId} not found");
+        
         var (contacts, contactCount) = await _contactRepository.GetContactPagedListAsync(search: cqp.Search,
                                                                                          orderBy: cqp.OrderBy,
                                                                                          skip: (cqp.PageIndex - 1) * cqp.PageSize,

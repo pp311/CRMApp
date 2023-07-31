@@ -61,9 +61,6 @@ public class UserController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOrOwner)]
     public async Task<IActionResult> ChangePassword(int userId, [FromBody] ChangePasswordDto dto)
     {
-        if (await _userService.GetByIdAsync(userId) == null)
-            return NotFound();
-        
         await _userService.ChangePasswordAsync(userId, dto);
         return NoContent();
     }

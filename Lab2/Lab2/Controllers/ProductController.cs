@@ -58,10 +58,6 @@ public class ProductController : ControllerBase
         if (productDto == null)
             return BadRequest();
         
-        // Check if product exists
-        if (await _productService.GetByIdAsync(productId) == null)
-            return NotFound();
-        
         // Update product
         var updatedProductDto = await _productService.UpdateAsync(productId, productDto);
         return Ok(updatedProductDto);

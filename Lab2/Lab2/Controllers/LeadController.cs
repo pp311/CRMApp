@@ -25,10 +25,10 @@ public class LeadController : ControllerBase
     {
         // Get lead from service, if not found return 404
         var leadDto = await _leadService.GetByIdAsync(leadId);
+        
         if (leadDto == null)
-        {
             return NotFound();
-        }
+        
         return Ok(leadDto);
     }
 
@@ -59,9 +59,6 @@ public class LeadController : ControllerBase
         if (leadDto == null)
             return BadRequest();
         
-        if (await _leadService.GetByIdAsync(leadId) == null)
-            return NotFound();
-        
         var updatedLeadDto = await _leadService.UpdateAsync(leadId, leadDto);
         return Ok(updatedLeadDto);
     }
@@ -78,10 +75,6 @@ public class LeadController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetDealDto>> QualifyLead(int leadId)
     {
-        // 1. Check if lead exists
-        if (await _leadService.GetByIdAsync(leadId) == null)
-            return NotFound();
-        // 2. Qualify lead
         var deal = await _leadService.QualifyLeadAsync(leadId);
         return CreatedAtRoute( new { dealId = deal.Id, controller = "Deal", action = nameof(DealController.GetDealById) }, deal);
     }
@@ -90,10 +83,6 @@ public class LeadController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetLeadDto>> DisqualifyLead(int leadId, [FromBody] DisqualifyLeadDto? disqualifyLeadDto)
     {
-        // 1. Check if lead exists
-        if (await _leadService.GetByIdAsync(leadId) == null)
-            return NotFound();
-        // 2. Disqualify lead
         var updatedLeadDto = await _leadService.DisqualifyLeadAsync(leadId, disqualifyLeadDto);
         return Ok(updatedLeadDto);
     }
@@ -101,7 +90,6 @@ public class LeadController : ControllerBase
     [HttpGet("statistics")]
     public async Task<ActionResult<LeadStatisticsDto>> GetLeadStatistics()
     {
-        // Get lead statistics from service
         return Ok(await _leadService.GetLeadStatisticsAsync());
     }
 }

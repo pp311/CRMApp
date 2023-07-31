@@ -54,9 +54,6 @@ public class ContactController : ControllerBase
         if (contactDto == null)
             return BadRequest();
         
-        if (await _contactService.GetByIdAsync(contactId) == null)
-            return NotFound();
-        
         var updatedContact = await _contactService.UpdateAsync(contactId, contactDto);
         return Ok(updatedContact);
     }
@@ -65,9 +62,6 @@ public class ContactController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult> DeleteContact(int contactId)
     {
-        if (await _contactService.GetByIdAsync(contactId) == null)
-            return NotFound();
-        
         await _contactService.DeleteAsync(contactId);
         return NoContent();
     }

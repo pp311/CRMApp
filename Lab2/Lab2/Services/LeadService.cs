@@ -113,6 +113,9 @@ public class LeadService : ILeadService
     
     public async Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters lqp)
     {
+        if (!await _accountRepository.IsAccountExistAsync(accountId))
+            throw new EntityNotFoundException($"Account with id {accountId} not found");
+        
         var (leads, leadCount) = await _leadRepository.GetLeadPagedListAsync(search: lqp.Search,
                                                                              status: lqp.Status,
                                                                              orderBy: lqp.OrderBy,
@@ -128,10 +131,11 @@ public class LeadService : ILeadService
     public async Task<GetLeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto)
     {
         // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadId);
+        var lead = await _leadRepository.GetByIdAsync(leadId)
+                   ?? throw new EntityNotFoundException($"Lead with id {leadId} not found"); 
         
         // 2. If lead is already ended (qualified or disqualified), throw exception
-        if (lead!.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
+        if (lead.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
             throw new InvalidUpdateException("Lead is already ended");
         
         // 3. If lead is not ended, update lead status and end date
@@ -152,10 +156,11 @@ public class LeadService : ILeadService
     public async Task<GetDealDto> QualifyLeadAsync(int leadId)
     {
         // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadId);
+        var lead = await _leadRepository.GetByIdAsync(leadId)
+                       ?? throw new EntityNotFoundException($"Lead with id {leadId} not found");
         
         // 2. If lead is already ended (qualified or disqualified), throw exception
-        if (lead!.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
+        if (lead.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
             throw new InvalidUpdateException("Cannot update ended (qualified or disqualified) lead");
         
         // 3. Change lead status to qualified and set lead end date

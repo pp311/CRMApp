@@ -8,7 +8,7 @@ public interface IDealProductService
     Task<GetDealProductDto?> GetDealProductByIdAsync(int dealProductId);
     Task<PagedResult<GetDealProductDto>> GetDealProductListAsync(int dealId, DealProductQueryParameters dpqp);
     Task<GetDealProductDto> AddProductToDealAsync(int dealId, AddDealProductDto addDealProductDto);
-    Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, UpdateDealProductDto dealProductDto);
-    Task DeleteDealProductAsync(int dealProductId);
+    Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, int dealId, UpdateDealProductDto dealProductDto);
+    Task DeleteDealProductAsync(int dealProductId, int dealId);
 
 }

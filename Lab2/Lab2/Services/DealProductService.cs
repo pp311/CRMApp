@@ -55,22 +55,27 @@ public class DealProductService : IDealProductService
         return _mapper.Map<GetDealProductDto>(await GetDealProductByIdAsync(dealProduct.Id));
     }
 
-    public async Task DeleteDealProductAsync(int dealProductId)
+    public async Task DeleteDealProductAsync(int dealProductId, int dealId)
     {
         // 1. Get deal and dealProduct from database
         var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId)
             ?? throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
 
-        var deal = await _dealRepository.GetByIdAsync(dealProduct.DealId);
-
-        // 2. If deal is ended (won or lost), throw exception
-        if (deal!.Status is (int)DealStatus.Won or (int)DealStatus.Lost)
+        var deal = await _dealRepository.GetByIdAsync(dealProduct.DealId)
+            ?? throw new EntityNotFoundException($"Deal with id {dealProduct.DealId} not found");
+        
+        // 2. Check if dealId provided from client is valid
+        if (dealId != deal.Id)
+            throw new InvalidUpdateException($"Deal's product with id {dealProductId} not found in deal with id {dealId}");
+        
+        // 3. If deal is ended (won or lost), throw exception
+        if (deal.Status is (int)DealStatus.Won or (int)DealStatus.Lost)
             throw new InvalidUpdateException("Deal is ended");
 
-        // 3. Recalculate deal value
+        // 4. Recalculate deal value
         deal.ActualRevenue -= dealProduct.PricePerUnit * dealProduct.Quantity;
 
-        // 4. Delete dealProduct
+        // 5. Delete dealProduct
         _dealProductRepository.Delete(dealProduct);
         await _unitOfWork.SaveChangesAsync();
     }
@@ -95,27 +100,30 @@ public class DealProductService : IDealProductService
         return new PagedResult<GetDealProductDto>(result, totalCount, dpqp.PageIndex, dpqp.PageSize);
     }
 
-    public async Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, UpdateDealProductDto dealProductDto)
+    public async Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, int dealId, UpdateDealProductDto dealProductDto)
     {
         // 1. Get deal and dealProduct from database
         var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId)
             ?? throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
+        
+        // 2. Check if dealId provided from client is valid
+        if (dealId != dealProduct.DealId)
+            throw new InvalidUpdateException($"Deal's product with id {dealProductId} not found in deal with id {dealId}");
 
+        // 3. If deal is ended (won or lost), throw exception
         var deal = await _dealRepository.GetByIdAsync(dealProduct.DealId);
-
-        // 2. If deal is ended (won or lost), throw exception
         if (deal!.Status is (int)DealStatus.Won or (int)DealStatus.Lost)
             throw new InvalidUpdateException("Deal is ended");
 
-        // 3. If product is changed, check if new product exists
+        // 4. If product is changed, check if new product exists
         if (dealProduct.ProductId != dealProductDto.ProductId && !await _productRepository.IsProductExistAsync(dealProductDto.ProductId))
                 throw new EntityNotFoundException($"Product with id {dealProductDto.ProductId} not found");
 
-        // 4. Recalculate deal value
+        // 5. Recalculate deal value
         deal.ActualRevenue -= dealProduct.PricePerUnit * dealProduct.Quantity;
         deal.ActualRevenue += dealProductDto.PricePerUnit * dealProductDto.Quantity;
 
-        // 5. Update dealProduct
+        // 6. Update dealProduct
         _mapper.Map(dealProductDto, dealProduct);
         await _unitOfWork.SaveChangesAsync();
         // Return dto with related data from Product
