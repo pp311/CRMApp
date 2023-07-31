@@ -1,5 +1,6 @@
 using AutoMapper;
 using Lab2.Constant;
+using Lab2.Data;
 using Lab2.DTOs.QueryParameters;
 using Lab2.DTOs.User;
 using Lab2.Entities;
@@ -14,14 +15,14 @@ namespace Lab2.Services;
 public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
-    // Currently userRepo is only for getting list of users with paging and ordering
-    // If more repo related to user is needed, I will use UnitOfWork
     private readonly IUserRepository _userRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     
-    public UserService(UserManager<User> userManager, IUserRepository userRepository, IMapper mapper)
+    public UserService(UserManager<User> userManager, IUserRepository userRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _userManager = userManager;
+        _unitOfWork = unitOfWork; 
         _userRepository = userRepository;
         _mapper = mapper;
     }
@@ -48,18 +49,30 @@ public class UserService : IUserService
         // 1. Check if user with the same email exists
         if (await _userManager.FindByEmailAsync(dto.Email) != null)
             throw new InvalidUpdateException($"User with email {dto.Email} already exists");
-        
-        // 2. Create user
+
         var user = _mapper.Map<User>(dto);
         
-        var result = await _userManager.CreateAsync(user, dto.Password);
-        
-        // 3. Set role
-        if (result.Succeeded)
-            await _userManager.AddToRoleAsync(user, AppRole.User);
-        else
-            throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(result.Errors));
-        
+        try
+        {
+            await _unitOfWork.BeginTransactionAsync();
+            
+            // 2. Create user
+            var createUserResult = await _userManager.CreateAsync(user, dto.Password);
+            if (!createUserResult.Succeeded)
+                throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(createUserResult.Errors));
+            
+            // 3. Set role
+            var addRoleResult = await _userManager.AddToRoleAsync(user, "123");
+            if (!addRoleResult.Succeeded)
+                throw new InvalidUpdateException(StringHelper.GetIdentityErrorString(addRoleResult.Errors));
+            
+            await _unitOfWork.CommitTransactionAsync();
+        }
+        catch
+        {
+            await _unitOfWork.RollbackAsync();
+            throw;
+        }
         return _mapper.Map<GetUserDto>(user);
     }
     

@@ -50,7 +50,7 @@ public class DealProductService : IDealProductService
         deal.ActualRevenue += dealProduct.PricePerUnit * dealProduct.Quantity;
 
         // 5. Save changes
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         // Refetch from database to load related data
         return _mapper.Map<GetDealProductDto>(await GetDealProductByIdAsync(dealProduct.Id));
     }
@@ -72,7 +72,7 @@ public class DealProductService : IDealProductService
 
         // 4. Delete dealProduct
         _dealProductRepository.Delete(dealProduct);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<GetDealProductDto?> GetDealProductByIdAsync(int dealProductId)
@@ -117,7 +117,7 @@ public class DealProductService : IDealProductService
 
         // 5. Update dealProduct
         _mapper.Map(dealProductDto, dealProduct);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         // Return dto with related data from Product
         return _mapper.Map<GetDealProductDto>(await GetDealProductByIdAsync(dealProduct.Id));
     }

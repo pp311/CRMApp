@@ -50,7 +50,7 @@ public class CustomUserStore : IUserStore<User>
     public Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
     {
         _userRepository.Add(user);
-        _unitOfWork.CommitAsync();
+        _unitOfWork.SaveChangesAsync();
         return Task.FromResult(IdentityResult.Success);
     }
 

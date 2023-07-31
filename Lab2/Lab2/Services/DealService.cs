@@ -38,7 +38,7 @@ public class DealService : IDealService
         account!.TotalSales -= deal.ActualRevenue;
 
         _dealRepository.Delete(deal);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<GetDealDetailDto?> GetByIdAsync(int id)
@@ -85,7 +85,7 @@ public class DealService : IDealService
 
         // 3. Update deal
         _mapper.Map(dealDto, deal);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetDealDetailDto>(deal);
     }
 
@@ -115,7 +115,7 @@ public class DealService : IDealService
         account!.TotalSales += deal.ActualRevenue;
 
         // 5. Save changes
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetDealDetailDto>(deal);
     }
 
@@ -137,7 +137,7 @@ public class DealService : IDealService
         account!.TotalSales += deal.ActualRevenue;
 
         // 5. Save changes
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetDealDetailDto>(deal);
     }
 }

@@ -33,7 +33,7 @@ public class ContactService : IContactService
         
         var contact = _mapper.Map<Contact>(upsertContactDto);
         _contactRepository.Add(contact);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetContactDto>(contact);
     }
 
@@ -44,7 +44,7 @@ public class ContactService : IContactService
             throw new EntityNotFoundException($"Contact with id {contactId} is not found");
         
         _contactRepository.Delete(new Contact { Id = contactId });
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<GetContactDto?> GetByIdAsync(int id)
@@ -82,7 +82,7 @@ public class ContactService : IContactService
         var validatedContact = await ValidateUpdatingContact(upsertContactDto, contactId);
         
         _mapper.Map(upsertContactDto, validatedContact);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetContactDto>(validatedContact);
     }
     

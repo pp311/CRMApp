@@ -32,7 +32,7 @@ public class AccountService : IAccountService
         // Create account
         var account = _mapper.Map<Account>(accountDto);
         _accountRepository.Add(account);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetAccountDto>(account);
     }
 
@@ -43,7 +43,7 @@ public class AccountService : IAccountService
             throw new EntityNotFoundException($"Account with id {accountId} does not exist");
         
         _accountRepository.Delete(new Account { Id = accountId });
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     public async Task<GetAccountDto> UpdateAsync(int accountId, UpsertAccountDto accountDto)
@@ -54,7 +54,7 @@ public class AccountService : IAccountService
             ?? throw new EntityNotFoundException($"Account with id {accountId} not found");
         
         _mapper.Map(accountDto, account);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetAccountDto>(account);
     }
 

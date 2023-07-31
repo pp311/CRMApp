@@ -45,7 +45,7 @@ public class ProductService : IProductService
         
         var product = _mapper.Map<Product>(productDto);
         _productRepository.Add(product);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetProductDto>(product);
     }
 
@@ -60,7 +60,7 @@ public class ProductService : IProductService
         
         // 3. Update product 
         _mapper.Map(productDto, product);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetProductDto>(product);
     }
 
@@ -70,7 +70,7 @@ public class ProductService : IProductService
             throw new EntityNotFoundException($"Product with id {productId} not found");
         
         _productRepository.Delete(new Product { Id = productId });
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     // Product validation

@@ -43,7 +43,7 @@ public class LeadService : ILeadService
         lead.Status = (int)LeadStatus.Prospect;
         _leadRepository.Add(lead);
         
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetLeadDto>(lead);
     }
 
@@ -54,7 +54,7 @@ public class LeadService : ILeadService
             throw new EntityNotFoundException($"Lead with id {leadId} not found");
         
         _leadRepository.Delete(new Lead { Id = leadId });
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
     }
     
     public async Task<GetLeadDto> UpdateAsync(int leadId, UpdateLeadDto leadDto) 
@@ -81,7 +81,7 @@ public class LeadService : ILeadService
         {
             _mapper.Map(leadDto, lead);
         }
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetLeadDto>(lead);
     }
     
@@ -145,7 +145,7 @@ public class LeadService : ILeadService
             lead.DisqualifiedDescription = disqualifyLeadDto.DisqualifiedDescription;
         }
         
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetLeadDto>(lead);
     }
 
@@ -170,7 +170,7 @@ public class LeadService : ILeadService
             LeadId = lead.Id
         };
         _dealRepository.Add(deal);
-        await _unitOfWork.CommitAsync();
+        await _unitOfWork.SaveChangesAsync();
         
         // 5. Return deal
         return _mapper.Map<GetDealDto>(deal);
