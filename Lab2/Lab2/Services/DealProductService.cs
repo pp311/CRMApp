@@ -34,13 +34,12 @@ public class DealProductService : IDealProductService
     public async Task<GetDealProductDto> AddProductToDealAsync(int dealId, AddDealProductDto addDealProductDto)
     {
         // 1. Check if product exists
-        if (!await _productRepository.IsExistAsync(p => p.Id == addDealProductDto.ProductId))
+        if (!await _productRepository.IsProductExistAsync(addDealProductDto.ProductId))
             throw new EntityNotFoundException($"Product with id {addDealProductDto.ProductId} not found");
 
         // 2. Get deal from database
-        var deal = await _dealRepository.GetByIdAsync(dealId);
-        if (deal == null)
-            throw new EntityNotFoundException($"Deal with id {dealId} not found");
+        var deal = await _dealRepository.GetByIdAsync(dealId)
+            ?? throw new EntityNotFoundException($"Deal with id {dealId} not found");
 
         // 3. Add deal's product to deal
         var dealProduct = _mapper.Map<DealProduct>(addDealProductDto);
@@ -59,9 +58,8 @@ public class DealProductService : IDealProductService
     public async Task DeleteDealProductAsync(int dealProductId)
     {
         // 1. Get deal and dealProduct from database
-        var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId);
-        if (dealProduct == null)
-            throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
+        var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId)
+            ?? throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
 
         var deal = await _dealRepository.GetByIdAsync(dealProduct.DealId);
 
@@ -90,19 +88,18 @@ public class DealProductService : IDealProductService
                                                                       skip: (dpqp.PageIndex - 1) * dpqp.PageSize,
                                                                       take: dpqp.PageSize,
                                                                       isDescending: dpqp.IsDescending,
-                                                                      condition: dp => dp.DealId == dealId);
+                                                                      dealId: dealId);
 
         var result = _mapper.Map<List<GetDealProductDto>>(dealProducts);
 
         return new PagedResult<GetDealProductDto>(result, totalCount, dpqp.PageIndex, dpqp.PageSize);
     }
 
-    public async Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, UpdateDealProductDto updateDealProductDto)
+    public async Task<GetDealProductDto> UpdateDealProductAsync(int dealProductId, UpdateDealProductDto dealProductDto)
     {
         // 1. Get deal and dealProduct from database
-        var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId);
-        if (dealProduct == null)
-            throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
+        var dealProduct = await _dealProductRepository.GetByIdAsync(dealProductId)
+            ?? throw new EntityNotFoundException($"Deal's product with id {dealProductId} not found");
 
         var deal = await _dealRepository.GetByIdAsync(dealProduct.DealId);
 
@@ -111,18 +108,15 @@ public class DealProductService : IDealProductService
             throw new InvalidUpdateException("Deal is ended");
 
         // 3. If product is changed, check if new product exists
-        if (dealProduct.ProductId != updateDealProductDto.ProductId)
-        {
-            if (!await _productRepository.IsExistAsync(p => p.Id == updateDealProductDto.ProductId))
-                throw new EntityNotFoundException($"Product with id {updateDealProductDto.ProductId} not found");
-        }
+        if (dealProduct.ProductId != dealProductDto.ProductId && !await _productRepository.IsProductExistAsync(dealProductDto.ProductId))
+                throw new EntityNotFoundException($"Product with id {dealProductDto.ProductId} not found");
 
         // 4. Recalculate deal value
         deal.ActualRevenue -= dealProduct.PricePerUnit * dealProduct.Quantity;
-        deal.ActualRevenue += updateDealProductDto.PricePerUnit * updateDealProductDto.Quantity;
+        deal.ActualRevenue += dealProductDto.PricePerUnit * dealProductDto.Quantity;
 
         // 5. Update dealProduct
-        _mapper.Map(updateDealProductDto, dealProduct);
+        _mapper.Map(dealProductDto, dealProduct);
         await _unitOfWork.CommitAsync();
         // Return dto with related data from Product
         return _mapper.Map<GetDealProductDto>(await GetDealProductByIdAsync(dealProduct.Id));

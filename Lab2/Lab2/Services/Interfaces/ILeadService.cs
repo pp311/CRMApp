@@ -7,6 +7,7 @@ namespace Lab2.Services.Interfaces;
 public interface ILeadService
 {
     Task<PagedResult<GetLeadDto>> GetListAsync(LeadQueryParameters lqp);
+    Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters leadQueryParameters);
     Task<GetLeadDto?> GetByIdAsync(int id);
     Task<GetLeadDto> CreateAsync(AddLeadDto leadDto);
     Task<GetLeadDto> UpdateAsync(int leadId, UpdateLeadDto leadDto);

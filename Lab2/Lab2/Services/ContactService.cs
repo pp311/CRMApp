@@ -63,6 +63,19 @@ public class ContactService : IContactService
 
         return new PagedResult<GetContactDto>(result, contactCount, cqp.PageIndex, cqp.PageSize);
     }
+    
+    public async Task<PagedResult<GetContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters cqp)
+    {
+        var (contacts, contactCount) = await _contactRepository.GetContactPagedListAsync(search: cqp.Search,
+                                                                                         orderBy: cqp.OrderBy,
+                                                                                         skip: (cqp.PageIndex - 1) * cqp.PageSize,
+                                                                                         take: cqp.PageSize,
+                                                                                         isDescending: cqp.IsDescending,
+                                                                                         accountId: accountId);
+        var result = _mapper.Map<List<GetContactDto>>(contacts);
+
+        return new PagedResult<GetContactDto>(result, contactCount, cqp.PageIndex, cqp.PageSize);
+    }
 
     public async Task<GetContactDto> UpdateAsync(int contactId, UpsertContactDto upsertContactDto)
     {

@@ -16,10 +16,20 @@ namespace Lab2.Controllers;
 public class AccountController : ControllerBase
 {
     private readonly IAccountService _accountService;
+    private readonly IDealService _dealService;
+    private readonly IContactService _contactService;
+    private readonly ILeadService _leadService;
 
-    public AccountController(IAccountService accountService)
+
+    public AccountController(IAccountService accountService,
+                             IDealService dealService,
+                             IContactService contactService,
+                             ILeadService leadService)
     {
         _accountService = accountService;
+        _dealService = dealService;
+        _contactService = contactService;
+        _leadService = leadService;
     }
 
     [HttpGet("{accountId:int}")]
@@ -79,7 +89,7 @@ public class AccountController : ControllerBase
             return NotFound();
         
         // Get lead list when account exists
-        var leads = await _accountService.GetLeadListByAccountIdAsync(accountId, lqp);
+        var leads = await _leadService.GetLeadListByAccountIdAsync(accountId, lqp);
         return Ok(leads);
     }
 
@@ -91,7 +101,7 @@ public class AccountController : ControllerBase
             return NotFound();
         
         // Get contact list when account exists
-        var contacts = await _accountService.GetContactListByAccountIdAsync(accountId, cqp);
+        var contacts = await _contactService.GetContactListByAccountIdAsync(accountId, cqp);
         return Ok(contacts);
     }
 
@@ -103,7 +113,7 @@ public class AccountController : ControllerBase
             return NotFound();
         
         // Get deal list when account exists
-        var deals = await _accountService.GetDealListByAccountIdAsync(accountId, dqp);
+        var deals = await _dealService.GetDealListByAccountIdAsync(accountId, dqp);
         return Ok(deals);
     }
 }

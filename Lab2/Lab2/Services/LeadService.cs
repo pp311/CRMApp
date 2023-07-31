@@ -15,16 +15,19 @@ public class LeadService : ILeadService
 {
     private readonly ILeadRepository _leadRepository;
     private readonly IDealRepository _dealRepository;
+    private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public LeadService(ILeadRepository leadRepository,
                        IDealRepository dealRepository,
+                       IAccountRepository accountRepository,
                        IMapper mapper,
                        IUnitOfWork unitOfWork)
     {
         _leadRepository = leadRepository;
         _dealRepository = dealRepository;
+        _accountRepository = accountRepository;
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
@@ -32,13 +35,14 @@ public class LeadService : ILeadService
     public async Task<GetLeadDto> CreateAsync(AddLeadDto leadDto)
     {
         // 1. Check if account exists
-        if (!await _dealRepository.IsExistAsync(d => d.Id == leadDto.AccountId))
+        if (!await _accountRepository.IsAccountExistAsync(leadDto.AccountId))
             throw new EntityNotFoundException($"Account with id {leadDto.AccountId} not found");
         
         // 2. Create lead
         var lead = _mapper.Map<Lead>(leadDto);
         lead.Status = (int)LeadStatus.Prospect;
         _leadRepository.Add(lead);
+        
         await _unitOfWork.CommitAsync();
         return _mapper.Map<GetLeadDto>(lead);
     }
@@ -46,7 +50,7 @@ public class LeadService : ILeadService
     public async Task DeleteAsync(int leadId)
     {
         // 1. Check if lead exists
-        if (!await _leadRepository.IsExistAsync(l => l.Id == leadId))
+        if (!await _leadRepository.IsLeadExistAsync(leadId))
             throw new EntityNotFoundException($"Lead with id {leadId} not found");
         
         _leadRepository.Delete(new Lead { Id = leadId });
@@ -56,20 +60,16 @@ public class LeadService : ILeadService
     public async Task<GetLeadDto> UpdateAsync(int leadId, UpdateLeadDto leadDto) 
     {
         // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadId);
-        if (lead == null)
-            throw new EntityNotFoundException($"Lead with id {leadId} not found");
+        var lead = await _leadRepository.GetByIdAsync(leadId)
+            ?? throw new EntityNotFoundException($"Lead with id {leadId} not found");
         
         // 2. Check leadDto: if status is not disqualified, reason must be null
         if (leadDto.Status != LeadStatus.Disqualified && leadDto.DisqualifiedReason != null)
             throw new InvalidUpdateException("Disqualification reason must be null if status is not disqualified");
         
         // 3. If account is changed, check if new account exists
-        if (lead.AccountId != leadDto.AccountId)
-        {
-            if (!await _dealRepository.IsExistAsync(d => d.Id == leadDto.AccountId))
+        if (lead.AccountId != leadDto.AccountId && !await _accountRepository.IsAccountExistAsync(leadDto.AccountId))
                 throw new EntityNotFoundException($"Account with id {leadDto.AccountId} not found");
-        }
         
         // 4. If lead is already ended (qualified or disqualified), only changes in source and desc fields are allowed
         if (lead.Status is (int)LeadStatus.Qualified or (int)LeadStatus.Disqualified)
@@ -106,6 +106,20 @@ public class LeadService : ILeadService
                                                                              skip: (lqp.PageIndex - 1) * lqp.PageSize,
                                                                              take: lqp.PageSize,
                                                                              isDescending: lqp.IsDescending);
+        var result = _mapper.Map<List<GetLeadDto>>(leads);
+
+        return new PagedResult<GetLeadDto>(result, leadCount, lqp.PageIndex, lqp.PageSize);
+    }
+    
+    public async Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters lqp)
+    {
+        var (leads, leadCount) = await _leadRepository.GetLeadPagedListAsync(search: lqp.Search,
+                                                                             status: lqp.Status,
+                                                                             orderBy: lqp.OrderBy,
+                                                                             skip: (lqp.PageIndex - 1) * lqp.PageSize,
+                                                                             take: lqp.PageSize,
+                                                                             isDescending: lqp.IsDescending,
+                                                                             accountId: accountId);
         var result = _mapper.Map<List<GetLeadDto>>(leads);
 
         return new PagedResult<GetLeadDto>(result, leadCount, lqp.PageIndex, lqp.PageSize);

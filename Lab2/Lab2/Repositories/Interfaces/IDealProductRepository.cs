@@ -12,6 +12,6 @@ namespace Lab2.Repositories.Interfaces
                                                                                     int skip,
                                                                                     int take,
                                                                                     bool isDescending,
-                                                                                    Expression<Func<DealProduct, bool>>? condition = null);
+                                                                                    int? dealId = null);
     }
 }

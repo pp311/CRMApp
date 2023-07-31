@@ -30,9 +30,8 @@ public class DealService : IDealService
     public async Task DeleteAsync(int id)
     {
         // Check if deal exists
-        var deal = await _dealRepository.GetByIdAsync(id);
-        if (deal == null)
-            throw new EntityNotFoundException($"Deal with id {id} not found");
+        var deal = await _dealRepository.GetByIdAsync(id)
+            ?? throw new EntityNotFoundException($"Deal with id {id} not found");
 
         // Subtract account's total sales with deal's actual revenue
         var account = await _accountRepository.GetByIdAsync(deal.Lead!.AccountId);
@@ -59,13 +58,26 @@ public class DealService : IDealService
 
         return new PagedResult<GetDealDetailDto>(result, dealCount, dqp.PageIndex, dqp.PageSize);
     }
+    
+    public async Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dqp)
+    {
+        var (deals, dealCount) = await _dealRepository.GetDealPagedListAsync(search: dqp.Search,
+                                                                             status: dqp.Status,
+                                                                             orderBy: dqp.OrderBy,
+                                                                             skip: (dqp.PageIndex - 1) * dqp.PageSize,
+                                                                             take: dqp.PageSize,
+                                                                             isDescending: dqp.IsDescending,
+                                                                             accountId: accountId);
+        var result = _mapper.Map<List<GetDealDto>>(deals);
+
+        return new PagedResult<GetDealDto>(result, dealCount, dqp.PageIndex, dqp.PageSize);
+    }
 
     public async Task<GetDealDetailDto> UpdateAsync(int dealId, UpdateDealDto dealDto)
     {
         // 1. Get deal from database
-        var deal = await _dealRepository.GetByIdAsync(dealId);
-        if (deal == null)
-            throw new EntityNotFoundException($"Deal with id {dealId} not found");
+        var deal = await _dealRepository.GetByIdAsync(dealId)
+            ?? throw new EntityNotFoundException($"Deal with id {dealId} not found");
 
         // 2. If deal is ended (won or lost), cannot change deal title
         if (deal.Status != (int)DealStatus.Open && dealDto.Title != deal.Title)
@@ -88,9 +100,8 @@ public class DealService : IDealService
     public async Task<GetDealDetailDto> MarkDealAsWonAsync(int dealId)
     {
         // 1. Get deal from database
-        var deal = await _dealRepository.GetByIdAsync(dealId);
-        if (deal == null)
-            throw new EntityNotFoundException($"Deal with id {dealId} not found");
+        var deal = await _dealRepository.GetByIdAsync(dealId)
+            ?? throw new EntityNotFoundException($"Deal with id {dealId} not found");
 
         // 2. If deal is already ended (won or lost), throw exception
         if (deal.Status is not (int)DealStatus.Open)
@@ -111,9 +122,8 @@ public class DealService : IDealService
     public async Task<GetDealDetailDto> MarkDealAsLostAsync(int dealId)
     {
         // 1. Get deal from database
-        var deal = await _dealRepository.GetByIdAsync(dealId);
-        if (deal == null)
-            throw new EntityNotFoundException($"Deal with id {dealId} not found");
+        var deal = await _dealRepository.GetByIdAsync(dealId)
+            ?? throw new EntityNotFoundException($"Deal with id {dealId} not found");
 
         // 2. If deal is already ended (won or lost), throw exception
         if (deal.Status is not (int)DealStatus.Open)

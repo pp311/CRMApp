@@ -26,12 +26,12 @@ namespace Lab2.Repositories
                                                                                     int skip,
                                                                                     int take,
                                                                                     bool isDescending,
-                                                                                    Expression<Func<DealProduct, bool>>? condition)
+                                                                                    int? dealId)
         {
             var query = DbSet.Include(dp => dp.Product).AsNoTracking();
             // 1. Filtering with condition
-            if (condition != null)
-                query = query.Where(condition);
+            if (dealId != null)
+                query = query.Where(dp => dp.DealId == dealId);
             
             // 2. Search by name and product code
             if (!string.IsNullOrWhiteSpace(search))

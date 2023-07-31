@@ -16,8 +16,10 @@ namespace Lab2.Repositories.Interfaces
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
-                                                                                Expression<Func<Lead, bool>>? condition = null);
+                                                                                int? accountId = null);
+        
         Task<LeadStatistics> GetLeadStatisticsAsync();
+        Task<bool> IsLeadExistAsync(int leadId);
     }
 
 }

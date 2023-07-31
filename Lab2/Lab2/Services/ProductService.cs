@@ -77,7 +77,8 @@ public class ProductService : IProductService
     private async Task ValidateSavingProduct(UpsertProductDto productDto, int productId = 0) 
     { 
         // Validate product code uniqueness
-        if (!string.IsNullOrEmpty(productDto.ProductCode) && await _productRepository.IsProductCodeExistAsync(productDto.ProductCode,productId))
+        if (!string.IsNullOrEmpty(productDto.ProductCode) 
+            && await _productRepository.IsProductCodeExistAsync(productDto.ProductCode, productId))
         {
                throw new EntityValidationException($"Product code {productDto.ProductCode} is already existed"); 
         } 

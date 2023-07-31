@@ -1,9 +1,6 @@
 using AutoMapper;
 using Lab2.Data;
 using Lab2.DTOs.Account;
-using Lab2.DTOs.Contact;
-using Lab2.DTOs.Deal;
-using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Exceptions;
@@ -15,23 +12,14 @@ namespace Lab2.Services;
 public class AccountService : IAccountService
 {
     private readonly IAccountRepository _accountRepository;
-    private readonly ILeadRepository _leadRepository;
-    private readonly IContactRepository _contactRepository;
-    private readonly IDealRepository _dealRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
     public AccountService(IAccountRepository accountRepository,
-                          ILeadRepository leadRepository,
-                          IContactRepository contactRepository,
-                          IDealRepository dealRepository,
                           IUnitOfWork unitOfWork,
                           IMapper mapper)
     {
         _accountRepository = accountRepository;
-        _leadRepository = leadRepository;
-        _contactRepository = contactRepository;
-        _dealRepository = dealRepository;
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
@@ -88,47 +76,6 @@ public class AccountService : IAccountService
         return new PagedResult<GetAccountDto>(result, accountCount, aqp.PageIndex, aqp.PageSize);
     }
 
-    public async Task<PagedResult<GetContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters cqp)
-    {
-        var (contacts, contactCount) = await _contactRepository.GetContactPagedListAsync(search: cqp.Search,
-                                                                                         orderBy: cqp.OrderBy,
-                                                                                         skip: (cqp.PageIndex - 1) * cqp.PageSize,
-                                                                                         take: cqp.PageSize,
-                                                                                         isDescending: cqp.IsDescending,
-                                                                                         condition: c => c.AccountId == accountId);
-        var result = _mapper.Map<List<GetContactDto>>(contacts);
-
-        return new PagedResult<GetContactDto>(result, contactCount, cqp.PageIndex, cqp.PageSize);
-    }
-
-    public async Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters lqp)
-    {
-        var (leads, leadCount) = await _leadRepository.GetLeadPagedListAsync(search: lqp.Search,
-                                                                             status: lqp.Status,
-                                                                             orderBy: lqp.OrderBy,
-                                                                             skip: (lqp.PageIndex - 1) * lqp.PageSize,
-                                                                             take: lqp.PageSize,
-                                                                             isDescending: lqp.IsDescending,
-                                                                             condition: l => l.AccountId == accountId);
-        var result = _mapper.Map<List<GetLeadDto>>(leads);
-
-        return new PagedResult<GetLeadDto>(result, leadCount, lqp.PageIndex, lqp.PageSize);
-    }
-
-    public async Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dqp)
-    {
-        var (deals, dealCount) = await _dealRepository.GetDealPagedListAsync(search: dqp.Search,
-                                                                             status: dqp.Status,
-                                                                             orderBy: dqp.OrderBy,
-                                                                             skip: (dqp.PageIndex - 1) * dqp.PageSize,
-                                                                             take: dqp.PageSize,
-                                                                             isDescending: dqp.IsDescending,
-                                                                             condition: d => d.Lead!.AccountId == accountId);
-        var result = _mapper.Map<List<GetDealDto>>(deals);
-
-        return new PagedResult<GetDealDto>(result, dealCount, dqp.PageIndex, dqp.PageSize);
-    }
-    
     // Account validation methods 
     private async Task ValidateSavingAccount(UpsertAccountDto accountDto, int accountId = 0)
     {

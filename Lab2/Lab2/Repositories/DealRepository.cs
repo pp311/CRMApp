@@ -29,12 +29,12 @@ namespace Lab2.Repositories
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
-                                                                                Expression<Func<Deal, bool>>? condition)
+                                                                                int? accountId)
         {
             var query = DbSet.Include(d => d.Lead).ThenInclude(l => l!.Account).AsNoTracking();
-            // 1. Filtering with expression
-            if (condition != null)
-                query = query.Where(condition);
+            // 1. Filtering by account id if provided
+            if (accountId != null)
+                query = query.Where(d => d.Lead!.AccountId == accountId);
             
             // 2. Search by title
             if (!string.IsNullOrWhiteSpace(search))

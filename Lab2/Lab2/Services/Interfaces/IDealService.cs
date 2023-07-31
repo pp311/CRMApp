@@ -7,7 +7,7 @@ public interface IDealService
 {
     Task<GetDealDetailDto?> GetByIdAsync(int id);
     Task<PagedResult<GetDealDetailDto>> GetListAsync(DealQueryParameters dqp);
-    // Task<DealDto> CreateAsync(DealDto deal);
+    Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dealQueryParameters);
     Task<GetDealDetailDto> UpdateAsync(int dealId, UpdateDealDto dealDto);
     Task DeleteAsync(int id);
     Task<GetDealDetailDto> MarkDealAsWonAsync(int dealId);

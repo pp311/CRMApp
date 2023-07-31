@@ -24,12 +24,13 @@ namespace Lab2.Repositories
                                                                                                  int skip,
                                                                                                  int take,
                                                                                                  bool isDescending,
-                                                                                                 Expression<Func<Contact, bool>>? condition)
+                                                                                                 int? accountId)
         {
             var query = DbSet.Include(c => c.Account).AsNoTracking();
-            // 1. Filtering with expression
-            if (condition != null)
-                query = query.Where(condition);
+            
+            // 1. Filtering by account id if provided
+            if (accountId != null)
+                query = query.Where(c => c.AccountId == accountId);
             
             // 2. Search by name, phone, email
             if (!string.IsNullOrWhiteSpace(search))

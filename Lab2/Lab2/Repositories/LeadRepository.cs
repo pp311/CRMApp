@@ -22,30 +22,18 @@ namespace Lab2.Repositories
             return await DbSet.Include(l => l.Account).FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<LeadStatistics> GetLeadStatisticsAsync()
-        {
-            return await DbSet.AsNoTracking().AsQueryable().Select(lead =>
-                new LeadStatistics
-                {
-                    OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
-                    QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),
-                    DisqualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Disqualified),
-                    AverageEstimatedRevenue = DbSet.Average(l => l.EstimatedRevenue),
-                }).FirstAsync();
-        }
-
         public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(string? search,
                                                                                 LeadStatus? status,
                                                                                 LeadSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
-                                                                                Expression<Func<Lead, bool>>? condition = null)
+                                                                                int? accountId)
         {
             var query = DbSet.Include(l => l.Account).AsNoTracking();
-            // 1. Filtering with condition
-            if (condition != null)
-                query = query.Where(condition);
+            // 1. Filter by account id if provided
+            if (accountId != null)
+                query = query.Where(l => l.AccountId == accountId);
             
             // 2. Search by title
             if (!string.IsNullOrWhiteSpace(search))
@@ -70,8 +58,25 @@ namespace Lab2.Repositories
             };
             query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
 
-            // 5. Paging
+            // 4. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);
+        }
+        
+        public async Task<LeadStatistics> GetLeadStatisticsAsync()
+        {
+            return await DbSet.AsNoTracking().AsQueryable().Select(lead =>
+                new LeadStatistics
+                {
+                    OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
+                    QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),
+                    DisqualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Disqualified),
+                    AverageEstimatedRevenue = DbSet.Average(l => l.EstimatedRevenue),
+                }).FirstAsync();
+        }
+
+        public async Task<bool> IsLeadExistAsync(int leadId)
+        {
+            return await IsExistAsync(l => l.Id == leadId);
         }
     }
 }

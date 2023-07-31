@@ -13,7 +13,4 @@ public interface IAccountService
     Task<GetAccountDto> CreateAsync(UpsertAccountDto accountDto);
     Task<GetAccountDto> UpdateAsync(int accountId, UpsertAccountDto accountDto);
     Task DeleteAsync(int accountId);
-    Task<PagedResult<GetContactDto>> GetContactListByAccountIdAsync(int accountId, ContactQueryParameters contactQueryParameters);
-    Task<PagedResult<GetLeadDto>> GetLeadListByAccountIdAsync(int accountId, LeadQueryParameters leadQueryParameters);
-    Task<PagedResult<GetDealDto>> GetDealListByAccountIdAsync(int accountId, DealQueryParameters dealQueryParameters);
 }

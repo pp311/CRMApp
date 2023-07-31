@@ -16,7 +16,7 @@ namespace Lab2.Repositories.Interfaces
                                                                                 int skip,
                                                                                 int take,
                                                                                 bool isDescending,
-                                                                                Expression<Func<Deal, bool>>? condition = null);
+                                                                                int? accountId = null);
         Task<DealStatistics> GetDealStatisticsAsync();
     }
 }
