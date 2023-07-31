@@ -76,7 +76,7 @@ namespace Lab2.Repositories
 
         public async Task<bool> IsLeadExistAsync(int leadId)
         {
-            return await IsExistAsync(l => l.Id == leadId);
+            return await DbSet.AnyAsync(l => l.Id == leadId);
         }
     }
 }

@@ -13,9 +13,4 @@ public interface IRepositoryBase<TEntity> where TEntity : class
                                             int skip = 0,
                                             int take = 0,
                                             bool isDescending = false);
-    Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> expression);
-    Task<TEntity?> GetFirstByConditionAsync(Expression<Func<TEntity, bool>> expression);
-    Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> expression);
-    Task<int> CountAsync(Expression<Func<TEntity, bool>>? expression = null);
-    Task<double> AverageAsync(Expression<Func<TEntity, double>> expression);
 }

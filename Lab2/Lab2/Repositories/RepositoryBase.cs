@@ -106,33 +106,8 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
         return await GetPagedListFromQueryableAsync(query, skip, take);
     }
 
-
     public async Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> expression)
     {
         return await DbSet.Where(expression).ToListAsync();
-    }
-    
-    public async Task<TEntity?> GetFirstByConditionAsync(Expression<Func<TEntity, bool>> expression)
-    {
-        return await DbSet.FirstOrDefaultAsync(expression);
-    }
-
-    public async Task<bool> IsExistAsync(Expression<Func<TEntity, bool>> expression)
-    {
-        return await DbSet.AnyAsync(expression);
-    }
-
-    public async Task<int> CountAsync(Expression<Func<TEntity, bool>>? expression = null)
-    {
-        if (expression == null)
-        {
-            return await DbSet.CountAsync();
-        }
-        return await DbSet.CountAsync(expression);
-    }
-    
-    public async Task<double> AverageAsync(Expression<Func<TEntity, double>> expression)
-    {
-        return await DbSet.AverageAsync(expression);
     }
 }

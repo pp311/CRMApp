@@ -60,12 +60,12 @@ namespace Lab2.Repositories
 
         public async Task<bool> IsProductCodeExistAsync(string productCode, int productId = 0)
         {
-            return await IsExistAsync(p => p.ProductCode == productCode && p.Id != productId);
+            return await DbSet.AnyAsync(p => p.ProductCode == productCode && p.Id != productId);
         }
 
         public async Task<bool> IsProductExistAsync(int productId)
         {
-            return await  IsExistAsync(p => p.Id == productId);
+            return await  DbSet.AnyAsync(p => p.Id == productId);
         }
     }
 }
