@@ -41,9 +41,6 @@ public static class AuthExtension
     {
         services.AddAuthorization(options =>
         {
-            // Require authenticated user by default
-            options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();   
-            
             options.AddPolicy(AuthPolicy.AdminOnly, policy => policy.RequireRole(AppRole.Admin));
             
             options.AddPolicy(AuthPolicy.AdminOrOwner, policy => policy.RequireAssertion(context =>

@@ -36,6 +36,7 @@ public class AuthenticationController : ControllerBase
     }
 
     [HttpPost("revoke-token")]
+    [Authorize]
     public async Task<IActionResult> RevokeRefreshToken([FromBody] RefreshTokenDto? dto)
     {
         if (dto == null)

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/products")]
 public class ProductController : ControllerBase
 {

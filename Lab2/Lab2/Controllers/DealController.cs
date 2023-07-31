@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Lab2.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/deals")]
 public class DealController : ControllerBase
 {
