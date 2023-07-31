@@ -56,7 +56,7 @@ public class AuthService : IAuthService
         var user = await _userManager.Users.SingleOrDefaultAsync(u => u.RefreshToken == refreshToken);
         
         // 2. Check if user and refreshToken is valid 
-        if (user == null || user.RefreshTokenLifetime < DateTime.Now)
+        if (user == null || user.RefreshTokenLifetime < DateTime.UtcNow)
             throw new InvalidRefreshTokenException("Refresh token is outdated!");
 
         // 3. Generate new access token and refresh token
@@ -97,8 +97,8 @@ public class AuthService : IAuthService
         var signingCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
 
         // 2. Create Jwt
-        var accessTokenLifetime = DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.AccessTokenExpiryInMinutes));
-        var refreshTokenLifetime = DateTime.Now.AddHours(Convert.ToDouble(_jwtSettings.RefreshTokenExpiryInHours));
+        var accessTokenLifetime = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_jwtSettings.AccessTokenExpiryInMinutes));
+        var refreshTokenLifetime = DateTime.UtcNow.AddHours(Convert.ToDouble(_jwtSettings.RefreshTokenExpiryInHours));
         
         var tokenOptions = new JwtSecurityToken(
             issuer: _jwtSettings.ValidIssuer,
