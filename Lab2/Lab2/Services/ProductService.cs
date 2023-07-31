@@ -22,28 +22,14 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
     
-    private async Task ValidateSavingProduct(UpsertProductDto productDto, int productId = 0) 
-    { 
-        // Validate product code uniqueness
-        if (!string.IsNullOrEmpty(productDto.ProductCode))
-        {
-           if (await _productRepository.IsExistAsync(p => p.ProductCode == productDto.ProductCode 
-                                                           && p.Id != productId))
-               throw new EntityValidationException($"Product code {productDto.ProductCode} is already existed"); 
-        } 
-    }
-
     public async Task<PagedResult<GetProductDto>> GetListAsync(ProductQueryParameters pqp)
     {
-        // 1. Get products based on filter and paging parameters
-        // 2. Get total count for paging
         var (products, productCount) = await _productRepository.GetProductPagedListAsync(search: pqp.Search,
                                                                                          type: pqp.Type,
                                                                                          orderBy: pqp.OrderBy,
                                                                                          skip: (pqp.PageIndex - 1) * pqp.PageSize,
                                                                                          take: pqp.PageSize,
                                                                                          isDescending: pqp.IsDescending);
-        // 3. Map and return
         var result = _mapper.Map<List<GetProductDto>>(products);
         return new PagedResult<GetProductDto>(result, productCount, pqp.PageIndex, pqp.PageSize);
     }
@@ -69,9 +55,8 @@ public class ProductService : IProductService
         await ValidateSavingProduct(productDto, productId);
         
         // 2. Get product from database
-        var product = await _productRepository.GetByIdAsync(productId);
-        if (product == null)
-            throw new EntityNotFoundException($"Product with id {productId} not found");
+        var product = await _productRepository.GetByIdAsync(productId)
+            ?? throw new EntityNotFoundException($"Product with id {productId} not found");
         
         // 3. Update product 
         _mapper.Map(productDto, product);
@@ -81,11 +66,20 @@ public class ProductService : IProductService
 
     public async Task DeleteAsync(int productId)
     {
-        // 1. Check if product exists
-        if (!await _productRepository.IsExistAsync(p => p.Id == productId))
+        if (!await _productRepository.IsProductExistAsync(productId))
             throw new EntityNotFoundException($"Product with id {productId} not found");
         
         _productRepository.Delete(new Product { Id = productId });
         await _unitOfWork.CommitAsync();
+    }
+    
+    // Product validation
+    private async Task ValidateSavingProduct(UpsertProductDto productDto, int productId = 0) 
+    { 
+        // Validate product code uniqueness
+        if (!string.IsNullOrEmpty(productDto.ProductCode) && await _productRepository.IsProductCodeExistAsync(productDto.ProductCode,productId))
+        {
+               throw new EntityValidationException($"Product code {productDto.ProductCode} is already existed"); 
+        } 
     }
 }

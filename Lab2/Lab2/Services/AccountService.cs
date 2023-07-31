@@ -36,26 +36,6 @@ public class AccountService : IAccountService
         _mapper = mapper;
     }
     
-    private async Task ValidateSavingAccount(UpsertAccountDto accountDto, int id = 0)
-    {
-        // Phone & email are unique fields so there are at most 2 items
-        var accounts = await _accountRepository.GetByConditionAsync(a => (a.Phone != null && a.Phone == accountDto.Phone)
-                                                                   || (a.Email == accountDto.Email));
-        accounts = accounts.ToList();
-        
-        //  Check phone field uniqueness
-        if (!string.IsNullOrEmpty(accountDto.Phone) && accounts.Any(a => a.Phone == accountDto.Phone && a.Id != id))
-        {
-               throw new EntityValidationException("This phone number is already used by another account"); 
-        } 
-        
-        // Check email field uniqueness
-        if (!string.IsNullOrEmpty(accountDto.Email) && accounts.Any(a => a.Email == accountDto.Email && a.Id != id))
-        {
-               throw new EntityValidationException("This email is already used by another account"); 
-        }
-    }
-
     public async Task<GetAccountDto> CreateAsync(UpsertAccountDto accountDto)
     {
         // Check phone and email uniqueness
@@ -71,7 +51,7 @@ public class AccountService : IAccountService
     public async Task DeleteAsync(int accountId)
     {
         // Check if account exists
-        if (!await _accountRepository.IsExistAsync(a => a.Id == accountId))
+        if (!await _accountRepository.IsAccountExistAsync(accountId))
             throw new EntityNotFoundException($"Account with id {accountId} does not exist");
         
         _accountRepository.Delete(new Account { Id = accountId });
@@ -80,16 +60,11 @@ public class AccountService : IAccountService
     
     public async Task<GetAccountDto> UpdateAsync(int accountId, UpsertAccountDto accountDto)
     {
-        // 1. Get account from database
-        var account = await _accountRepository.GetByIdAsync(accountId);
-        if (account == null)
-            throw new EntityNotFoundException($"Account with id {accountId} not found");
-        
-        // 2. Check phone field uniqueness if it modified and not empty
-        // 3. Check email field uniqueness if it modified and not empty
         await ValidateSavingAccount(accountDto, accountId);
         
-        // 4. Update account
+        var account = await _accountRepository.GetByIdAsync(accountId)
+            ?? throw new EntityNotFoundException($"Account with id {accountId} not found");
+        
         _mapper.Map(accountDto, account);
         await _unitOfWork.CommitAsync();
         return _mapper.Map<GetAccountDto>(account);
@@ -152,5 +127,17 @@ public class AccountService : IAccountService
         var result = _mapper.Map<List<GetDealDto>>(deals);
 
         return new PagedResult<GetDealDto>(result, dealCount, dqp.PageIndex, dqp.PageSize);
+    }
+    
+    // Account validation methods 
+    private async Task ValidateSavingAccount(UpsertAccountDto accountDto, int accountId = 0)
+    {
+        //  Check phone field uniqueness
+        if (!string.IsNullOrEmpty(accountDto.Email) && await _accountRepository.IsEmailDuplicatedAsync(accountDto.Email, accountId))
+            throw new EntityValidationException("This email is already used by another account"); 
+        
+        // Check email field uniqueness
+        if (!string.IsNullOrEmpty(accountDto.Phone) && await _accountRepository.IsPhoneDuplicatedAsync(accountDto.Phone, accountId))
+            throw new EntityValidationException("This phone number is already used by another account"); 
     }
 }

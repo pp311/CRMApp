@@ -56,5 +56,20 @@ namespace Lab2.Repositories
             // 4. Paging
             return await GetPagedListFromQueryableAsync(query,  skip, take);
         }
+
+        public async Task<bool> IsEmailDuplicatedAsync(string email, int contactId = 0)
+        {
+            return await IsExistAsync(c => c.Email == email && c.Id != contactId);
+        }
+
+        public async Task<bool> IsPhoneDuplicatedAsync(string phone, int contactId = 0)
+        {
+            return await IsExistAsync(c => c.Phone == phone && c.Id != contactId); 
+        }
+
+        public async Task<bool> IsContactExistAsync(int contactId)
+        {
+            return await IsExistAsync(c => c.Id == contactId); 
+        }
     }
 }

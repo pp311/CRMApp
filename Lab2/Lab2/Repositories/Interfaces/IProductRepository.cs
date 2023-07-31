@@ -15,5 +15,7 @@ namespace Lab2.Repositories.Interfaces
                                                                                     int take,
                                                                                     bool isDescending,  
                                                                                     Expression<Func<Product, bool>>? expression = null);
+        Task<bool> IsProductCodeExistAsync(string productCode, int productId = 0);
+        Task<bool> IsProductExistAsync(int productId);
     }
 }

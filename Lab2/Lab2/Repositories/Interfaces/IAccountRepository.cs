@@ -12,5 +12,9 @@ namespace Lab2.Repositories.Interfaces
                                                                                     int take,
                                                                                     bool isDescending,
                                                                                     Expression<Func<Account, bool>>? condition = null);
+        
+        Task<bool> IsEmailDuplicatedAsync(string email, int accountId = 0);
+        Task<bool> IsPhoneDuplicatedAsync(string phone, int accountId = 0);
+        Task<bool> IsAccountExistAsync(int accountId);
     }
 }

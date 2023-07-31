@@ -26,35 +26,10 @@ public class ContactService : IContactService
         _mapper = mapper;
         _unitOfWork = unitOfWork;
     }
-    
-    private async Task ValidateSavingContact(UpsertContactDto upsertContactDto, int contactId = 0)
-    {
-        // Phone & email are unique fields so contacts are at most 2 items
-        var contacts = await _contactRepository.GetByConditionAsync(c => (c.Phone != null && c.Phone == upsertContactDto.Phone)
-                                                                   || (c.Email == upsertContactDto.Email));
-        contacts = contacts.ToList();
-        
-        //  Check phone field uniqueness
-        if (!string.IsNullOrEmpty(upsertContactDto.Phone) && contacts.Any(c => c.Phone == upsertContactDto.Phone && c.Id != contactId))
-        {
-               throw new EntityValidationException("This phone number is already used by another contact"); 
-        } 
-        
-        // Check email field uniqueness
-        if (!string.IsNullOrEmpty(upsertContactDto.Email) && contacts.Any(c => c.Email == upsertContactDto.Email && c.Id != contactId))
-        {
-               throw new EntityValidationException("This email is already used by another contact"); 
-        }
-    }
 
     public async Task<GetContactDto> CreateAsync(UpsertContactDto upsertContactDto)
     {
-        // Check phone and email uniqueness
-        await ValidateSavingContact(upsertContactDto);
-        
-        // Check if account of the contact is exist
-        if (!await _accountRepository.IsExistAsync(a => a.Id == upsertContactDto.AccountId))
-            throw new EntityNotFoundException($"Account with id {upsertContactDto.AccountId} not found");
+        await ValidateCreatingContact(upsertContactDto);
         
         var contact = _mapper.Map<Contact>(upsertContactDto);
         _contactRepository.Add(contact);
@@ -65,7 +40,7 @@ public class ContactService : IContactService
     public async Task DeleteAsync(int contactId)
     {
         // Check if contact is exist
-        if (!await _contactRepository.IsExistAsync(c => c.Id == contactId))
+        if (!await _contactRepository.IsContactExistAsync(contactId))
             throw new EntityNotFoundException($"Contact with id {contactId} is not found");
         
         _contactRepository.Delete(new Contact { Id = contactId });
@@ -91,23 +66,44 @@ public class ContactService : IContactService
 
     public async Task<GetContactDto> UpdateAsync(int contactId, UpsertContactDto upsertContactDto)
     {
-        var contact = await _contactRepository.GetByIdAsync(contactId);
-        if (contact == null)
-            throw new EntityNotFoundException($"Contact with id {contactId} is not found");
+        var validatedContact = await ValidateUpdatingContact(upsertContactDto, contactId);
         
-        // Check phone and email uniqueness
-        await ValidateSavingContact(upsertContactDto, contactId);
+        _mapper.Map(upsertContactDto, validatedContact);
+        await _unitOfWork.CommitAsync();
+        return _mapper.Map<GetContactDto>(validatedContact);
+    }
+    
+    // Contact validation methods 
+    private async Task ValidateCreatingContact(UpsertContactDto contactDto)
+    {
+        if (!string.IsNullOrEmpty(contactDto.Phone) && await _contactRepository.IsPhoneDuplicatedAsync(contactDto.Phone))
+            throw new EntityValidationException("This phone number is already used by another contact"); 
+        
+        if (!string.IsNullOrEmpty(contactDto.Email) && await _contactRepository.IsEmailDuplicatedAsync(contactDto.Email))
+            throw new EntityValidationException("This email is already used by another contact"); 
+        
+        if (!await _accountRepository.IsAccountExistAsync(contactDto.AccountId))
+            throw new EntityNotFoundException($"Account with id {contactDto.AccountId} not found");
+    }
+
+    private async Task<Contact> ValidateUpdatingContact(UpsertContactDto contactDto, int contactId)
+    {
+        var contact = await _contactRepository.GetByIdAsync(contactId) 
+                      ?? throw new EntityNotFoundException($"Contact with id {contactId} is not found");
+        
+        // Check phone uniqueness
+        if (!string.IsNullOrEmpty(contactDto.Phone) && await _contactRepository.IsPhoneDuplicatedAsync(contactDto.Phone, contactId))
+            throw new EntityValidationException("This phone number is already used by another contact"); 
+        
+        // Check email uniqueness
+        if (!string.IsNullOrEmpty(contactDto.Email) && await _contactRepository.IsEmailDuplicatedAsync(contactDto.Email, contactId))
+            throw new EntityValidationException("This email is already used by another contact"); 
         
         // Check if account of the contact is exist when updating account id
-        if (upsertContactDto.AccountId != contact.AccountId &&
-            !await _accountRepository.IsExistAsync(a => a.Id == upsertContactDto.AccountId))
-        {
-            throw new EntityNotFoundException($"Account with id {upsertContactDto.AccountId} not found");
-        }
+        if (contactDto.AccountId != contact.AccountId && !await _accountRepository.IsAccountExistAsync(contactDto.AccountId))
+            throw new EntityNotFoundException($"Account with id {contactDto.AccountId} not found");
         
-        _mapper.Map(upsertContactDto, contact);
-        await _unitOfWork.CommitAsync();
-        return _mapper.Map<GetContactDto>(contact);
+        return contact;
     }
 }
 
