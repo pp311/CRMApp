@@ -23,11 +23,7 @@ public class ContactController : ControllerBase
     public async Task<ActionResult<GetContactDto>> GetContactById(int contactId)
     {
         var contact = await _contactService.GetByIdAsync(contactId);
-        if (contact == null)
-        {
-            return NotFound();
-        }
-        return Ok(contact);
+        return contact == null ? NotFound() : Ok(contact);
     }
 
     [HttpGet]
@@ -35,6 +31,12 @@ public class ContactController : ControllerBase
     {
         var contacts = await _contactService.GetListAsync(contactQueryParameters);
         return Ok(contacts);
+    }
+    
+    [HttpGet("account/{accountId:int}")]
+    public async Task<ActionResult<PagedResult<UpsertContactDto>>> GetContactList(int accountId, [FromQuery] ContactQueryParameters cqp)
+    {
+        return Ok(await _contactService.GetContactListByAccountIdAsync(accountId, cqp));
     }
     
     [HttpPost]

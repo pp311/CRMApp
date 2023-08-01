@@ -23,31 +23,29 @@ public class LeadController : ControllerBase
     [HttpGet("{leadId:int}")]
     public async Task<ActionResult<GetLeadDto>> GetLeadById(int leadId)
     {
-        // Get lead from service, if not found return 404
         var leadDto = await _leadService.GetByIdAsync(leadId);
-        
-        if (leadDto == null)
-            return NotFound();
-        
-        return Ok(leadDto);
+        return leadDto == null ? NotFound() : Ok(leadDto); 
     }
 
     [HttpGet]
     public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadList([FromQuery] LeadQueryParameters leadQueryParameters)
     {
-        // Get leads from service
-        var leads = await _leadService.GetListAsync(leadQueryParameters);
-        return Ok(leads);
+        return Ok(await _leadService.GetListAsync(leadQueryParameters));
+    }
+    
+    [HttpGet("account/{accountId:int}")]
+    public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadList(int accountId, [FromQuery] LeadQueryParameters lqp)
+    {
+        return Ok(await _leadService.GetLeadListByAccountIdAsync(accountId, lqp));
     }
 
     [HttpPost]
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetLeadDto>> CreateLead([FromBody] AddLeadDto? leadDto)
     {
-        // 1. Check if dto provided
         if (leadDto == null)
             return BadRequest();
-        // 2. Create lead    
+        
         var createdLead = await _leadService.CreateAsync(leadDto);
         return CreatedAtAction(nameof(GetLeadById), new { leadId = createdLead.Id }, createdLead);
     }

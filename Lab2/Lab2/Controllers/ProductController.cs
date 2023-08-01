@@ -22,18 +22,13 @@ public class ProductController : ControllerBase
     [HttpGet("{productId:int}")]
     public async Task<ActionResult<GetProductDto>> GetProductById(int productId)
     {
-        // Get product from service, if not found return 404
         var productDto = await _productService.GetByIdAsync(productId);
-        if (productDto == null)
-            return NotFound();
-       
-        return Ok(productDto);
+        return productDto == null ? NotFound() : Ok(productDto);
     }
 
     [HttpGet]
     public async Task<ActionResult<PagedResult<GetProductDto>>> GetProductList([FromQuery] ProductQueryParameters productQueryParameters)
     {
-        // Get products from service
         var products = await _productService.GetListAsync(productQueryParameters);
         return Ok(products);
     }
@@ -42,11 +37,9 @@ public class ProductController : ControllerBase
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<ActionResult<GetProductDto>> CreateProduct([FromBody] UpsertProductDto? productDto)
     {
-        // 1. Check if dto provided
         if (productDto == null)
             return BadRequest();
         
-        // 2. Create product
         var newProductDto = await _productService.CreateAsync(productDto);
         return CreatedAtAction(nameof(GetProductById), new { productId = newProductDto.Id }, newProductDto);
     }
@@ -58,7 +51,6 @@ public class ProductController : ControllerBase
         if (productDto == null)
             return BadRequest();
         
-        // Update product
         var updatedProductDto = await _productService.UpdateAsync(productId, productDto);
         return Ok(updatedProductDto);
     }

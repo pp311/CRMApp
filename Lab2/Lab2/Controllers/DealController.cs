@@ -26,11 +26,7 @@ public class DealController : ControllerBase
     public async Task<ActionResult<GetDealDto>> GetDealById(int dealId)
     {
         var deal = await _dealService.GetByIdAsync(dealId);
-        
-        if (deal == null)
-            return NotFound();
-        
-        return Ok(deal);
+        return deal == null ? NotFound() : Ok(deal); 
     }
 
     [HttpGet]
@@ -38,6 +34,12 @@ public class DealController : ControllerBase
     {
         var deals = await _dealService.GetListAsync(dealQueryParameters);
         return Ok(deals);
+    }
+    
+    [HttpGet("account/{accountId:int}")]
+    public async Task<ActionResult<PagedResult<GetDealDto>>> GetDealList(int accountId, [FromQuery] DealQueryParameters dqp)
+    {
+        return Ok(await _dealService.GetDealListByAccountIdAsync(accountId, dqp));
     }
 
     [HttpPut("{dealId:int}")]
