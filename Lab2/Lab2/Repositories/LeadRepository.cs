@@ -1,6 +1,4 @@
-using System.Linq.Expressions;
 using Lab2.Data;
-using Lab2.DTOs.Lead;
 using System.Linq.Dynamic.Core;
 using Lab2.DomainModels;
 using Lab2.Entities;

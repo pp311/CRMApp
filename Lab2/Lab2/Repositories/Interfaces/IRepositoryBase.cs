@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 namespace Lab2.Repositories.Interfaces;
 
 public interface IRepositoryBase<TEntity> where TEntity : class

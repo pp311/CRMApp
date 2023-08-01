@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using Lab2.Enums;
 
 namespace Lab2.DTOs.Deal;

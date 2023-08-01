@@ -66,7 +66,7 @@ namespace Lab2.Repositories
                                                                                            int take,
                                                                                            bool isDescending)
         {
-            query = DbSet.Include(d => d.Lead).ThenInclude(l => l!.Account).AsNoTracking();
+            query = query.Include(d => d.Lead).ThenInclude(l => l!.Account).AsNoTracking();
             
             // 1. Search by title
             if (!string.IsNullOrWhiteSpace(search))

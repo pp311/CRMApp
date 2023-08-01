@@ -1,7 +1,4 @@
-using System.Linq.Expressions;
 using Lab2.DomainModels;
-using Lab2.DTOs.Deal;
-using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Enums.Sorting;

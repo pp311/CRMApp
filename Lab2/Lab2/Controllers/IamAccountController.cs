@@ -9,12 +9,12 @@ namespace Lab2.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/users")]
-public class UserController : ControllerBase
+[Route("api/iam-accounts")]
+public class IamAccountController : ControllerBase
 {
     private readonly IUserService _userService;
     
-    public UserController(IUserService userService)
+    public IamAccountController(IUserService userService)
     {
         _userService = userService;
     }

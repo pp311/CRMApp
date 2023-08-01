@@ -1,7 +1,4 @@
 using Lab2.DTOs.Account;
-using Lab2.DTOs.Contact;
-using Lab2.DTOs.Deal;
-using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 
 namespace Lab2.Services.Interfaces;

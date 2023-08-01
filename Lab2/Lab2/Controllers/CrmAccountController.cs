@@ -1,8 +1,5 @@
 using Lab2.Constant;
 using Lab2.DTOs.Account;
-using Lab2.DTOs.Contact;
-using Lab2.DTOs.Deal;
-using Lab2.DTOs.Lead;
 using Lab2.DTOs.QueryParameters;
 using Lab2.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,12 +9,12 @@ namespace Lab2.Controllers;
 
 [ApiController]
 [Authorize]
-[Route("api/accounts")]
-public class AccountController : ControllerBase
+[Route("api/crm-accounts")]
+public class CrmAccountController : ControllerBase
 {
     private readonly IAccountService _accountService;
 
-    public AccountController(IAccountService accountService)
+    public CrmAccountController(IAccountService accountService)
     {
         _accountService = accountService;
     }

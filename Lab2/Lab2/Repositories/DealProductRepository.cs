@@ -1,7 +1,5 @@
-using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using Lab2.Data;
-using Lab2.DTOs.QueryParameters;
 using Lab2.Entities;
 using Lab2.Enums.Sorting;
 using Lab2.Repositories.Interfaces;

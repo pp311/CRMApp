@@ -1,5 +1,3 @@
-using Bogus.DataSets;
-
 namespace Lab2.Enums.Sorting;
 
 public enum ContactSortBy
