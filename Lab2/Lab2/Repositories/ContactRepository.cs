@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Lab2.Data;
 using System.Linq.Dynamic.Core;
 using Lab2.Entities;
@@ -23,39 +22,21 @@ namespace Lab2.Repositories
                                                                                                  ContactSortBy? orderBy,
                                                                                                  int skip,
                                                                                                  int take,
-                                                                                                 bool isDescending,
-                                                                                                 int? accountId)
+                                                                                                 bool isDescending)
         {
-            var query = DbSet.Include(c => c.Account).AsNoTracking();
-            
-            // 1. Filtering by account id if provided
-            if (accountId != null)
-                query = query.Where(c => c.AccountId == accountId);
-            
-            // 2. Search by name, phone, email
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.Trim().ToLower();
-                query = query.Where(c => c.Name.ToLower().Contains(search) ||
-                                                (c.Phone != null && c.Phone.ToLower().Contains(search)) ||
-                                                c.Email.ToLower().Contains(search));
-            }
-            
-            // 3. Ordering
-            if (orderBy == null)
-                return await GetPagedListFromQueryableAsync(query, skip, take);
-
-            var sortingField = orderBy switch
-            {
-                ContactSortBy.Name => ContactSortBy.Name.ToString(),
-                ContactSortBy.Phone => ContactSortBy.Phone.ToString(),
-                ContactSortBy.Email => ContactSortBy.Email.ToString(),
-                _ => ContactSortBy.Id.ToString()
-            };
-            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
-            
-            // 4. Paging
-            return await GetPagedListFromQueryableAsync(query,  skip, take);
+            return await GetContactPagedListFromQueryableAsync(DbSet.AsQueryable(), search, orderBy, skip, take, isDescending);
+        }
+        
+        public async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(
+                                                                                                 int accountId,              
+                                                                                                 string? search,
+                                                                                                 ContactSortBy? orderBy,
+                                                                                                 int skip,
+                                                                                                 int take,
+                                                                                                 bool isDescending)
+        {
+            var query = DbSet.AsNoTracking().Where(c => c.AccountId == accountId);
+            return await GetContactPagedListFromQueryableAsync(query, search, orderBy, skip, take, isDescending);
         }
 
         public async Task<bool> IsEmailDuplicatedAsync(string email, int contactId = 0)
@@ -71,6 +52,33 @@ namespace Lab2.Repositories
         public async Task<bool> IsContactExistAsync(int contactId)
         {
             return await DbSet.AnyAsync(c => c.Id == contactId); 
+        }
+        
+        private async Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListFromQueryableAsync(
+                                                                                                 IQueryable<Contact> query, 
+                                                                                                 string? search,
+                                                                                                 ContactSortBy? orderBy,
+                                                                                                 int skip,
+                                                                                                 int take,
+                                                                                                 bool isDescending)
+        {
+            query = query.Include(c => c.Account).AsNoTracking();
+            
+            // 1. Search by name, phone, email
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search.Trim().ToLower();
+                query = query.Where(c => c.Name.ToLower().Contains(search) ||
+                                                (c.Phone != null && c.Phone.ToLower().Contains(search)) ||
+                                                c.Email.ToLower().Contains(search));
+            }
+            
+            // 2. Ordering
+            if (orderBy == null)
+                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy.ToString()!);
+            
+            // 3. Paging
+            return await GetPagedListFromQueryableAsync(query,  skip, take);
         }
     }
 }

@@ -29,11 +29,11 @@ public class UserService : IUserService
     
     public async Task<PagedResult<GetUserDto>> GetListAsync(UserQueryParameters uqp)
     {
-        var (list, totalCount) = await _userRepository.GetPagedListAsync(expression: null,
-                                                                   orderBy: null,
-                                                                   skip: (uqp.PageIndex - 1) * uqp.PageSize,
-                                                                   take: uqp.PageSize,
-                                                                   isDescending: uqp.IsDescending);
+        var (list, totalCount) = await _userRepository.GetUserPagedListAsync(uqp.Search,
+                                                                             orderBy: null,
+                                                                             skip: (uqp.PageIndex - 1) * uqp.PageSize,
+                                                                             take: uqp.PageSize,
+                                                                             isDescending: uqp.IsDescending);
         var userList = _mapper.Map<List<GetUserDto>>(list);
         return new PagedResult<GetUserDto>(userList, totalCount, uqp.PageIndex, uqp.PageSize);
     }

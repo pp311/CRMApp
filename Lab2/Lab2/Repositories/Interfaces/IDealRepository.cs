@@ -15,8 +15,14 @@ namespace Lab2.Repositories.Interfaces
                                                                                 DealSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
-                                                                                bool isDescending,
-                                                                                int? accountId = null);
+                                                                                bool isDescending);
+        Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(int accountId,
+                                                                              string? search,
+                                                                              DealStatus? status,
+                                                                              DealSortBy? orderBy,
+                                                                              int skip,
+                                                                              int take,
+                                                                              bool isDescending);
         Task<DealStatistics> GetDealStatisticsAsync();
     }
 }

@@ -27,39 +27,21 @@ namespace Lab2.Repositories
                                                                                 LeadSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
-                                                                                bool isDescending,
-                                                                                int? accountId)
+                                                                                bool isDescending)
         {
-            var query = DbSet.Include(l => l.Account).AsNoTracking();
-            // 1. Filter by account id if provided
-            if (accountId != null)
-                query = query.Where(l => l.AccountId == accountId);
-            
-            // 2. Search by title
-            if (!string.IsNullOrWhiteSpace(search))
-                query = query.Where(l => l.Title.ToLower().Contains(search.Trim().ToLower()));
-            
-            // 3. Filter by status
-            if (status != null)
-                query = query.Where(l => l.Status == (int)status);
-            
-            // 4. Ordering
-            if (orderBy == null) 
-                return await GetPagedListFromQueryableAsync(query, skip, take);
-            
-            var sortingField = orderBy switch
-            {
-                LeadSortBy.Title => LeadSortBy.Title.ToString(),
-                LeadSortBy.AccountName => "Account.Name",
-                LeadSortBy.AccountId => LeadSortBy.AccountId.ToString(),
-                LeadSortBy.EstimatedRevenue => LeadSortBy.EstimatedRevenue.ToString(),
-                LeadSortBy.Source => LeadSortBy.Source.ToString(),
-                _ => LeadSortBy.Id.ToString()
-            };
-            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
-
-            // 4. Paging
-            return await GetPagedListFromQueryableAsync(query, skip, take);
+            return await GetLeadPagedListFromQueryableAsync(DbSet.AsQueryable(), search, status, orderBy, skip, take, isDescending);
+        }
+        
+        public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(int accountId,
+                                                                                           string? search,
+                                                                                           LeadStatus? status,
+                                                                                           LeadSortBy? orderBy,
+                                                                                           int skip,
+                                                                                           int take,
+                                                                                           bool isDescending)
+        {
+            var query = DbSet.Where(l => l.AccountId == accountId);
+            return await GetLeadPagedListFromQueryableAsync(query, search, status, orderBy, skip, take, isDescending);
         }
         
         public async Task<LeadStatistics> GetLeadStatisticsAsync()
@@ -77,6 +59,38 @@ namespace Lab2.Repositories
         public async Task<bool> IsLeadExistAsync(int leadId)
         {
             return await DbSet.AnyAsync(l => l.Id == leadId);
+        }
+        
+        private async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListFromQueryableAsync(
+                                                                                IQueryable<Lead> query, 
+                                                                                string? search,
+                                                                                LeadStatus? status,
+                                                                                LeadSortBy? orderBy,
+                                                                                int skip,
+                                                                                int take,
+                                                                                bool isDescending)
+        {
+            query = query.Include(l => l.Account).AsNoTracking();
+            
+            // 1. Search by title
+            if (!string.IsNullOrWhiteSpace(search))
+                query = query.Where(l => l.Title.ToLower().Contains(search.Trim().ToLower()));
+            
+            // 2. Filter by status
+            if (status != null)
+                query = query.Where(l => l.Status == (int)status);
+            
+            // 3. Ordering
+            if (orderBy != null)
+            {
+                var sortingField = orderBy.ToString()!;
+                if (orderBy == LeadSortBy.AccountName)
+                    sortingField = "Account.Name";
+                query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
+            } 
+            
+            // 4. Paging
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

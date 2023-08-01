@@ -13,8 +13,7 @@ namespace Lab2.Repositories.Interfaces
                                                                                     ProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,  
-                                                                                    Expression<Func<Product, bool>>? expression = null);
+                                                                                    bool isDescending);
         Task<bool> IsProductCodeExistAsync(string productCode, int productId = 0);
         Task<bool> IsProductExistAsync(int productId);
     }

@@ -15,8 +15,14 @@ namespace Lab2.Repositories.Interfaces
                                                                                 LeadSortBy? orderBy,
                                                                                 int skip,
                                                                                 int take,
-                                                                                bool isDescending,
-                                                                                int? accountId = null);
+                                                                                bool isDescending);
+        Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(int accountId,
+                                                                              string? search,
+                                                                              LeadStatus? status,
+                                                                              LeadSortBy? orderBy,
+                                                                              int skip,
+                                                                              int take,
+                                                                              bool isDescending);
         
         Task<LeadStatistics> GetLeadStatisticsAsync();
         Task<bool> IsLeadExistAsync(int leadId);

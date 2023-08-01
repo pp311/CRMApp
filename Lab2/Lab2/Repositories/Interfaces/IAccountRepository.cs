@@ -10,8 +10,7 @@ namespace Lab2.Repositories.Interfaces
                                                                                     AccountSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,
-                                                                                    Expression<Func<Account, bool>>? condition = null);
+                                                                                    bool isDescending);
         
         Task<bool> IsEmailDuplicatedAsync(string email, int accountId = 0);
         Task<bool> IsPhoneDuplicatedAsync(string phone, int accountId = 0);

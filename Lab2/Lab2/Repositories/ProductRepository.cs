@@ -21,40 +21,25 @@ namespace Lab2.Repositories
                                                                                     ProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,  
-                                                                                    Expression<Func<Product, bool>>? expression = null)
+                                                                                    bool isDescending)
         {
             var query = DbSet.AsNoTracking();
-            // 1. Filtering with expression
-            if (expression != null)
-                query = query.Where(expression);
             
-            // 2. Search by name and product code
+            // 1. Search by name and product code
             if (!string.IsNullOrWhiteSpace(search))
             {
                 search = search.Trim().ToLower();
-                query = query.Where(p => p.Name.ToLower().Contains(search) 
-                                         || p.ProductCode.ToLower().Contains(search));
+                query = query.Where(p => p.Name.ToLower().Contains(search) || p.ProductCode.ToLower().Contains(search));
             }
-            // 3. Filter by type
+            // 2. Filter by type
             if (type != null)
                 query = query.Where(p => p.Type == (int)type);
             
-            // 4. Early return if no sorting
-            if (orderBy == null)
-                return await GetPagedListFromQueryableAsync(query, skip, take);
+            // 3. Ordering
+            if (orderBy != null)
+                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy.ToString()!);
             
-            // 5. Sorting
-            var sortingField = orderBy switch {
-                ProductSortBy.Name => ProductSortBy.Name.ToString(),
-                ProductSortBy.ProductCode => ProductSortBy.ProductCode.ToString(),
-                ProductSortBy.Price => ProductSortBy.Price.ToString(),
-                _ => ProductSortBy.Id.ToString()
-            };
-            
-            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
-            
-            // 6. Paging
+            // 4. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
 

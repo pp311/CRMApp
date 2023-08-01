@@ -69,12 +69,12 @@ public class ContactService : IContactService
         if (!await _accountRepository.IsAccountExistAsync(accountId))
             throw new EntityNotFoundException($"Account with id {accountId} not found");
         
-        var (contacts, contactCount) = await _contactRepository.GetContactPagedListAsync(search: cqp.Search,
+        var (contacts, contactCount) = await _contactRepository.GetContactPagedListAsync(accountId: accountId,
+                                                                                         search: cqp.Search,
                                                                                          orderBy: cqp.OrderBy,
                                                                                          skip: (cqp.PageIndex - 1) * cqp.PageSize,
                                                                                          take: cqp.PageSize,
-                                                                                         isDescending: cqp.IsDescending,
-                                                                                         accountId: accountId);
+                                                                                         isDescending: cqp.IsDescending);
         var result = _mapper.Map<List<GetContactDto>>(contacts);
 
         return new PagedResult<GetContactDto>(result, contactCount, cqp.PageIndex, cqp.PageSize);

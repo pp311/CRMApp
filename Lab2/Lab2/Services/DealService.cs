@@ -2,6 +2,7 @@ using AutoMapper;
 using Lab2.Data;
 using Lab2.DTOs.Deal;
 using Lab2.DTOs.QueryParameters;
+using Lab2.Entities;
 using Lab2.Enums;
 using Lab2.Exceptions;
 using Lab2.Repositories.Interfaces;
@@ -64,15 +65,15 @@ public class DealService : IDealService
         if (!await _accountRepository.IsAccountExistAsync(accountId))
             throw new EntityNotFoundException($"Account with id {accountId} not found");
         
-        var (deals, dealCount) = await _dealRepository.GetDealPagedListAsync(search: dqp.Search,
+        var (deals, dealCount) = await _dealRepository.GetDealPagedListAsync(
+                                                                             accountId: accountId,
+                                                                             search: dqp.Search,
                                                                              status: dqp.Status,
                                                                              orderBy: dqp.OrderBy,
                                                                              skip: (dqp.PageIndex - 1) * dqp.PageSize,
                                                                              take: dqp.PageSize,
-                                                                             isDescending: dqp.IsDescending,
-                                                                             accountId: accountId);
+                                                                             isDescending: dqp.IsDescending);
         var result = _mapper.Map<List<GetDealDto>>(deals);
-
         return new PagedResult<GetDealDto>(result, dealCount, dqp.PageIndex, dqp.PageSize);
     }
 
@@ -102,27 +103,37 @@ public class DealService : IDealService
 
     public async Task<GetDealDetailDto> MarkDealAsWonAsync(int dealId)
     {
-        // 1. Get deal from database
-        var deal = await _dealRepository.GetByIdAsync(dealId)
-            ?? throw new EntityNotFoundException($"Deal with id {dealId} not found");
+        var deal = await ValidateClosingDeal(dealId);
 
-        // 2. If deal is already ended (won or lost), throw exception
-        if (deal.Status is not (int)DealStatus.Open)
-            throw new InvalidUpdateException("Deal is already ended");
-
-        // 3. Update deal
+        // Update deal
         deal.Status = (int)DealStatus.Won;
 
-        // 4. Recalculate account's total sales (sum of all deal's actual revenues)
+        // Recalculate account's total sales (sum of all deal's actual revenues)
         var account = await _accountRepository.GetByIdAsync(deal.Lead!.AccountId);
         account!.TotalSales += deal.ActualRevenue;
 
-        // 5. Save changes
+        // Save changes
         await _unitOfWork.SaveChangesAsync();
         return _mapper.Map<GetDealDetailDto>(deal);
     }
 
     public async Task<GetDealDetailDto> MarkDealAsLostAsync(int dealId)
+    {
+        var deal = await ValidateClosingDeal(dealId);
+        
+        // Update deal
+        deal.Status = (int)DealStatus.Lost;
+        
+        // Recalculate account's total sales (sum of all deal's actual revenues)
+        var account = await _accountRepository.GetByIdAsync(deal.Lead!.AccountId);
+        account!.TotalSales += deal.ActualRevenue;
+
+        // Save changes
+        await _unitOfWork.SaveChangesAsync();
+        return _mapper.Map<GetDealDetailDto>(deal);
+    }
+
+    private async Task<Deal> ValidateClosingDeal(int dealId)
     {
         // 1. Get deal from database
         var deal = await _dealRepository.GetByIdAsync(dealId)
@@ -132,15 +143,6 @@ public class DealService : IDealService
         if (deal.Status is not (int)DealStatus.Open)
             throw new InvalidUpdateException("Deal is already ended");
 
-        // 3. Update deal
-        deal.Status = (int)DealStatus.Lost;
-        
-        // 4. Recalculate account's total sales (sum of all deal's actual revenues)
-        var account = await _accountRepository.GetByIdAsync(deal.Lead!.AccountId);
-        account!.TotalSales += deal.ActualRevenue;
-
-        // 5. Save changes
-        await _unitOfWork.SaveChangesAsync();
-        return _mapper.Map<GetDealDetailDto>(deal);
+        return deal;
     }
 }

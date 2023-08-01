@@ -116,13 +116,13 @@ public class LeadService : ILeadService
         if (!await _accountRepository.IsAccountExistAsync(accountId))
             throw new EntityNotFoundException($"Account with id {accountId} not found");
         
-        var (leads, leadCount) = await _leadRepository.GetLeadPagedListAsync(search: lqp.Search,
+        var (leads, leadCount) = await _leadRepository.GetLeadPagedListAsync(accountId: accountId,
+                                                                             search: lqp.Search,
                                                                              status: lqp.Status,
                                                                              orderBy: lqp.OrderBy,
                                                                              skip: (lqp.PageIndex - 1) * lqp.PageSize,
                                                                              take: lqp.PageSize,
-                                                                             isDescending: lqp.IsDescending,
-                                                                             accountId: accountId);
+                                                                             isDescending: lqp.IsDescending);
         var result = _mapper.Map<List<GetLeadDto>>(leads);
 
         return new PagedResult<GetLeadDto>(result, leadCount, lqp.PageIndex, lqp.PageSize);
@@ -130,19 +130,11 @@ public class LeadService : ILeadService
 
     public async Task<GetLeadDto> DisqualifyLeadAsync(int leadId, DisqualifyLeadDto? disqualifyLeadDto)
     {
-        // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadId)
-                   ?? throw new EntityNotFoundException($"Lead with id {leadId} not found"); 
+        var lead = await ValidateLeadAsync(leadId);
         
-        // 2. If lead is already ended (qualified or disqualified), throw exception
-        if (lead.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
-            throw new InvalidUpdateException("Lead is already ended");
-        
-        // 3. If lead is not ended, update lead status and end date
         lead.Status = (int)LeadStatus.Disqualified;
-        lead.EndedDate = DateTime.Now;
+        lead.EndedDate = DateTime.UtcNow;
         
-        // 4. If disqualifyLeadDto is provided, update lead reason
         if (disqualifyLeadDto != null)
         {
             lead.DisqualifiedReason = (int)disqualifyLeadDto.DisqualifiedReason;
@@ -155,19 +147,13 @@ public class LeadService : ILeadService
 
     public async Task<GetDealDto> QualifyLeadAsync(int leadId)
     {
-        // 1. Get lead from database
-        var lead = await _leadRepository.GetByIdAsync(leadId)
-                       ?? throw new EntityNotFoundException($"Lead with id {leadId} not found");
+        var lead = await ValidateLeadAsync(leadId);
         
-        // 2. If lead is already ended (qualified or disqualified), throw exception
-        if (lead.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
-            throw new InvalidUpdateException("Cannot update ended (qualified or disqualified) lead");
-        
-        // 3. Change lead status to qualified and set lead end date
+        // Change lead status to qualified and set lead end date
         lead.Status = (int)LeadStatus.Qualified;
-        lead.EndedDate = DateTime.Now;
+        lead.EndedDate = DateTime.UtcNow;
         
-        // 4. Create deal with lead's tittle, deal's status set to Open
+        // Create deal with lead's tittle, deal's status set to Open
         var deal = new Deal
         {
             Title = lead.Title,
@@ -177,8 +163,19 @@ public class LeadService : ILeadService
         _dealRepository.Add(deal);
         await _unitOfWork.SaveChangesAsync();
         
-        // 5. Return deal
         return _mapper.Map<GetDealDto>(deal);
     }
 
+    private async Task<Lead> ValidateLeadAsync(int leadId)
+    {
+        // 1. Get lead from database
+        var lead = await _leadRepository.GetByIdAsync(leadId)
+                       ?? throw new EntityNotFoundException($"Lead with id {leadId} not found");
+        
+        // 2. If lead is already ended (qualified or disqualified), throw exception
+        if (lead.Status == (int)LeadStatus.Qualified || lead.Status == (int)LeadStatus.Disqualified)
+            throw new InvalidUpdateException("Cannot update ended (qualified or disqualified) lead");
+
+        return lead;
+    }
 }

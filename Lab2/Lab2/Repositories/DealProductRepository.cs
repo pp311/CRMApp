@@ -40,19 +40,20 @@ namespace Lab2.Repositories
                 query = query.Where(dp => dp.Product!.Name.ToLower().Contains(search) 
                                           || dp.Product.ProductCode.ToLower().Contains(search));
             }
-            // 3. If orderBy provided, check if the orderBy field valid and apply the order 
-            if (orderBy == null) 
-                return await GetPagedListFromQueryableAsync(query, skip, take);
             
-            var sortingField = orderBy switch
+            // 3. Ordering
+            if (orderBy != null)
             {
-                DealProductSortBy.ProductCode => "Product.ProductCode",
-                DealProductSortBy.PricePerUnit => DealProductSortBy.PricePerUnit.ToString(),
-                DealProductSortBy.Quantity => DealProductSortBy.Quantity.ToString(),
-                DealProductSortBy.TotalAmount => "PricePerUnit * Quantity",
-                _ => "Product.Name"
-            };
-            query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
+                var sortingField = orderBy switch
+                {
+                    DealProductSortBy.ProductCode => "Product.ProductCode",
+                    DealProductSortBy.PricePerUnit => DealProductSortBy.PricePerUnit.ToString(),
+                    DealProductSortBy.Quantity => DealProductSortBy.Quantity.ToString(),
+                    DealProductSortBy.TotalAmount => "PricePerUnit * Quantity",
+                    _ => "Product.Name"
+                };
+                query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
+            }
 
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }

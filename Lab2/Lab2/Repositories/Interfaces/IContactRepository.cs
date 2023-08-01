@@ -11,8 +11,13 @@ namespace Lab2.Repositories.Interfaces
                                                                                     ContactSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,
-                                                                                    int? accountId = null);
+                                                                                    bool isDescending);
+        Task<(IEnumerable<Contact> Items, int TotalCount)> GetContactPagedListAsync(int accountId,
+                                                                                    string? search,
+                                                                                    ContactSortBy? orderBy,
+                                                                                    int skip,
+                                                                                    int take,
+                                                                                    bool isDescending);
         Task<bool> IsEmailDuplicatedAsync(string email, int contactId = 0);
         Task<bool> IsPhoneDuplicatedAsync(string phone, int contactId = 0);
         Task<bool> IsContactExistAsync(int contactId);
