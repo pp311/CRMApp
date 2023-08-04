@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2", "Lab2\Lab2.csproj", "{031C5805-7215-4DF4-BD00-4CBB0E2C56E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2.API", "Lab2.API\Lab2.API.csproj", "{031C5805-7215-4DF4-BD00-4CBB0E2C56E1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2578000A-9082-4583-A699-6DCB4579E986}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2.Domain", "Lab2.Domain\Lab2.Domain.csproj", "{2AD27984-2D1B-4902-91CD-6DAC40401587}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2.Infrastructure", "Lab2.Infrastructure\Lab2.Infrastructure.csproj", "{3720A6C8-4C2A-4273-81C6-5FF2A261264F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lab2.Application", "Lab2.Application\Lab2.Application.csproj", "{3CA30904-A9F9-41F1-959E-4653A6E44B84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,5 +23,17 @@ Global
 		{031C5805-7215-4DF4-BD00-4CBB0E2C56E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{031C5805-7215-4DF4-BD00-4CBB0E2C56E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{031C5805-7215-4DF4-BD00-4CBB0E2C56E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD27984-2D1B-4902-91CD-6DAC40401587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD27984-2D1B-4902-91CD-6DAC40401587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD27984-2D1B-4902-91CD-6DAC40401587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD27984-2D1B-4902-91CD-6DAC40401587}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3720A6C8-4C2A-4273-81C6-5FF2A261264F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3720A6C8-4C2A-4273-81C6-5FF2A261264F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3720A6C8-4C2A-4273-81C6-5FF2A261264F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3720A6C8-4C2A-4273-81C6-5FF2A261264F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CA30904-A9F9-41F1-959E-4653A6E44B84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CA30904-A9F9-41F1-959E-4653A6E44B84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CA30904-A9F9-41F1-959E-4653A6E44B84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CA30904-A9F9-41F1-959E-4653A6E44B84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
