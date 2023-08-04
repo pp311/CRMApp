@@ -1,5 +1,5 @@
+using Lab2.Application.Interfaces;
 using Lab2.Application.Services;
-using Lab2.Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Lab2.Application.Extensions;

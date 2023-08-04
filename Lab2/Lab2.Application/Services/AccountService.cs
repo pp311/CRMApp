@@ -1,7 +1,7 @@
 using AutoMapper;
 using Lab2.Application.DTOs.Account;
 using Lab2.Application.DTOs.QueryParameters;
-using Lab2.Application.Services.Interfaces;
+using Lab2.Application.Interfaces;
 using Lab2.Domain;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Exceptions;

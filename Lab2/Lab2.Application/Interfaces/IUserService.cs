@@ -1,7 +1,7 @@
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.DTOs.User;
 
-namespace Lab2.Application.Services.Interfaces;
+namespace Lab2.Application.Interfaces;
 
 public interface IUserService
 {

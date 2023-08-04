@@ -1,5 +1,5 @@
 using Lab2.Application.DTOs.Authentication;
-using Lab2.Application.Services.Interfaces;
+using Lab2.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

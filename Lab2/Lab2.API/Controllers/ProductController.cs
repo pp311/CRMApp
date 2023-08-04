@@ -1,6 +1,6 @@
 using Lab2.Application.DTOs.Product;
 using Lab2.Application.DTOs.QueryParameters;
-using Lab2.Application.Services.Interfaces;
+using Lab2.Application.Interfaces;
 using Lab2.Domain.Constant;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

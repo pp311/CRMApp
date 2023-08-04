@@ -1,6 +1,6 @@
 using Lab2.Application.DTOs.Authentication;
 
-namespace Lab2.Application.Services.Interfaces;
+namespace Lab2.Application.Interfaces;
 
 public interface IAuthService
 {

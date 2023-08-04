@@ -2,7 +2,7 @@ using Lab2.Application.DTOs.Deal;
 using Lab2.Application.DTOs.Lead;
 using Lab2.Application.DTOs.QueryParameters;
 
-namespace Lab2.Application.Services.Interfaces;
+namespace Lab2.Application.Interfaces;
 
 public interface ILeadService
 {
