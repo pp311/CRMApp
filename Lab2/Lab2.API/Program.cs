@@ -17,6 +17,7 @@ builder.Services.AddControllers();
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigureRepositories();
+builder.Services.ConfigureInfrastructureServices();
 builder.Services.ConfigureServices();
 builder.Services.ConfigureIdentity();
 
