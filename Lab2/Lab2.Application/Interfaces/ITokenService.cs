@@ -4,7 +4,9 @@ public interface ITokenService
 {
     string GenerateRefreshToken();
 
-    Task<string> GenerateAccessTokenAsync(string userId);
+    Task<string> GenerateAccessTokenAsync(int userId);
 
-    Task UpdateRefreshTokenAsync(string userId, string? refreshToken);
+    Task UpdateRefreshTokenAsync(int userId, string? refreshToken);
+
+    Task ValidateRefreshTokenAsync(string refreshToken);
 }

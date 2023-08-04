@@ -22,18 +22,18 @@ public class AuthService : IAuthService
                    ?? throw new EntityNotFoundException($"User with email {loginDto.Email} not found");
         
         // 2. Check if password is correct
-        if (!await _userManager.CheckPasswordAsync(user.Id.ToString(), loginDto.Password))
+        if (!await _userManager.CheckPasswordAsync(user.Id, loginDto.Password))
             throw new InvalidPasswordException("Invalid password");
         
         // 3. Generate token
         var tokenDto = new TokenDto
         {
-            AccessToken = await _tokenService.GenerateAccessTokenAsync(user.Id.ToString()),
+            AccessToken = await _tokenService.GenerateAccessTokenAsync(user.Id),
             RefreshToken = _tokenService.GenerateRefreshToken()
         };
         
         // 4. Save refresh token
-        await _tokenService.UpdateRefreshTokenAsync(user.Id.ToString(), tokenDto.RefreshToken);
+        await _tokenService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken);
 
         return tokenDto;
     }
@@ -41,19 +41,22 @@ public class AuthService : IAuthService
     public async Task<TokenDto> CreateTokenFromRefreshTokenAsync(string refreshToken)
     {
         // 1. Check if user and refreshToken is valid 
-        var user = await _userManager.ValidateRefreshTokenAsync(refreshToken);
+        await _tokenService.ValidateRefreshTokenAsync(refreshToken);
         
-        // 2. Generate new access token and refresh token
+        // 2. Get user by refresh token
+        var user = _userManager.FindByRefreshTokenAsync(refreshToken);
+        
+        // 3. Generate new access token and refresh token
         var tokenDto = new TokenDto
         {
-            AccessToken = await _tokenService.GenerateAccessTokenAsync(user.Id.ToString()),
+            AccessToken = await _tokenService.GenerateAccessTokenAsync(user.Id),
             RefreshToken = _tokenService.GenerateRefreshToken()
         };
         
-        // 3. Save Refresh token to database
-        await _tokenService.UpdateRefreshTokenAsync(user.Id.ToString(), tokenDto.RefreshToken);
+        // 4. Save Refresh token to database
+        await _tokenService.UpdateRefreshTokenAsync(user.Id, tokenDto.RefreshToken);
         
-        // 4. Return tokenDto
+        // 5. Return tokenDto
         return tokenDto;
     }
 
@@ -64,6 +67,6 @@ public class AuthService : IAuthService
             ?? throw new InvalidRefreshTokenException("Refresh token is invalid!");
         
         // 2. Remove refresh token
-        await _tokenService.UpdateRefreshTokenAsync(user.Id.ToString(), null);
+        await _tokenService.UpdateRefreshTokenAsync(user.Id, null);
     }
 }

@@ -6,6 +6,7 @@ using Lab2.Application.Interfaces;
 using Lab2.Domain.Exceptions;
 using Lab2.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -28,7 +29,7 @@ public class TokenService : ITokenService
         return Guid.NewGuid().ToString();
     }
 
-    public async Task<string> GenerateAccessTokenAsync(string userId)
+    public async Task<string> GenerateAccessTokenAsync(int userId)
     {
         // 1. Create header and signature 
         var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecurityKey));
@@ -45,9 +46,9 @@ public class TokenService : ITokenService
         return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
     }
 
-    public async Task UpdateRefreshTokenAsync(string userId, string? refreshToken)
+    public async Task UpdateRefreshTokenAsync(int userId, string? refreshToken)
     {
-        var appUser = await _userManager.FindByIdAsync(userId) 
+        var appUser = await _userManager.FindByIdAsync(userId.ToString()) 
                       ?? throw new EntityNotFoundException($"User with id {userId} not found");
         appUser.RefreshToken = refreshToken;
         appUser.RefreshTokenLifetime = DateTime.UtcNow.AddHours(Convert.ToDouble(_jwtSettings.RefreshTokenExpiryInHours));
@@ -58,9 +59,20 @@ public class TokenService : ITokenService
             throw new Exception(result.Errors.First().Description);
     }
 
-    private async Task<IList<Claim>> GetUserClaimListAsync(string userId)
+    public async Task ValidateRefreshTokenAsync(string refreshToken)
     {
-        var appUser = await _userManager.FindByIdAsync(userId);
+        var appUser = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+        
+        if (appUser == null)
+            throw new Exception("Refresh token not found");
+        
+        if (appUser.RefreshTokenLifetime < DateTime.UtcNow)
+            throw new Exception("Refresh token expired");
+    }
+
+    private async Task<IList<Claim>> GetUserClaimListAsync(int userId)
+    {
+        var appUser = await _userManager.FindByIdAsync(userId.ToString());
         return new List<Claim>
         {
             new(ClaimTypes.NameIdentifier, appUser!.Id.ToString()),

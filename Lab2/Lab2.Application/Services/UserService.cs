@@ -35,7 +35,7 @@ public class UserService : IUserService
     
     public async Task<GetUserDto?> GetByIdAsync(int id)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
+        var user = await _userManager.FindByIdAsync(id);
         return _mapper.Map<GetUserDto>(user);
     }
     
@@ -55,7 +55,7 @@ public class UserService : IUserService
             user = await _userManager.CreateAsync(user, dto.Password);
             
             // 3. Set role
-            await _userManager.AddToRoleAsync(user, AppRole.User);
+            await _userManager.AddToRoleAsync(user.Id, AppRole.User);
             
             await _unitOfWork.CommitTransactionAsync();
         }
@@ -67,11 +67,11 @@ public class UserService : IUserService
         return _mapper.Map<GetUserDto>(user);
     }
     
-    public async Task<GetUserDto> UpdateAsync(int id, UpdateUserDto dto)
+    public async Task<GetUserDto> UpdateAsync(int userId, UpdateUserDto dto)
     {
         // 1. Get user from database
-        var user = await _userManager.FindByIdAsync(id.ToString())
-                ?? throw new EntityNotFoundException($"User with id {id} not found");
+        var user = await _userManager.FindByIdAsync(userId)
+                ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         //2. If email changed, check if new email is not taken
         if (user.Email != dto.Email && await _userManager.FindByEmailAsync(dto.Email) != null)
@@ -84,16 +84,16 @@ public class UserService : IUserService
         return _mapper.Map<GetUserDto>(user);
     }
     
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(int userId)
     {
-        await _userManager.DeleteAsync(id.ToString());
+        await _userManager.DeleteAsync(userId);
     }
 
     public async Task ChangePasswordAsync(int userId, ChangePasswordDto dto)
     {
-        if (!await _userManager.CheckPasswordAsync(userId.ToString(), dto.OldPassword))
+        if (!await _userManager.CheckPasswordAsync(userId, dto.OldPassword))
             throw new InvalidUpdateException("Old password is incorrect");
         
-        await _userManager.ChangePasswordAsync(userId.ToString(), dto.OldPassword, dto.NewPassword);
+        await _userManager.ChangePasswordAsync(userId, dto.OldPassword, dto.NewPassword);
     }
 }

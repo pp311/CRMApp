@@ -5,27 +5,21 @@ namespace Lab2.Application.Interfaces;
 
 public interface IUserManagerService
 {
-    Task<IList<string>> GetRolesAsync(string userId);
-    
     Task<User?> FindByEmailAsync(string email);
     
-    Task<User?> FindByIdAsync(string userId);
+    Task<User?> FindByIdAsync(int userId);
     
     Task<User> CreateAsync(User user, string password);
     
-    Task AddToRoleAsync(User user, string role);
+    Task AddToRoleAsync(int userId, string role);
 
     Task<User> UpdateAsync(User user);
     
-    Task DeleteAsync(string userId);
+    Task DeleteAsync(int userId);
     
-    Task<bool> CheckPasswordAsync(string userId, string password);
+    Task<bool> CheckPasswordAsync(int userId, string password);
     
-    Task ChangePasswordAsync(string userId, string oldPassword, string newPassword);
-    
-    Task UpdateRefreshTokenAsync(string userId, string? refreshToken, DateTime? refreshTokenExpiration);
-    
-    Task<User> ValidateRefreshTokenAsync(string refreshToken);
+    Task ChangePasswordAsync(int userId, string oldPassword, string newPassword);
     
     Task<User?> FindByRefreshTokenAsync(string refreshToken);
     

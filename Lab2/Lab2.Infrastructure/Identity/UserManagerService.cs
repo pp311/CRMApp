@@ -19,23 +19,15 @@ public class UserManagerService : IUserManagerService
         _mapper = mapper;
     }
 
-    public async Task<IList<string>> GetRolesAsync(string userId)
-    {
-        var appUser = await _userManager.FindByIdAsync(userId)
-            ?? throw new Exception($"User with id {userId} not found");
-        
-        return await _userManager.GetRolesAsync(appUser);
-    }
-
     public async Task<User?> FindByEmailAsync(string email)
     {
         var appUser = await _userManager.FindByEmailAsync(email);
         return _mapper.Map<User>(appUser); 
     }
 
-    public async Task<User?> FindByIdAsync(string userId)
+    public async Task<User?> FindByIdAsync(int userId)
     {
-        var appUser = await _userManager.FindByIdAsync(userId);
+        var appUser = await _userManager.FindByIdAsync(userId.ToString());
         return _mapper.Map<User>(appUser);
     }
 
@@ -50,10 +42,10 @@ public class UserManagerService : IUserManagerService
         return _mapper.Map<User>(appUser); 
     }
 
-    public async Task AddToRoleAsync(User user, string role)
+    public async Task AddToRoleAsync(int userId, string role)
     {
-        var appUser = await _userManager.FindByIdAsync(user.Id.ToString())
-            ?? throw new Exception($"User with id {user.Id} not found");
+        var appUser = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new Exception($"User with id {userId} not found");
         
         var addToRoleResult = await _userManager.AddToRoleAsync(appUser, role);
         
@@ -76,9 +68,9 @@ public class UserManagerService : IUserManagerService
         return _mapper.Map<User>(appUser);
     }
 
-    public async Task DeleteAsync(string userId)
+    public async Task DeleteAsync(int userId)
     {
-        var appUser = await _userManager.FindByIdAsync(userId)
+        var appUser = await _userManager.FindByIdAsync(userId.ToString())
             ?? throw new Exception($"User with id {userId} not found");
         
         var deleteResult = await _userManager.DeleteAsync(appUser);
@@ -87,39 +79,23 @@ public class UserManagerService : IUserManagerService
             throw new Exception(deleteResult.Errors.First().Description);
     }
 
-    public async Task<bool> CheckPasswordAsync(string userId, string password)
+    public async Task<bool> CheckPasswordAsync(int userId, string password)
     {
-        var appUser = await _userManager.FindByIdAsync(userId)
+        var appUser = await _userManager.FindByIdAsync(userId.ToString())
             ?? throw new Exception($"User with id {userId} not found");
         
         return await _userManager.CheckPasswordAsync(appUser, password);
     }
 
-    public async Task ChangePasswordAsync(string userId, string oldPassword, string newPassword)
+    public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
     {
-        var appUser = await _userManager.FindByIdAsync(userId)
+        var appUser = await _userManager.FindByIdAsync(userId.ToString())
             ?? throw new Exception($"User with id {userId} not found");
         
         var changePasswordResult = await _userManager.ChangePasswordAsync(appUser, oldPassword, newPassword);
         
         if (!changePasswordResult.Succeeded)
             throw new Exception(changePasswordResult.Errors.First().Description);
-    }
-
-    public async Task UpdateRefreshTokenAsync(string userId,
-                                        string? refreshToken,
-                                        DateTime? refreshTokenExpiration)
-    {
-        var appUser = await _userManager.FindByIdAsync(userId)
-            ?? throw new Exception($"User with id {userId} not found");
-        
-        appUser.RefreshToken = refreshToken;
-        appUser.RefreshTokenLifetime = refreshTokenExpiration;
-        
-        var updateResult = await _userManager.UpdateAsync(appUser);
-        
-        if (!updateResult.Succeeded)
-            throw new Exception(updateResult.Errors.First().Description); 
     }
 
     public async Task<User> ValidateRefreshTokenAsync(string refreshToken)
