@@ -3,6 +3,8 @@ using AutoMapper;
 using Lab2.Application.Interfaces;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums.Sorting;
+using Lab2.Infrastructure.Specifications;
+using Lab2.Infrastructure.Specifications.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -126,20 +128,11 @@ public class UserManagerService : IUserManagerService
                                                                                        int take,
                                                                                        bool isDescending)
     {
-            var query = _userManager.Users.AsNoTracking();
+            var query = SpecificationEvaluator<ApplicationUser>.GetQuery(
+                query: _userManager.Users.AsNoTracking(),
+                specification: new UserFilterSpecification(search, orderBy, isDescending));
             
-            // 1. Search by name and product code
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.Trim().ToLower();
-                query = query.Where(u => u.Name.ToLower().Contains(search) || u.Email!.ToLower().Contains(search));
-            }
-            
-            // 2. Sorting
-            if (orderBy != null)
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy.ToString()!);
-            
-            // 3. Paging
+            // Paging
             var totalCount = await query.CountAsync();
             
             // If skip and take provided, apply them 

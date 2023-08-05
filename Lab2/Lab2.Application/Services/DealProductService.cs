@@ -88,12 +88,12 @@ public class DealProductService : IDealProductService
     public async Task<PagedResult<GetDealProductDto>> GetDealProductListAsync(int dealId, DealProductQueryParameters dpqp)
     {
         var (dealProducts, totalCount) = await _dealProductRepository.GetDealProductPagedListAsync(
+                                                                      dealId: dealId, 
                                                                       search: dpqp.Search,
                                                                       orderBy: dpqp.OrderBy,
                                                                       skip: (dpqp.PageIndex - 1) * dpqp.PageSize,
                                                                       take: dpqp.PageSize,
-                                                                      isDescending: dpqp.IsDescending,
-                                                                      dealId: dealId);
+                                                                      isDescending: dpqp.IsDescending);
 
         var result = _mapper.Map<List<GetDealProductDto>>(dealProducts);
 

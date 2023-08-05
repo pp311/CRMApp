@@ -29,6 +29,42 @@
       <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
         <HintPath>..\..\..\..\.nuget\packages\microsoft.entityframeworkcore.sqlserver\7.0.8\lib\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
       </Reference>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </ItemGroup>
 
 

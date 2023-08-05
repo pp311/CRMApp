@@ -1,10 +1,11 @@
-using System.Linq.Dynamic.Core;
 using Lab2.Domain.DomainModels;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums;
 using Lab2.Domain.Enums.Sorting;
 using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
+using Lab2.Infrastructure.Specifications;
+using Lab2.Infrastructure.Specifications.Deal;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Repositories
@@ -17,9 +18,10 @@ namespace Lab2.Infrastructure.Repositories
         
         public override async Task<Deal?> GetByIdAsync(int id)
         {
-            return await DbSet.Include(d => d.Lead)
-                       .ThenInclude(l => l!.Account)
-                       .FirstOrDefaultAsync(d => d.Id == id);
+            return await SpecificationEvaluator<Deal>
+                       .GetQuery(query: DbSet.AsQueryable(),
+                                 specification: new GetDealByIdSpecification(id))
+                       .FirstOrDefaultAsync();
         }
 
         public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(string? search,
@@ -29,7 +31,11 @@ namespace Lab2.Infrastructure.Repositories
                                                                                 int take,
                                                                                 bool isDescending)
         {
-            return await GetDealPagedListFromQueryableAsync(DbSet.AsQueryable(), search, status, orderBy, skip, take, isDescending);
+            var query = SpecificationEvaluator<Deal>.GetQuery(
+                query: DbSet.AsNoTracking(),
+                specification: new DealFilterSpecification(search, status, orderBy, isDescending));
+            
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
 
         public async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListAsync(
@@ -42,7 +48,12 @@ namespace Lab2.Infrastructure.Repositories
                                                                                 bool isDescending)
         {
             var query = DbSet.Where(d => d.Lead!.AccountId == accountId);
-            return await GetDealPagedListFromQueryableAsync(query, search, status, orderBy, skip, take, isDescending);
+            
+            query = SpecificationEvaluator<Deal>.GetQuery(
+                query: query.AsNoTracking(),
+                specification: new DealFilterSpecification(search, status, orderBy, isDescending));
+            
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
         
         public async Task<DealStatistics> GetDealStatisticsAsync()
@@ -56,32 +67,6 @@ namespace Lab2.Infrastructure.Repositories
                             AverageRevenue = DbSet.Average(d1 => d1.ActualRevenue),
                             TotalRevenue = DbSet.Sum(d1 => d1.ActualRevenue),
                         }).FirstAsync();
-        }
-
-        private async Task<(IEnumerable<Deal> Items, int TotalCount)> GetDealPagedListFromQueryableAsync(IQueryable<Deal> query,
-                                                                                           string? search,
-                                                                                           DealStatus? status,
-                                                                                           DealSortBy? orderBy,
-                                                                                           int skip,
-                                                                                           int take,
-                                                                                           bool isDescending)
-        {
-            query = query.Include(d => d.Lead).ThenInclude(l => l!.Account).AsNoTracking();
-            
-            // 1. Search by title
-            if (!string.IsNullOrWhiteSpace(search))
-                query = query.Where(d => d.Title.ToLower().Contains(search.Trim().ToLower()));
-            
-            // 2. Filter by status
-            if (status != null)
-                query = query.Where(l => l.Status == (int)status);
-            
-            // 3. Ordering
-            if (orderBy != null)
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy.ToString()!);
-            
-            // 4. Paging
-            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

@@ -1,10 +1,11 @@
-using System.Linq.Dynamic.Core;
 using Lab2.Domain.DomainModels;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums;
 using Lab2.Domain.Enums.Sorting;
 using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
+using Lab2.Infrastructure.Specifications;
+using Lab2.Infrastructure.Specifications.Lead;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Repositories
@@ -27,7 +28,11 @@ namespace Lab2.Infrastructure.Repositories
                                                                                 int take,
                                                                                 bool isDescending)
         {
-            return await GetLeadPagedListFromQueryableAsync(DbSet.AsQueryable(), search, status, orderBy, skip, take, isDescending);
+            var query = SpecificationEvaluator<Lead>.GetQuery(
+                query: DbSet.AsNoTracking(),
+                specification: new LeadFilterSpecification(search, status, orderBy, isDescending));
+            
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
         
         public async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListAsync(int accountId,
@@ -39,7 +44,12 @@ namespace Lab2.Infrastructure.Repositories
                                                                                            bool isDescending)
         {
             var query = DbSet.Where(l => l.AccountId == accountId);
-            return await GetLeadPagedListFromQueryableAsync(query, search, status, orderBy, skip, take, isDescending);
+
+            query = SpecificationEvaluator<Lead>.GetQuery(
+                query: query.AsNoTracking(),
+                specification: new LeadFilterSpecification(search, status, orderBy, isDescending));
+            
+            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
         
         public async Task<LeadStatistics> GetLeadStatisticsAsync()
@@ -57,38 +67,6 @@ namespace Lab2.Infrastructure.Repositories
         public async Task<bool> IsLeadExistAsync(int leadId)
         {
             return await DbSet.AnyAsync(l => l.Id == leadId);
-        }
-        
-        private async Task<(IEnumerable<Lead> Items, int TotalCount)> GetLeadPagedListFromQueryableAsync(
-                                                                                IQueryable<Lead> query, 
-                                                                                string? search,
-                                                                                LeadStatus? status,
-                                                                                LeadSortBy? orderBy,
-                                                                                int skip,
-                                                                                int take,
-                                                                                bool isDescending)
-        {
-            query = query.Include(l => l.Account).AsNoTracking();
-            
-            // 1. Search by title
-            if (!string.IsNullOrWhiteSpace(search))
-                query = query.Where(l => l.Title.ToLower().Contains(search.Trim().ToLower()));
-            
-            // 2. Filter by status
-            if (status != null)
-                query = query.Where(l => l.Status == (int)status);
-            
-            // 3. Ordering
-            if (orderBy != null)
-            {
-                var sortingField = orderBy.ToString()!;
-                if (orderBy == LeadSortBy.AccountName)
-                    sortingField = "Account.Name";
-                query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
-            } 
-            
-            // 4. Paging
-            return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }
 }

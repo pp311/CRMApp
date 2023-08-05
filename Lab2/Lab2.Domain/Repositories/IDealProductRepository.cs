@@ -5,11 +5,12 @@ namespace Lab2.Domain.Repositories
 {
     public interface IDealProductRepository : IRepositoryBase<DealProduct>
     {
-        Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
+        Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(
+                                                                                    int dealId, 
+                                                                                    string? search,
                                                                                     DealProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,
-                                                                                    int? dealId = null);
+                                                                                    bool isDescending);
     }
 }

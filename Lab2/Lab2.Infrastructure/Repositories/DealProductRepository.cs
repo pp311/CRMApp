@@ -1,8 +1,9 @@
-using System.Linq.Dynamic.Core;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums.Sorting;
 using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
+using Lab2.Infrastructure.Specifications;
+using Lab2.Infrastructure.Specifications.DealProduct;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Repositories
@@ -19,40 +20,20 @@ namespace Lab2.Infrastructure.Repositories
                             .FirstOrDefaultAsync(dp => dp.Id == id);
         }
 
-        public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(string? search,
+        public async Task<(IEnumerable<DealProduct> Items, int TotalCount)> GetDealProductPagedListAsync(
+                                                                                    int dealId,
+                                                                                    string? search,
                                                                                     DealProductSortBy? orderBy,
                                                                                     int skip,
                                                                                     int take,
-                                                                                    bool isDescending,
-                                                                                    int? dealId)
+                                                                                    bool isDescending)
         {
-            var query = DbSet.Include(dp => dp.Product).AsNoTracking();
-            // 1. Filtering with condition
-            if (dealId != null)
-                query = query.Where(dp => dp.DealId == dealId);
-            
-            // 2. Search by name and product code
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.Trim().ToLower();
-                query = query.Where(dp => dp.Product!.Name.ToLower().Contains(search) 
-                                          || dp.Product.ProductCode.ToLower().Contains(search));
-            }
-            
-            // 3. Ordering
-            if (orderBy != null)
-            {
-                var sortingField = orderBy switch
-                {
-                    DealProductSortBy.ProductCode => "Product.ProductCode",
-                    DealProductSortBy.PricePerUnit => DealProductSortBy.PricePerUnit.ToString(),
-                    DealProductSortBy.Quantity => DealProductSortBy.Quantity.ToString(),
-                    DealProductSortBy.TotalAmount => "PricePerUnit * Quantity",
-                    _ => "Product.Name"
-                };
-                query = isDescending ? query.OrderBy(sortingField + " desc") : query.OrderBy(sortingField);
-            }
+            var query = DbSet.Where(dp => dp.DealId == dealId);
 
+            query = SpecificationEvaluator<DealProduct>.GetQuery(
+                query: query.AsNoTracking(),
+                specification: new DealProductFilterSpecification(search, orderBy, isDescending));
+            
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
     }

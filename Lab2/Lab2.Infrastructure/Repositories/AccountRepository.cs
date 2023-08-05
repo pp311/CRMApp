@@ -1,8 +1,9 @@
-using System.Linq.Dynamic.Core;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums.Sorting;
 using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
+using Lab2.Infrastructure.Specifications;
+using Lab2.Infrastructure.Specifications.Account;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Repositories
@@ -19,22 +20,10 @@ namespace Lab2.Infrastructure.Repositories
                                                                                                  int take,
                                                                                                  bool isDescending)
         {
-            var query = DbSet.AsNoTracking();
+            var query = SpecificationEvaluator<Account>.GetQuery(
+                query: DbSet.AsNoTracking(),
+                specification: new AccountFilterSpecification(search, orderBy, isDescending));
             
-            // 1. Search by name, phone, email
-            if (!string.IsNullOrWhiteSpace(search))
-            {
-                search = search.Trim().ToLower();
-                query = query.Where(c => c.Name.ToLower().Contains(search) ||
-                                                (c.Phone != null && c.Phone.ToLower().Contains(search)) ||
-                                                (c.Email != null && c.Email.ToLower().Contains(search)));
-            }
-            
-            // 2. Sorting
-            if (orderBy == null)
-                query = isDescending ? query.OrderBy(orderBy + " desc") : query.OrderBy(orderBy.ToString()!);
-
-            // 3. Paging
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
 
