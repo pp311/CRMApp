@@ -14,6 +14,7 @@ builder.Services.ConfigureLogging();
 builder.Services.ConfigureConfigurations(builder.Configuration);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureDbContext(builder.Configuration);
 
 builder.Services.ConfigureRepositories();

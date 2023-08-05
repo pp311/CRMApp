@@ -19,20 +19,11 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 
     public void Add(TEntity entity)
     {
-        if (typeof(AuditableEntity).IsAssignableFrom(typeof(TEntity)))
-        {
-            (entity as AuditableEntity)!.CreatedAt = DateTime.UtcNow;
-            (entity as AuditableEntity)!.ModifiedAt = DateTime.UtcNow;
-        }
         DbSet.Add(entity);
     }
 
     public void Update(TEntity entity)
     {
-        if (typeof(AuditableEntity).IsAssignableFrom(typeof(TEntity)))
-        {
-            (entity as AuditableEntity)!.ModifiedAt = DateTime.UtcNow;
-        }
         DbSet.Update(entity);
     }
 

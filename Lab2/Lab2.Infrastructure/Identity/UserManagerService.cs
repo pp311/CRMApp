@@ -100,20 +100,6 @@ public class UserManagerService : IUserManagerService
             throw new Exception(changePasswordResult.Errors.First().Description);
     }
 
-    public async Task<User> ValidateRefreshTokenAsync(string refreshToken)
-    {
-        var appUser = await _userManager.Users
-            .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
-        
-        if (appUser == null)
-            throw new Exception("Refresh token not found");
-        
-        if (appUser.RefreshTokenLifetime < DateTime.UtcNow)
-            throw new Exception("Refresh token expired");
-        
-        return _mapper.Map<User>(appUser);
-    }
-
     public async Task<User?> FindByRefreshTokenAsync(string refreshToken)
     {
         var appUser = await _userManager.Users

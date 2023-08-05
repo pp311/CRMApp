@@ -2,7 +2,7 @@ namespace Lab2.Domain.Entities;
 
 public class Deal : AuditableEntity
 {
-    public string Title { get; set; } = "";
+    public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public double ActualRevenue { get; set; }
     public int Status { get; set; }
