@@ -1,7 +1,7 @@
 using Lab2.Application.DTOs.Account;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
-using Lab2.Domain.Constant;
+using Lab2.Application.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +20,7 @@ public class CrmAccountController : ControllerBase
     }
 
     [HttpGet("{accountId:int}")]
+    [HasPermission(PermissionPolicy.AccountPermission.View)]
     public async Task<ActionResult<GetAccountDto>> GetAccountById(int accountId)
     {
         var accountDto = await _accountService.GetByIdAsync(accountId);
@@ -27,13 +28,14 @@ public class CrmAccountController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionPolicy.AccountPermission.View)]
     public async Task<ActionResult<PagedResult<GetAccountDto>>> GetAccountList([FromQuery] AccountQueryParameters accountQueryParameters)
     {
         return Ok(await _accountService.GetListAsync(accountQueryParameters));
     }
 
     [HttpPost]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.AccountPermission.Create)]
     public async Task<ActionResult<GetAccountDto>> CreateAccount([FromBody] UpsertAccountDto? accountDto)
     {
         if (accountDto == null)
@@ -44,7 +46,7 @@ public class CrmAccountController : ControllerBase
     }
 
     [HttpPut("{accountId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.AccountPermission.Edit)]
     public async Task<ActionResult<GetAccountDto>> UpdateAccount(int accountId, [FromBody] UpsertAccountDto? accountDto)
     {
         if (accountDto == null)
@@ -55,7 +57,7 @@ public class CrmAccountController : ControllerBase
     }
 
     [HttpDelete("{accountId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.AccountPermission.Delete)]
     public async Task<ActionResult> DeleteAccount(int accountId)
     {
         await _accountService.DeleteAsync(accountId);

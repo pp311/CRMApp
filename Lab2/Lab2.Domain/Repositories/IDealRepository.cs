@@ -20,6 +20,6 @@ namespace Lab2.Domain.Repositories
                                                                               int skip,
                                                                               int take,
                                                                               bool isDescending);
-        Task<DealStatistics> GetDealStatisticsAsync();
+        Task<DealStatisticsModel> GetDealStatisticsAsync();
     }
 }

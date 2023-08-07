@@ -1,6 +1,6 @@
 namespace Lab2.Domain.Constant;
 
-public class AuthPolicy
+public static class AuthPolicy
 {
     public const string AdminOnly = "AdminOnly";
     public const string AdminOrOwner = "AdminOrOwner";  

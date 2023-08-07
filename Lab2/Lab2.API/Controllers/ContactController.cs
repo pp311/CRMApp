@@ -1,6 +1,7 @@
 using Lab2.Application.DTOs.Contact;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
+using Lab2.Application.Permissions;
 using Lab2.Domain.Constant;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpGet("{contactId:int}")]
+    [HasPermission(PermissionPolicy.ContactPermission.View)]
     public async Task<ActionResult<GetContactDto>> GetContactById(int contactId)
     {
         var contact = await _contactService.GetByIdAsync(contactId);
@@ -27,6 +29,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionPolicy.ContactPermission.View)]
     public async Task<ActionResult<PagedResult<GetContactDto>>> GetContactList([FromQuery] ContactQueryParameters contactQueryParameters)
     {
         var contacts = await _contactService.GetListAsync(contactQueryParameters);
@@ -34,6 +37,7 @@ public class ContactController : ControllerBase
     }
     
     [HttpGet("account/{accountId:int}")]
+    [HasPermission(PermissionPolicy.ContactPermission.View)]
     public async Task<ActionResult<PagedResult<UpsertContactDto>>> GetContactList(int accountId, [FromQuery] ContactQueryParameters cqp)
     {
         return Ok(await _contactService.GetContactListByAccountIdAsync(accountId, cqp));
@@ -41,6 +45,7 @@ public class ContactController : ControllerBase
     
     [HttpPost]
     [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ContactPermission.Create)]
     public async Task<ActionResult<GetContactDto>> CreateContact([FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
@@ -50,7 +55,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpPut("{contactId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ContactPermission.Edit)]
     public async Task<ActionResult<GetContactDto>> UpdateContact(int contactId, [FromBody] UpsertContactDto? contactDto)
     {
         if (contactDto == null)
@@ -61,7 +66,7 @@ public class ContactController : ControllerBase
     }
 
     [HttpDelete("{contactId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ContactPermission.Delete)]
     public async Task<ActionResult> DeleteContact(int contactId)
     {
         await _contactService.DeleteAsync(contactId);

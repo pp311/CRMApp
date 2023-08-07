@@ -2,7 +2,7 @@ using Lab2.Application.DTOs.Deal;
 using Lab2.Application.DTOs.DealProduct;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
-using Lab2.Domain.Constant;
+using Lab2.Application.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +23,7 @@ public class DealController : ControllerBase
     }
 
     [HttpGet("{dealId:int}")]
+    [HasPermission(PermissionPolicy.DealPermission.View)]
     public async Task<ActionResult<GetDealDto>> GetDealById(int dealId)
     {
         var deal = await _dealService.GetByIdAsync(dealId);
@@ -30,6 +31,7 @@ public class DealController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionPolicy.DealPermission.View)]
     public async Task<ActionResult<PagedResult<GetDealDto>>> GetDealList([FromQuery] DealQueryParameters dealQueryParameters)
     {
         var deals = await _dealService.GetListAsync(dealQueryParameters);
@@ -37,13 +39,14 @@ public class DealController : ControllerBase
     }
     
     [HttpGet("account/{accountId:int}")]
+    [HasPermission(PermissionPolicy.DealPermission.View)]
     public async Task<ActionResult<PagedResult<GetDealDto>>> GetDealList(int accountId, [FromQuery] DealQueryParameters dqp)
     {
         return Ok(await _dealService.GetDealListByAccountIdAsync(accountId, dqp));
     }
 
     [HttpPut("{dealId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.Edit)]
     public async Task<ActionResult<GetDealDetailDto>> UpdateDeal(int dealId, [FromBody] UpdateDealDto? dealDto)
     {
         if (dealDto == null)
@@ -54,7 +57,7 @@ public class DealController : ControllerBase
     }
 
     [HttpDelete("{dealId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.Delete)]
     public async Task<ActionResult> DeleteDeal(int dealId)
     {
         await _dealService.DeleteAsync(dealId);
@@ -62,7 +65,7 @@ public class DealController : ControllerBase
     }
 
     [HttpPost("{dealId:int}/won")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.EndDeal)]
     public async Task<ActionResult<GetDealDetailDto>> MarkDealAsWon(int dealId)
     {
         var wonDealDto = await _dealService.MarkDealAsWonAsync(dealId);
@@ -70,7 +73,7 @@ public class DealController : ControllerBase
     }
     
     [HttpPost("{dealId:int}/lost")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.EndDeal)]
     public async Task<ActionResult<GetDealDetailDto>> MarkDealAsLost(int dealId)
     {
         var lostDealDto = await _dealService.MarkDealAsLostAsync(dealId);
@@ -78,6 +81,7 @@ public class DealController : ControllerBase
     }
 
     [HttpGet("statistics")]
+    [HasPermission(PermissionPolicy.DealPermission.View)]
     public async Task<ActionResult<DealStatisticsDto>> GetDealStatistics()
     {
         var dealStatistics = await _dealService.GetDealStatisticsAsync();
@@ -85,6 +89,7 @@ public class DealController : ControllerBase
     }
     
     [HttpGet("{dealId:int}/products")]
+    [HasPermission(PermissionPolicy.DealPermission.ViewProduct)]
     public async Task<ActionResult<PagedResult<GetDealProductDto>>> GetDealProducts(int dealId, [FromQuery] DealProductQueryParameters dpqp)
     {
         // 1. Check if deal exists
@@ -96,7 +101,7 @@ public class DealController : ControllerBase
     }
 
     [HttpPost("{dealId:int}/products")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.AddProduct)]
     public async Task<ActionResult<GetDealProductDto>> AddProductToDeal(int dealId, [FromBody] AddDealProductDto? dealProductDto)
     {
         if (dealProductDto == null)
@@ -107,7 +112,7 @@ public class DealController : ControllerBase
     }
     
     [HttpDelete("{dealId:int}/products/{dealProductId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.DeleteProduct)]
     public async Task<ActionResult> DeleteDealProduct(int dealProductId, int dealId)
     {
         await _dealProductService.DeleteDealProductAsync(dealProductId, dealId);
@@ -115,6 +120,7 @@ public class DealController : ControllerBase
     }
 
     [HttpGet("{dealId:int}/products/{dealProductId:int}")]
+    [HasPermission(PermissionPolicy.DealPermission.ViewProduct)]
     public async Task<ActionResult<GetDealProductDto>> GetDealProductById(int dealId, int dealProductId)
     {
         var dealProduct = await _dealProductService.GetDealProductByIdAsync(dealProductId);
@@ -127,7 +133,7 @@ public class DealController : ControllerBase
     }
     
     [HttpPut("{dealId:int}/products/{dealProductId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.DealPermission.EditProduct)]
     public async Task<ActionResult<GetDealProductDto>> UpdateDealProduct(int dealId, int dealProductId, [FromBody] UpdateDealProductDto? updateDealProductDto)
     {
         if (updateDealProductDto == null)

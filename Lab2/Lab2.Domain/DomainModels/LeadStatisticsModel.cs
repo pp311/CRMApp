@@ -1,6 +1,6 @@
 namespace Lab2.Domain.DomainModels;
 
-public class LeadStatistics
+public class LeadStatisticsModel
 {
     public int OpenLeadCount { get; set; }
     public int QualifiedLeadCount { get; set; }

@@ -1,7 +1,7 @@
 using Lab2.Application.DTOs.Product;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
-using Lab2.Domain.Constant;
+using Lab2.Application.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +19,9 @@ public class ProductController : ControllerBase
         _productService = productService;
     }
 
+    
     [HttpGet("{productId:int}")]
+    [HasPermission(PermissionPolicy.ProductPermission.View)]
     public async Task<ActionResult<GetProductDto>> GetProductById(int productId)
     {
         var productDto = await _productService.GetByIdAsync(productId);
@@ -27,6 +29,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionPolicy.ProductPermission.View)]
     public async Task<ActionResult<PagedResult<GetProductDto>>> GetProductList([FromQuery] ProductQueryParameters productQueryParameters)
     {
         var products = await _productService.GetListAsync(productQueryParameters);
@@ -34,7 +37,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ProductPermission.Create)]
     public async Task<ActionResult<GetProductDto>> CreateProduct([FromBody] UpsertProductDto? productDto)
     {
         if (productDto == null)
@@ -45,7 +48,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpPut("{productId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ProductPermission.Edit)]
     public async Task<ActionResult<GetProductDto>> UpdateProduct(int productId, [FromBody] UpsertProductDto? productDto)
     {
         if (productDto == null)
@@ -56,7 +59,7 @@ public class ProductController : ControllerBase
     }
 
     [HttpDelete("{productId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.ProductPermission.Delete)]
     public async Task<ActionResult> DeleteProduct(int productId)
     {
         await _productService.DeleteAsync(productId);

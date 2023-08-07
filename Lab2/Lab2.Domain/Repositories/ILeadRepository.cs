@@ -21,7 +21,7 @@ namespace Lab2.Domain.Repositories
                                                                               int take,
                                                                               bool isDescending);
         
-        Task<LeadStatistics> GetLeadStatisticsAsync();
+        Task<LeadStatisticsModel> GetLeadStatisticsAsync();
         Task<bool> IsLeadExistAsync(int leadId);
     }
 

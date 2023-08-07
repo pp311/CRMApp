@@ -1,7 +1,10 @@
+using System.Security.Claims;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.DTOs.User;
 using Lab2.Application.Interfaces;
+using Lab2.Application.Permissions;
 using Lab2.Domain.Constant;
+using Lab2.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +23,7 @@ public class IamAccountController : ControllerBase
     }
     
     [HttpGet]
+    [HasPermission(PermissionPolicy.UserPermission.View)]
     public async Task<IActionResult> GetUsers([FromQuery] UserQueryParameters uqp)
     {
         var users = await _userService.GetListAsync(uqp);
@@ -27,6 +31,7 @@ public class IamAccountController : ControllerBase
     }   
     
     [HttpGet("{userId:int}")]
+    [HasPermission(PermissionPolicy.UserPermission.View)]
     public async Task<IActionResult> GetUserById(int userId)
     {
         var user = await _userService.GetByIdAsync(userId);
@@ -34,7 +39,7 @@ public class IamAccountController : ControllerBase
     }
     
     [HttpPost]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.UserPermission.Create)]
     public async Task<IActionResult> CreateUser([FromBody] CreateUserDto dto)
     {
         var user = await _userService.CreateAsync(dto);
@@ -43,13 +48,21 @@ public class IamAccountController : ControllerBase
     
     [HttpPut("{userId:int}")]
     [Authorize(Policy = AuthPolicy.AdminOrOwner)]
+    [HasPermission(PermissionPolicy.UserPermission.Edit)]
     public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserDto dto)
     {
+        var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var currentUserRole = User.FindFirstValue(ClaimTypes.Role)!;
+        
+        if (currentUserId != userId && currentUserRole == AppRole.User.ToString())
+            return Forbid();
+        
         var user = await _userService.UpdateAsync(userId, dto);
         return Ok(user);
     }
     
     [HttpDelete("{userId:int}")]
+    [HasPermission(PermissionPolicy.UserPermission.Delete)]
     [Authorize(Policy = AuthPolicy.AdminOnly)]
     public async Task<IActionResult> DeleteUser(int userId)
     {
@@ -59,8 +72,15 @@ public class IamAccountController : ControllerBase
     
     [HttpPost("{userId:int}/change-password")]
     [Authorize(Policy = AuthPolicy.AdminOrOwner)]
+    [HasPermission(PermissionPolicy.UserPermission.Edit)]
     public async Task<IActionResult> ChangePassword(int userId, [FromBody] ChangePasswordDto dto)
     {
+        var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        var currentUserRole = User.FindFirstValue(ClaimTypes.Role)!;
+        
+        if (currentUserId != userId && currentUserRole == AppRole.User.ToString())
+            return Forbid();
+        
         await _userService.ChangePasswordAsync(userId, dto);
         return NoContent();
     }

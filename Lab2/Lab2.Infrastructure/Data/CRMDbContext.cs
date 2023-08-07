@@ -21,6 +21,7 @@ public class CRMDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CRMDbContext).Assembly);
         modelBuilder.AddSeedData();
+        modelBuilder.AddIdentitySeedData();
     }
 
     public DbSet<Deal> Deals { get; set; }

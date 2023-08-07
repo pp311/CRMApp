@@ -1,4 +1,3 @@
-using Lab2.Domain.Entities;
 using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;

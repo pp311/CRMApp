@@ -27,6 +27,7 @@ public static class CustomExceptionHandler
                         response.StatusCode = (int)HttpStatusCode.NotImplemented;
                         break;
                     case EntityValidationException:
+                    case EntityAlreadyExistsException:
                     case InvalidUpdateException:
                     case InvalidPasswordException:
                     case InvalidRefreshTokenException:

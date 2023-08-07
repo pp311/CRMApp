@@ -4,7 +4,6 @@ using Lab2.Domain.Repositories;
 using Lab2.Infrastructure.Data;
 using Lab2.Infrastructure.Identity;
 using Lab2.Infrastructure.Repositories;
-using Lab2.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,8 +39,6 @@ public static class InfrastructureServiceExtension
     public static void ConfigureInfrastructureServices(this IServiceCollection services)
     {
         services.AddScoped<IUserManagerService, UserManagerService>();
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IRoleManagerService, RoleManagerService>();
     }
-    
-    
 }

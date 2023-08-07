@@ -1,4 +1,3 @@
-using System.Linq.Dynamic.Core;
 using AutoMapper;
 using Lab2.Application.Interfaces;
 using Lab2.Domain.Entities;
@@ -19,6 +18,11 @@ public class UserManagerService : IUserManagerService
     {
         _userManager = userManager;
         _mapper = mapper;
+    }
+
+    public async Task<IList<string>> GetRolesAsync(int userId)
+    {
+        return await _userManager.GetRolesAsync(new ApplicationUser { Id = userId });
     }
 
     public async Task<User?> FindByEmailAsync(string email)
@@ -106,6 +110,27 @@ public class UserManagerService : IUserManagerService
             .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         
         return _mapper.Map<User>(appUser);
+    }
+
+    public async Task<DateTime?> GetRefreshTokenLifetimeAsync(string refreshToken)
+    {
+        return await _userManager.Users
+            .Where(u => u.RefreshToken == refreshToken)
+            .Select(u => u.RefreshTokenLifetime)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateRefreshTokenAsync(int userId, string? refreshToken, DateTime? refreshTokenExpiresUtc)
+    {
+        var appUser = await _userManager.FindByIdAsync(userId.ToString())
+            ?? throw new Exception($"User with id {userId} not found");
+        
+        (appUser.RefreshToken, appUser.RefreshTokenLifetime) = (refreshToken, refreshTokenExpiresUtc);
+        
+        var updateResult = await _userManager.UpdateAsync(appUser);
+        
+        if (!updateResult.Succeeded)
+            throw new Exception(updateResult.Errors.First().Description);
     }
 
     public async Task<(IEnumerable<User> Items, int TotalCount)> GetUserPagedListAsync(string? search,

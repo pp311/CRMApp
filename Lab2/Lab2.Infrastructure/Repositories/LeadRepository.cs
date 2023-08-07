@@ -52,10 +52,10 @@ namespace Lab2.Infrastructure.Repositories
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
         
-        public async Task<LeadStatistics> GetLeadStatisticsAsync()
+        public async Task<LeadStatisticsModel> GetLeadStatisticsAsync()
         {
             return await DbSet.AsNoTracking().AsQueryable().Select(lead =>
-                new LeadStatistics
+                new LeadStatisticsModel
                 {
                     OpenLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Open),
                     QualifiedLeadCount = DbSet.Count(l => l.Status == (int)LeadStatus.Qualified),

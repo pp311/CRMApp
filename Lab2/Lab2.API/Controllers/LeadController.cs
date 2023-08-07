@@ -2,7 +2,7 @@ using Lab2.Application.DTOs.Deal;
 using Lab2.Application.DTOs.Lead;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
-using Lab2.Domain.Constant;
+using Lab2.Application.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +21,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpGet("{leadId:int}")]
+    [HasPermission(PermissionPolicy.LeadPermission.View)]
     public async Task<ActionResult<GetLeadDto>> GetLeadById(int leadId)
     {
         var leadDto = await _leadService.GetByIdAsync(leadId);
@@ -28,19 +29,21 @@ public class LeadController : ControllerBase
     }
 
     [HttpGet]
+    [HasPermission(PermissionPolicy.LeadPermission.View)]
     public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadList([FromQuery] LeadQueryParameters leadQueryParameters)
     {
         return Ok(await _leadService.GetListAsync(leadQueryParameters));
     }
     
     [HttpGet("account/{accountId:int}")]
+    [HasPermission(PermissionPolicy.LeadPermission.View)]
     public async Task<ActionResult<PagedResult<GetLeadDto>>> GetLeadList(int accountId, [FromQuery] LeadQueryParameters lqp)
     {
         return Ok(await _leadService.GetLeadListByAccountIdAsync(accountId, lqp));
     }
 
     [HttpPost]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.LeadPermission.Create)]
     public async Task<ActionResult<GetLeadDto>> CreateLead([FromBody] AddLeadDto? leadDto)
     {
         if (leadDto == null)
@@ -51,7 +54,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPut("{leadId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.LeadPermission.Edit)]
     public async Task<ActionResult<GetLeadDto>> UpdateLead(int leadId, [FromBody] UpdateLeadDto? leadDto)
     {
         if (leadDto == null)
@@ -62,7 +65,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpDelete("{leadId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.LeadPermission.Delete)]
     public async Task<ActionResult> DeleteLead(int leadId)
     {
         await _leadService.DeleteAsync(leadId);
@@ -70,7 +73,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost("{leadId:int}/qualify-lead")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.LeadPermission.Qualify)]
     public async Task<ActionResult<GetDealDto>> QualifyLead(int leadId)
     {
         var deal = await _leadService.QualifyLeadAsync(leadId);
@@ -78,7 +81,7 @@ public class LeadController : ControllerBase
     }
 
     [HttpPost("{leadId:int}/disqualify-lead")]
-    [Authorize(Policy = AuthPolicy.AdminOnly)]
+    [HasPermission(PermissionPolicy.LeadPermission.Disqualify)]
     public async Task<ActionResult<GetLeadDto>> DisqualifyLead(int leadId, [FromBody] DisqualifyLeadDto? disqualifyLeadDto)
     {
         var updatedLeadDto = await _leadService.DisqualifyLeadAsync(leadId, disqualifyLeadDto);
@@ -86,6 +89,7 @@ public class LeadController : ControllerBase
     }
     
     [HttpGet("statistics")]
+    [HasPermission(PermissionPolicy.LeadPermission.View)]
     public async Task<ActionResult<LeadStatisticsDto>> GetLeadStatistics()
     {
         return Ok(await _leadService.GetLeadStatisticsAsync());

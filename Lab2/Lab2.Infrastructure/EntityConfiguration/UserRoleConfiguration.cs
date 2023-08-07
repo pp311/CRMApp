@@ -9,11 +9,5 @@ public class UserRoleConfiguration : IEntityTypeConfiguration<IdentityUserRole<i
     public void Configure(EntityTypeBuilder<IdentityUserRole<int>> builder)
     {
         // builder.HasNoKey();
-        
-        builder.HasData(new IdentityUserRole<int>
-        {
-            RoleId = 1,
-            UserId = 1
-        }); 
     }
 }

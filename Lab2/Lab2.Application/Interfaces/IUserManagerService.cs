@@ -5,6 +5,8 @@ namespace Lab2.Application.Interfaces;
 
 public interface IUserManagerService
 {
+    Task<IList<string>> GetRolesAsync(int userId);
+    
     Task<User?> FindByEmailAsync(string email);
     
     Task<User?> FindByIdAsync(int userId);
@@ -22,6 +24,10 @@ public interface IUserManagerService
     Task ChangePasswordAsync(int userId, string oldPassword, string newPassword);
     
     Task<User?> FindByRefreshTokenAsync(string refreshToken);
+    
+    Task<DateTime?> GetRefreshTokenLifetimeAsync(string refreshToken);
+    
+    Task UpdateRefreshTokenAsync(int userId, string? refreshToken, DateTime? refreshTokenExpiresUtc); 
     
     Task<(IEnumerable<User> Items, int TotalCount)> GetUserPagedListAsync(string? search,
                                                                           UserSortBy? orderBy,

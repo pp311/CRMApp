@@ -56,10 +56,10 @@ namespace Lab2.Infrastructure.Repositories
             return await GetPagedListFromQueryableAsync(query, skip, take);
         }
         
-        public async Task<DealStatistics> GetDealStatisticsAsync()
+        public async Task<DealStatisticsModel> GetDealStatisticsAsync()
         {
             return await DbSet.AsNoTracking().AsQueryable().Select(d => 
-                       new DealStatistics
+                       new DealStatisticsModel
                         {
                             OpenDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Open),
                             WonDealCount = DbSet.Count(d1 => d1.Status == (int)DealStatus.Won),

@@ -3,9 +3,9 @@ using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.DTOs.User;
 using Lab2.Application.Interfaces;
 using Lab2.Domain;
-using Lab2.Domain.Constant;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Exceptions;
+using AppRole = Lab2.Domain.Enums.AppRole;
 
 namespace Lab2.Application.Services;
 
@@ -55,7 +55,7 @@ public class UserService : IUserService
             user = await _userManager.CreateAsync(user, dto.Password);
             
             // 3. Set role
-            await _userManager.AddToRoleAsync(user.Id, AppRole.User);
+            await _userManager.AddToRoleAsync(user.Id, AppRole.User.ToString());
             
             await _unitOfWork.CommitTransactionAsync();
         }
