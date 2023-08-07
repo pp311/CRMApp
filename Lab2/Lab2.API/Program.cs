@@ -1,7 +1,9 @@
 using Lab2.Application.Extensions;
 using Lab2.Extensions;
+using Lab2.Infrastructure.Data;
 using Lab2.Infrastructure.Extensions;
 using Lab2.Middlewares;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,7 +31,11 @@ builder.Services.ConfigureAutoMapper();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Apply migrations
+await builder.Services.ApplyMigrateAsync();
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();

@@ -3,7 +3,7 @@
     image: lab2
     build:
       context: .
-      dockerfile: Lab2/Dockerfile
+      dockerfile: Lab2.API/Dockerfile
     ports:
         - "5001:80"
         - "5000:443"
