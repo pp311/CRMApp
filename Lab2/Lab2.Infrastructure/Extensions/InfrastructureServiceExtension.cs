@@ -19,7 +19,7 @@ public static class InfrastructureServiceExtension
     
     public static void ConfigureDbContext(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddDbContext<CRMDbContext>(options =>
+        services.AddDbContext<CrmDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
             options.EnableSensitiveDataLogging();

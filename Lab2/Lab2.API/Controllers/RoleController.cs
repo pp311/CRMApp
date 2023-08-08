@@ -1,6 +1,7 @@
+using Lab2.Application.Commons.Permissions;
 using Lab2.Application.DTOs.Role;
 using Lab2.Application.Interfaces;
-using Lab2.Application.Permissions;
+using Lab2.Commons.Attributes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

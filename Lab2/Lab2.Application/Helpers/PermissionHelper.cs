@@ -1,7 +1,8 @@
 using System.Reflection;
 using System.Security.Claims;
+using Lab2.Application.Commons.Permissions;
 
-namespace Lab2.Application.Permissions;
+namespace Lab2.Application.Helpers;
 
 public static class PermissionHelper
 {

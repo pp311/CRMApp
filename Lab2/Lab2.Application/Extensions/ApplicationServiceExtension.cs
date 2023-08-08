@@ -1,8 +1,8 @@
 using System.Text;
-using Lab2.Application.Configuration;
+using Lab2.Application.Commons.Configuration;
+using Lab2.Application.Commons.Permissions;
 using Lab2.Application.CustomServices;
 using Lab2.Application.Interfaces;
-using Lab2.Application.Permissions;
 using Lab2.Application.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

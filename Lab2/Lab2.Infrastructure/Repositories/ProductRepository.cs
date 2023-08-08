@@ -11,7 +11,7 @@ namespace Lab2.Infrastructure.Repositories
 {
     public class ProductRepository : RepositoryBase<Product>, IProductRepository
     {
-        public ProductRepository(CRMDbContext context) : base(context)
+        public ProductRepository(CrmDbContext context) : base(context)
         {
         }
 

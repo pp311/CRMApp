@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Lab2.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Lab2.Application.Permissions;
+namespace Lab2.Application.Commons.Permissions;
 
 public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionRequirement>
 {

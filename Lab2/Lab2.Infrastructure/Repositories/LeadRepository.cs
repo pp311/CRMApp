@@ -12,7 +12,7 @@ namespace Lab2.Infrastructure.Repositories
 {
     public class LeadRepository : RepositoryBase<Lead>, ILeadRepository
     {
-        public LeadRepository(CRMDbContext context) : base(context)
+        public LeadRepository(CrmDbContext context) : base(context)
         {
         }
         

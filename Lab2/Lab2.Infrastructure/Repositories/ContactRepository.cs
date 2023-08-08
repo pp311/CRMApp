@@ -10,7 +10,7 @@ namespace Lab2.Infrastructure.Repositories
 {
     public class ContactRepository : RepositoryBase<Contact>, IContactRepository
     {
-        public ContactRepository(CRMDbContext context) : base(context)
+        public ContactRepository(CrmDbContext context) : base(context)
         {
         }
 

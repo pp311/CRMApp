@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Data;
 
-public class CRMDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
+public class CrmDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    public CRMDbContext(DbContextOptions<CRMDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
+    public CrmDbContext(DbContextOptions<CrmDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
     {
         _httpContextAccessor = httpContextAccessor;
     }
@@ -18,7 +18,7 @@ public class CRMDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CRMDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(CrmDbContext).Assembly);
         
         modelBuilder.AddSeedData();
         modelBuilder.AddIdentitySeedData();

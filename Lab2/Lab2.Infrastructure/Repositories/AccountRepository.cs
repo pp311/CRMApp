@@ -10,7 +10,7 @@ namespace Lab2.Infrastructure.Repositories
 {
     public class AccountRepository : RepositoryBase<Account>, IAccountRepository
     {
-        public AccountRepository(CRMDbContext context) : base(context)
+        public AccountRepository(CrmDbContext context) : base(context)
         {
         }
         

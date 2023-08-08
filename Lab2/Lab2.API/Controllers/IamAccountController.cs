@@ -1,8 +1,9 @@
 using System.Security.Claims;
+using Lab2.Application.Commons.Permissions;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.DTOs.User;
 using Lab2.Application.Interfaces;
-using Lab2.Application.Permissions;
+using Lab2.Commons.Attributes;
 using Lab2.Domain.Constant;
 using Lab2.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -35,7 +36,7 @@ public class IamAccountController : ControllerBase
     public async Task<IActionResult> GetUserById(int userId)
     {
         var user = await _userService.GetByIdAsync(userId);
-        return Ok(user);
+        return user is null ? NotFound() : Ok(user);
     }
     
     [HttpPost]

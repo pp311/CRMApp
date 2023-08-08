@@ -1,8 +1,10 @@
 using Bogus;
-using Lab2.Application.Permissions;
+using Lab2.Application.Commons.Permissions;
+using Lab2.Application.Helpers;
 using Lab2.Domain.Enums;
 using Lab2.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Data;
@@ -30,6 +32,7 @@ public static class SeedIdentityData
             .RuleFor(u => u.Name, f => f.Name.FullName())
             .RuleFor(u => u.Email, f => f.Internet.Email())
             .RuleFor(u => u.UserName, (_, u) => u.Email)
+            .RuleFor(u => u.SecurityStamp, _ => Guid.NewGuid().ToString())
             .Generate(10);
 
         foreach (var user in users)

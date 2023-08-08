@@ -4,10 +4,10 @@ namespace Lab2.Infrastructure.Data;
 
 public class UnitOfWork : IUnitOfWork, IDisposable
 {
-    private readonly CRMDbContext _context;
+    private readonly CrmDbContext _context;
     private bool _disposed;
 
-    public UnitOfWork(CRMDbContext context)
+    public UnitOfWork(CrmDbContext context)
     {
         _context = context;
     }

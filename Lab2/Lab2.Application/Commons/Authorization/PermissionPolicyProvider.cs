@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
-namespace Lab2.Application.Permissions;
+namespace Lab2.Application.Commons.Permissions;
 
 public class PermissionPolicyProvider : DefaultAuthorizationPolicyProvider
 {

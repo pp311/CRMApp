@@ -1,4 +1,5 @@
 using AutoMapper;
+using Lab2.Application.Commons.Permissions;
 using Lab2.Application.DTOs.Account;
 using Lab2.Application.DTOs.Contact;
 using Lab2.Application.DTOs.Deal;
@@ -7,7 +8,6 @@ using Lab2.Application.DTOs.Lead;
 using Lab2.Application.DTOs.Product;
 using Lab2.Application.DTOs.Role;
 using Lab2.Application.DTOs.User;
-using Lab2.Application.Permissions;
 using Lab2.Domain.DomainModels;
 using Lab2.Domain.Entities;
 using Lab2.Infrastructure.Identity;

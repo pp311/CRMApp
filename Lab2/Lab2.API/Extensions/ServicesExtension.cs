@@ -1,4 +1,4 @@
-using Lab2.Application.Configuration;
+using Lab2.Application.Commons.Configuration;
 using Lab2.Infrastructure.Data;
 using Lab2.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +21,7 @@ public static class ServicesExtension
                 
                 options.User.RequireUniqueEmail = true;
             })
-            .AddEntityFrameworkStores<CRMDbContext>()
+            .AddEntityFrameworkStores<CrmDbContext>()
             .AddDefaultTokenProviders();
     }
 

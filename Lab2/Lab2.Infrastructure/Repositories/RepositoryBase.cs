@@ -6,12 +6,12 @@ namespace Lab2.Infrastructure.Repositories;
 
 public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class
 {
-    private readonly CRMDbContext _context;
+    private readonly CrmDbContext _context;
     private DbSet<TEntity>? _dbSet;
 
     protected DbSet<TEntity> DbSet => _dbSet ??= _context.Set<TEntity>();
 
-    public RepositoryBase(CRMDbContext context)
+    public RepositoryBase(CrmDbContext context)
     {
         _context = context;
     }

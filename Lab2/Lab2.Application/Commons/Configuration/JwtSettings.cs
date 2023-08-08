@@ -1,4 +1,4 @@
-namespace Lab2.Application.Configuration;
+namespace Lab2.Application.Commons.Configuration;
 
 public class JwtSettings
 {

@@ -4,16 +4,19 @@ using Lab2.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
 namespace Lab2.Infrastructure.Migrations
 {
-    [DbContext(typeof(CRMDbContext))]
-    partial class CRMDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(CrmDbContext))]
+    [Migration("20230808151822_InitDb")]
+    partial class InitDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,227 +77,227 @@ namespace Lab2.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Address = "6422 Alverta Rapid, Antonioville, Netherlands",
-                            Email = "King96@hotmail.com",
-                            Name = "Mayert, Kohler and Lind",
-                            Phone = "1-834-443-4275",
-                            TotalSales = 47224.0
+                            Address = "148 Jones Well, Mohrmouth, Slovenia",
+                            Email = "Gillian_Marvin@gmail.com",
+                            Name = "Thompson Group",
+                            Phone = "1-361-370-6351",
+                            TotalSales = 45898.0
                         },
                         new
                         {
                             Id = 2,
-                            Address = "4723 Eli Track, Tremblayton, Estonia",
-                            Email = "Dayton_Sipes@gmail.com",
-                            Name = "Kulas - Bartoletti",
-                            Phone = "1-259-452-3900 x112",
-                            TotalSales = 9334.0
+                            Address = "833 McDermott Garden, North Muriel, Pitcairn Islands",
+                            Email = "Kenny73@yahoo.com",
+                            Name = "Schoen, Davis and Swaniawski",
+                            Phone = "367.953.7168",
+                            TotalSales = 10220.0
                         },
                         new
                         {
                             Id = 3,
-                            Address = "559 Blanche Ramp, Wilhelmville, Afghanistan",
-                            Email = "Ernesto_Labadie@hotmail.com",
-                            Name = "Bartell, Walsh and Dooley",
-                            Phone = "1-838-384-3597",
-                            TotalSales = 1127.0
+                            Address = "02024 Carroll Street, South Jacinto, Saudi Arabia",
+                            Email = "Uriel.Kertzmann40@gmail.com",
+                            Name = "Ritchie, Wehner and Crona",
+                            Phone = "(545) 276-5372",
+                            TotalSales = 45389.0
                         },
                         new
                         {
                             Id = 4,
-                            Address = "267 Cremin Falls, Lake Giuseppe, Slovenia",
-                            Email = "Antonette.Funk@gmail.com",
-                            Name = "Keeling - Osinski",
-                            Phone = "381-292-1288 x752",
-                            TotalSales = 10361.0
+                            Address = "53290 Tianna Village, North Nikolasfurt, Libyan Arab Jamahiriya",
+                            Email = "Nash.Hickle3@hotmail.com",
+                            Name = "Altenwerth - Emmerich",
+                            Phone = "1-379-618-8457",
+                            TotalSales = 5471.0
                         },
                         new
                         {
                             Id = 5,
-                            Address = "220 Hollis Forge, Port Reginald, Nepal",
-                            Email = "Audie55@yahoo.com",
-                            Name = "Rowe and Sons",
-                            Phone = "204-393-0231 x53231",
-                            TotalSales = 39870.0
+                            Address = "6196 Stokes Street, South Hughton, Bosnia and Herzegovina",
+                            Email = "Anais.Reichel@hotmail.com",
+                            Name = "Larkin LLC",
+                            Phone = "487.906.8362",
+                            TotalSales = 48147.0
                         },
                         new
                         {
                             Id = 6,
-                            Address = "668 Stanton Trafficway, Port Ashleetown, American Samoa",
-                            Email = "Marie.Littel@yahoo.com",
-                            Name = "Runolfsson, Weber and Ondricka",
-                            Phone = "377.424.4480",
-                            TotalSales = 46663.0
+                            Address = "096 Demario Rue, Franciscaside, Venezuela",
+                            Email = "Eleanore_Schimmel41@hotmail.com",
+                            Name = "Leffler - Ortiz",
+                            Phone = "619-289-9766",
+                            TotalSales = 34444.0
                         },
                         new
                         {
                             Id = 7,
-                            Address = "26284 Queenie Stream, Kielchester, Fiji",
-                            Email = "Theresia32@gmail.com",
-                            Name = "Carroll, Robel and Bayer",
-                            Phone = "529.394.3623 x2101",
-                            TotalSales = 4650.0
+                            Address = "18927 Kristopher Mountain, North Afton, Macao",
+                            Email = "Carter0@hotmail.com",
+                            Name = "Collins, Wehner and Hessel",
+                            Phone = "616.980.9789 x4905",
+                            TotalSales = 12009.0
                         },
                         new
                         {
                             Id = 8,
-                            Address = "875 Joyce Extensions, Emiliotown, Antarctica (the territory South of 60 deg S)",
-                            Email = "Sheila4@gmail.com",
-                            Name = "Watsica LLC",
-                            Phone = "1-402-946-5488 x339",
-                            TotalSales = 24685.0
+                            Address = "152 Davin Crossroad, Julietland, Guinea-Bissau",
+                            Email = "Amelie.Emard@yahoo.com",
+                            Name = "Marks - Wolff",
+                            Phone = "(257) 844-2443 x26207",
+                            TotalSales = 17098.0
                         },
                         new
                         {
                             Id = 9,
-                            Address = "2582 Tristin Club, South Dewayne, Jordan",
-                            Email = "Vicente_Wilkinson47@hotmail.com",
-                            Name = "Sauer - Kerluke",
-                            Phone = "(439) 906-6329 x284",
-                            TotalSales = 16381.0
+                            Address = "2346 Mylene Mission, Ullrichmouth, South Georgia and the South Sandwich Islands",
+                            Email = "Emmie_Gislason92@gmail.com",
+                            Name = "Schmitt - Braun",
+                            Phone = "1-619-489-4303 x765",
+                            TotalSales = 29185.0
                         },
                         new
                         {
                             Id = 10,
-                            Address = "47677 Prosacco Plains, Janickhaven, Central African Republic",
-                            Email = "Kenyatta.Gorczany36@yahoo.com",
-                            Name = "Schultz, Kub and Koch",
-                            Phone = "(329) 271-8009 x46123",
-                            TotalSales = 19632.0
+                            Address = "0042 Linwood Isle, Koelpinberg, Marshall Islands",
+                            Email = "Manley_Franecki41@hotmail.com",
+                            Name = "Cremin, Bechtelar and Gaylord",
+                            Phone = "767-875-5215 x98879",
+                            TotalSales = 48896.0
                         },
                         new
                         {
                             Id = 11,
-                            Address = "3123 Gottlieb Extensions, North Elenora, Fiji",
-                            Email = "Rocio_Weissnat@hotmail.com",
-                            Name = "Bogan - Effertz",
-                            Phone = "692-288-9930 x096",
-                            TotalSales = 21417.0
+                            Address = "219 Grady Rapid, Wuckertshire, Aruba",
+                            Email = "Jocelyn33@hotmail.com",
+                            Name = "Schimmel Inc",
+                            Phone = "291.471.9429 x8370",
+                            TotalSales = 40030.0
                         },
                         new
                         {
                             Id = 12,
-                            Address = "673 Conn Stravenue, East Ellsworthbury, Trinidad and Tobago",
-                            Email = "Aliyah92@hotmail.com",
-                            Name = "Hammes Group",
-                            Phone = "409.258.5375 x83256",
-                            TotalSales = 34840.0
+                            Address = "876 Lind Pike, West Millerborough, Palau",
+                            Email = "Candido84@hotmail.com",
+                            Name = "Murray - Koch",
+                            Phone = "1-650-608-4533 x59183",
+                            TotalSales = 7009.0
                         },
                         new
                         {
                             Id = 13,
-                            Address = "334 Pascale Port, West Allene, Ethiopia",
-                            Email = "Vicky34@gmail.com",
-                            Name = "Dietrich - Kessler",
-                            Phone = "444-296-7080",
-                            TotalSales = 40201.0
+                            Address = "114 Dominic Island, Port Justice, Guernsey",
+                            Email = "Nat_Hamill@hotmail.com",
+                            Name = "Stanton - Braun",
+                            Phone = "649.554.4091",
+                            TotalSales = 43309.0
                         },
                         new
                         {
                             Id = 14,
-                            Address = "45940 Lind Shores, New Meagan, Montenegro",
-                            Email = "Mylene.Monahan61@hotmail.com",
-                            Name = "Wuckert LLC",
-                            Phone = "224.221.0067 x693",
-                            TotalSales = 34888.0
+                            Address = "956 Anibal Motorway, West Wilber, United Arab Emirates",
+                            Email = "Audie.Bauch24@hotmail.com",
+                            Name = "Lynch, Stracke and Stark",
+                            Phone = "(359) 573-7984 x30973",
+                            TotalSales = 27355.0
                         },
                         new
                         {
                             Id = 15,
-                            Address = "18686 Maribel Stream, Port Holden, Brunei Darussalam",
-                            Email = "Cullen20@gmail.com",
-                            Name = "Mayert, Gorczany and Huel",
-                            Phone = "753-872-7201 x50024",
-                            TotalSales = 44230.0
+                            Address = "051 Raymond Vista, East Garfieldview, Philippines",
+                            Email = "Ettie.Donnelly47@hotmail.com",
+                            Name = "Miller, Cruickshank and Stoltenberg",
+                            Phone = "926-802-2916 x78114",
+                            TotalSales = 2524.0
                         },
                         new
                         {
                             Id = 16,
-                            Address = "5064 Ruecker Ford, East Jarod, Kyrgyz Republic",
-                            Email = "Destiny_Smith@yahoo.com",
-                            Name = "Douglas - Muller",
-                            Phone = "1-461-904-4862 x3238",
-                            TotalSales = 1472.0
+                            Address = "7996 Wunsch Village, Arnoland, New Caledonia",
+                            Email = "Kayla_Dickinson81@hotmail.com",
+                            Name = "Williamson Group",
+                            Phone = "(762) 466-8823 x0873",
+                            TotalSales = 5747.0
                         },
                         new
                         {
                             Id = 17,
-                            Address = "79495 Denis Canyon, Port Christop, British Indian Ocean Territory (Chagos Archipelago)",
-                            Email = "Johnny_Torp80@gmail.com",
-                            Name = "Gulgowski - Spencer",
-                            Phone = "1-557-992-0042 x59441",
-                            TotalSales = 43992.0
+                            Address = "461 Howell Flats, Port Jovantown, Barbados",
+                            Email = "Eldred_Luettgen41@hotmail.com",
+                            Name = "Runolfsson, Nienow and Feil",
+                            Phone = "638.371.8885 x263",
+                            TotalSales = 42113.0
                         },
                         new
                         {
                             Id = 18,
-                            Address = "406 Lemuel Garden, Brannonview, Republic of Korea",
-                            Email = "Alisa.Beer35@hotmail.com",
-                            Name = "McClure and Sons",
-                            Phone = "(519) 573-6216 x747",
-                            TotalSales = 16430.0
+                            Address = "27571 Kuhlman Village, East Chrisburgh, Guyana",
+                            Email = "Harry.Hickle45@yahoo.com",
+                            Name = "Quitzon Group",
+                            Phone = "291-600-3425 x1441",
+                            TotalSales = 1203.0
                         },
                         new
                         {
                             Id = 19,
-                            Address = "866 Pfannerstill Heights, Port Alexis, Armenia",
-                            Email = "Eliza.Kessler59@gmail.com",
-                            Name = "Huel, Waelchi and Friesen",
-                            Phone = "1-900-844-0596 x22286",
-                            TotalSales = 38141.0
+                            Address = "042 Trycia Expressway, South Jannie, Saint Martin",
+                            Email = "Carmel_Runolfsdottir38@gmail.com",
+                            Name = "Jakubowski - Koepp",
+                            Phone = "677-580-1228 x188",
+                            TotalSales = 44903.0
                         },
                         new
                         {
                             Id = 20,
-                            Address = "76687 Colton Falls, Spinkaberg, Anguilla",
-                            Email = "Linda.Waters@gmail.com",
-                            Name = "Heidenreich, Quigley and Casper",
-                            Phone = "826.411.0788 x67560",
-                            TotalSales = 17867.0
+                            Address = "752 Sven Burgs, Lake Elvieport, France",
+                            Email = "Baylee_Green97@yahoo.com",
+                            Name = "Batz - Zboncak",
+                            Phone = "767.825.5572",
+                            TotalSales = 27621.0
                         },
                         new
                         {
                             Id = 21,
-                            Address = "89981 Katelyn Mews, East Christview, Lebanon",
-                            Email = "Frances.Boyer@hotmail.com",
-                            Name = "McLaughlin, Lowe and Watsica",
-                            Phone = "1-843-422-6847",
-                            TotalSales = 8218.0
+                            Address = "81705 Natalie Neck, Idelltown, Mauritania",
+                            Email = "Juanita23@hotmail.com",
+                            Name = "Howell - Ondricka",
+                            Phone = "1-987-732-2643 x7633",
+                            TotalSales = 42597.0
                         },
                         new
                         {
                             Id = 22,
-                            Address = "07865 Creola Shoal, Joeport, Marshall Islands",
-                            Email = "Brandyn.Boyer54@yahoo.com",
-                            Name = "Lynch, Wyman and Stehr",
-                            Phone = "(773) 414-4993",
-                            TotalSales = 46775.0
+                            Address = "45236 Swaniawski Valleys, South Toni, South Georgia and the South Sandwich Islands",
+                            Email = "Myah77@hotmail.com",
+                            Name = "Kshlerin, Rosenbaum and Crooks",
+                            Phone = "(236) 459-0237",
+                            TotalSales = 23805.0
                         },
                         new
                         {
                             Id = 23,
-                            Address = "231 Monroe Ford, North Nels, Kyrgyz Republic",
-                            Email = "Magali68@yahoo.com",
-                            Name = "Hagenes - Feeney",
-                            Phone = "(728) 200-7085 x7762",
-                            TotalSales = 12669.0
+                            Address = "74549 Dietrich Crescent, New Kaylee, Democratic People's Republic of Korea",
+                            Email = "Reid70@gmail.com",
+                            Name = "Feest - Blanda",
+                            Phone = "1-881-999-7367 x24651",
+                            TotalSales = 12759.0
                         },
                         new
                         {
                             Id = 24,
-                            Address = "7857 Sibyl Flat, New Dashawn, Equatorial Guinea",
-                            Email = "Nasir_Morar@yahoo.com",
-                            Name = "Johnson - Hahn",
-                            Phone = "1-596-282-6503",
-                            TotalSales = 12128.0
+                            Address = "357 Gulgowski Crest, South Arelyfort, Australia",
+                            Email = "Steve26@yahoo.com",
+                            Name = "Gorczany Inc",
+                            Phone = "833.527.2316 x52803",
+                            TotalSales = 16161.0
                         },
                         new
                         {
                             Id = 25,
-                            Address = "002 Isadore Orchard, Dylanfort, Libyan Arab Jamahiriya",
-                            Email = "Stephanie.Zulauf56@gmail.com",
-                            Name = "Marvin - Corkery",
-                            Phone = "254.732.4935 x55933",
-                            TotalSales = 41468.0
+                            Address = "0214 Langosh Tunnel, Port Floyville, Morocco",
+                            Email = "Celine.Doyle94@yahoo.com",
+                            Name = "Armstrong - Haley",
+                            Phone = "869-305-3233",
+                            TotalSales = 11093.0
                         });
                 });
 
@@ -349,802 +352,802 @@ namespace Lab2.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            AccountId = 5,
-                            Email = "Elena.Rogahn@hotmail.com",
-                            Name = "Marge Pfannerstill",
-                            Phone = "1-204-493-2723 x5202"
+                            AccountId = 25,
+                            Email = "Carleton52@yahoo.com",
+                            Name = "Elian Rau",
+                            Phone = "463.434.0672"
                         },
                         new
                         {
                             Id = 2,
-                            AccountId = 17,
-                            Email = "Judson27@yahoo.com",
-                            Name = "Foster Schinner",
-                            Phone = "1-965-201-5881"
+                            AccountId = 1,
+                            Email = "Camille90@yahoo.com",
+                            Name = "Araceli Bayer",
+                            Phone = "1-347-408-4077 x623"
                         },
                         new
                         {
                             Id = 3,
-                            AccountId = 10,
-                            Email = "Kaia_Feeney57@gmail.com",
-                            Name = "Sadie Watsica",
-                            Phone = "1-462-532-1366 x37943"
+                            AccountId = 15,
+                            Email = "Pansy30@yahoo.com",
+                            Name = "Cali Padberg",
+                            Phone = "(696) 358-3844 x770"
                         },
                         new
                         {
                             Id = 4,
-                            AccountId = 10,
-                            Email = "Juana_Harvey30@gmail.com",
-                            Name = "Rudy Abshire",
-                            Phone = "(504) 662-5153 x184"
+                            AccountId = 18,
+                            Email = "Electa_Gleason20@hotmail.com",
+                            Name = "Kathryne Reilly",
+                            Phone = "(421) 292-0354"
                         },
                         new
                         {
                             Id = 5,
-                            AccountId = 5,
-                            Email = "Santa_Spinka95@yahoo.com",
-                            Name = "Garland Wilkinson",
-                            Phone = "1-230-753-9758 x87701"
+                            AccountId = 3,
+                            Email = "Reta_Bednar70@gmail.com",
+                            Name = "Elyse Mayert",
+                            Phone = "(578) 835-5623 x660"
                         },
                         new
                         {
                             Id = 6,
-                            AccountId = 24,
-                            Email = "Osvaldo.Reichert62@gmail.com",
-                            Name = "Sammy Kihn",
-                            Phone = "1-917-513-0278"
+                            AccountId = 21,
+                            Email = "Emilie83@hotmail.com",
+                            Name = "Kobe Thompson",
+                            Phone = "1-575-262-7368"
                         },
                         new
                         {
                             Id = 7,
-                            AccountId = 18,
-                            Email = "Otis.Frami71@gmail.com",
-                            Name = "Lane Runte",
-                            Phone = "1-871-870-6065 x793"
+                            AccountId = 4,
+                            Email = "Alessandra98@gmail.com",
+                            Name = "Zella Ondricka",
+                            Phone = "667.852.7621 x320"
                         },
                         new
                         {
                             Id = 8,
-                            AccountId = 23,
-                            Email = "Brock.McCullough@hotmail.com",
-                            Name = "Adah Witting",
-                            Phone = "(552) 255-1504 x79853"
+                            AccountId = 4,
+                            Email = "Rebekah.Spencer58@hotmail.com",
+                            Name = "Precious Buckridge",
+                            Phone = "501-369-2470 x4944"
                         },
                         new
                         {
                             Id = 9,
-                            AccountId = 2,
-                            Email = "Helen91@yahoo.com",
-                            Name = "Evans Gibson",
-                            Phone = "846-662-8376"
+                            AccountId = 5,
+                            Email = "Ibrahim.Huel@hotmail.com",
+                            Name = "Terry Hagenes",
+                            Phone = "943-437-2571"
                         },
                         new
                         {
                             Id = 10,
-                            AccountId = 25,
-                            Email = "Gilbert33@yahoo.com",
-                            Name = "Delphia Smitham",
-                            Phone = "1-900-857-0467"
+                            AccountId = 17,
+                            Email = "Shana67@gmail.com",
+                            Name = "Jordyn Wintheiser",
+                            Phone = "1-839-275-8595 x23180"
                         },
                         new
                         {
                             Id = 11,
-                            AccountId = 6,
-                            Email = "Karlee_OConnell@yahoo.com",
-                            Name = "Brice Kessler",
-                            Phone = "872.682.9771 x322"
+                            AccountId = 18,
+                            Email = "Talia58@hotmail.com",
+                            Name = "Carlotta Larkin",
+                            Phone = "1-458-926-7153 x85535"
                         },
                         new
                         {
                             Id = 12,
-                            AccountId = 13,
-                            Email = "Frederic_Mohr67@hotmail.com",
-                            Name = "Porter Boyle",
-                            Phone = "1-372-341-1642"
+                            AccountId = 5,
+                            Email = "Kristian_Ward71@yahoo.com",
+                            Name = "Sadye O'Kon",
+                            Phone = "438-569-8253 x7379"
                         },
                         new
                         {
                             Id = 13,
-                            AccountId = 1,
-                            Email = "Alyce.Gulgowski@gmail.com",
-                            Name = "Jazlyn McKenzie",
-                            Phone = "1-471-637-6155 x330"
+                            AccountId = 11,
+                            Email = "Haven86@gmail.com",
+                            Name = "Berniece Pagac",
+                            Phone = "918-927-7112 x93551"
                         },
                         new
                         {
                             Id = 14,
                             AccountId = 6,
-                            Email = "Elwin84@yahoo.com",
-                            Name = "Manuel Johnson",
-                            Phone = "372-703-6678 x80812"
+                            Email = "Weldon_Herzog@hotmail.com",
+                            Name = "Jerrod McClure",
+                            Phone = "387.985.6231"
                         },
                         new
                         {
                             Id = 15,
                             AccountId = 8,
-                            Email = "Chet_Turner@hotmail.com",
-                            Name = "Ryley Hayes",
-                            Phone = "790-901-2583 x5388"
+                            Email = "Abdiel96@gmail.com",
+                            Name = "Quincy Volkman",
+                            Phone = "320.795.6656 x01005"
                         },
                         new
                         {
                             Id = 16,
-                            AccountId = 3,
-                            Email = "Guy66@hotmail.com",
-                            Name = "Berniece McGlynn",
-                            Phone = "284.287.5777 x82962"
+                            AccountId = 20,
+                            Email = "Ocie_Waelchi91@hotmail.com",
+                            Name = "Francesco Brown",
+                            Phone = "(938) 252-6884 x662"
                         },
                         new
                         {
                             Id = 17,
-                            AccountId = 5,
-                            Email = "Emory.Rodriguez18@gmail.com",
-                            Name = "Isabella Schneider",
-                            Phone = "1-417-237-6400"
+                            AccountId = 23,
+                            Email = "Darby68@hotmail.com",
+                            Name = "Anika Reinger",
+                            Phone = "(333) 827-3534 x455"
                         },
                         new
                         {
                             Id = 18,
-                            AccountId = 5,
-                            Email = "Bertrand.Feest25@gmail.com",
-                            Name = "Wilfred Jaskolski",
-                            Phone = "(461) 883-7246"
+                            AccountId = 11,
+                            Email = "Shannon78@gmail.com",
+                            Name = "Robb Stamm",
+                            Phone = "(534) 762-3153 x98349"
                         },
                         new
                         {
                             Id = 19,
-                            AccountId = 10,
-                            Email = "Chandler_MacGyver@hotmail.com",
-                            Name = "Joany Davis",
-                            Phone = "(844) 602-4411 x145"
+                            AccountId = 13,
+                            Email = "Kitty.Steuber@gmail.com",
+                            Name = "Stuart Hahn",
+                            Phone = "(816) 825-1731 x6222"
                         },
                         new
                         {
                             Id = 20,
-                            AccountId = 25,
-                            Email = "Elnora17@yahoo.com",
-                            Name = "Lilian Schowalter",
-                            Phone = "1-317-334-1074 x9186"
+                            AccountId = 9,
+                            Email = "Jevon71@yahoo.com",
+                            Name = "Devon Bernhard",
+                            Phone = "(431) 236-5463 x2412"
                         },
                         new
                         {
                             Id = 21,
-                            AccountId = 17,
-                            Email = "Hortense_Bode57@gmail.com",
-                            Name = "Sydney Bartell",
-                            Phone = "1-454-665-4583"
+                            AccountId = 11,
+                            Email = "Ebba7@yahoo.com",
+                            Name = "Katherine Heller",
+                            Phone = "(372) 762-6958 x412"
                         },
                         new
                         {
                             Id = 22,
-                            AccountId = 14,
-                            Email = "Samanta_Larson@hotmail.com",
-                            Name = "Elsa Kunde",
-                            Phone = "(315) 699-0397 x334"
+                            AccountId = 12,
+                            Email = "Marley_Rogahn3@gmail.com",
+                            Name = "Brisa Conroy",
+                            Phone = "796-745-3372 x601"
                         },
                         new
                         {
                             Id = 23,
                             AccountId = 1,
-                            Email = "Trace6@gmail.com",
-                            Name = "Maurice Hauck",
-                            Phone = "(434) 729-3995 x396"
+                            Email = "Dasia.Denesik@hotmail.com",
+                            Name = "Kenneth Dooley",
+                            Phone = "251-890-7936 x2925"
                         },
                         new
                         {
                             Id = 24,
-                            AccountId = 5,
-                            Email = "Diamond_Nicolas84@yahoo.com",
-                            Name = "Hunter Mosciski",
-                            Phone = "405.985.1272"
+                            AccountId = 15,
+                            Email = "Kailey_Emard45@gmail.com",
+                            Name = "Joannie Bergnaum",
+                            Phone = "(433) 483-8303 x94100"
                         },
                         new
                         {
                             Id = 25,
-                            AccountId = 24,
-                            Email = "Alexandrea.Yundt@yahoo.com",
-                            Name = "Rylan Lowe",
-                            Phone = "(623) 543-3549 x866"
+                            AccountId = 9,
+                            Email = "Frederique40@gmail.com",
+                            Name = "Alba Olson",
+                            Phone = "504.931.4418 x941"
                         },
                         new
                         {
                             Id = 26,
-                            AccountId = 7,
-                            Email = "Annie_Carter@gmail.com",
-                            Name = "Brant Pacocha",
-                            Phone = "938.825.6819 x04490"
+                            AccountId = 6,
+                            Email = "Asha72@hotmail.com",
+                            Name = "Lauretta O'Connell",
+                            Phone = "940-554-0078 x0008"
                         },
                         new
                         {
                             Id = 27,
-                            AccountId = 19,
-                            Email = "Savanah.Murazik@gmail.com",
-                            Name = "Hazel Bayer",
-                            Phone = "1-261-244-6618 x873"
+                            AccountId = 1,
+                            Email = "Eddie36@gmail.com",
+                            Name = "Scotty Windler",
+                            Phone = "(246) 396-0939"
                         },
                         new
                         {
                             Id = 28,
-                            AccountId = 8,
-                            Email = "Lenny8@yahoo.com",
-                            Name = "Gayle Sipes",
-                            Phone = "(889) 977-7370 x92074"
+                            AccountId = 14,
+                            Email = "Obie_Brakus@gmail.com",
+                            Name = "Bennie Price",
+                            Phone = "819.279.8238 x9523"
                         },
                         new
                         {
                             Id = 29,
                             AccountId = 8,
-                            Email = "Kip33@gmail.com",
-                            Name = "Kirsten Sipes",
-                            Phone = "1-418-549-5914"
+                            Email = "Reuben.OHara49@yahoo.com",
+                            Name = "Hilario Connelly",
+                            Phone = "887-728-1212"
                         },
                         new
                         {
                             Id = 30,
-                            AccountId = 11,
-                            Email = "Albina_Harvey26@hotmail.com",
-                            Name = "Johnpaul Heller",
-                            Phone = "396-569-8232"
+                            AccountId = 3,
+                            Email = "Cheyenne_Johnson@gmail.com",
+                            Name = "Damon Ritchie",
+                            Phone = "339-624-6479 x20167"
                         },
                         new
                         {
                             Id = 31,
-                            AccountId = 13,
-                            Email = "Mollie5@yahoo.com",
-                            Name = "Alverta Yundt",
-                            Phone = "1-357-241-7384 x0588"
+                            AccountId = 16,
+                            Email = "Florine_Zieme98@yahoo.com",
+                            Name = "Mauricio Jones",
+                            Phone = "549-407-1334 x9224"
                         },
                         new
                         {
                             Id = 32,
-                            AccountId = 8,
-                            Email = "Coy13@gmail.com",
-                            Name = "Adella Lueilwitz",
-                            Phone = "351.978.7566 x7179"
+                            AccountId = 16,
+                            Email = "Marian51@hotmail.com",
+                            Name = "Gonzalo Schamberger",
+                            Phone = "522.534.4515 x7207"
                         },
                         new
                         {
                             Id = 33,
-                            AccountId = 9,
-                            Email = "Domenico90@hotmail.com",
-                            Name = "Ara Sipes",
-                            Phone = "(679) 303-5417 x984"
+                            AccountId = 3,
+                            Email = "Amina.Batz@hotmail.com",
+                            Name = "Orval Hagenes",
+                            Phone = "817-660-1775"
                         },
                         new
                         {
                             Id = 34,
-                            AccountId = 10,
-                            Email = "Zora_Kunze@yahoo.com",
-                            Name = "Vern Barrows",
-                            Phone = "341-913-9563 x051"
+                            AccountId = 5,
+                            Email = "Monserrat_Graham@yahoo.com",
+                            Name = "Willy Bauch",
+                            Phone = "1-460-430-9643 x7389"
                         },
                         new
                         {
                             Id = 35,
-                            AccountId = 21,
-                            Email = "Michelle.Lowe71@yahoo.com",
-                            Name = "Neha Beahan",
-                            Phone = "1-301-670-3313"
+                            AccountId = 12,
+                            Email = "Marjolaine75@gmail.com",
+                            Name = "Consuelo Effertz",
+                            Phone = "(231) 655-2718 x934"
                         },
                         new
                         {
                             Id = 36,
-                            AccountId = 16,
-                            Email = "Elmore74@hotmail.com",
-                            Name = "Marquise Hessel",
-                            Phone = "738-923-2884 x985"
+                            AccountId = 7,
+                            Email = "Emmet.Labadie@hotmail.com",
+                            Name = "Andrew Cummerata",
+                            Phone = "414-226-6115 x237"
                         },
                         new
                         {
                             Id = 37,
-                            AccountId = 3,
-                            Email = "Herta.Rodriguez@gmail.com",
-                            Name = "Oren Blick",
-                            Phone = "1-993-557-6935"
+                            AccountId = 7,
+                            Email = "Gillian43@yahoo.com",
+                            Name = "Crystel Lynch",
+                            Phone = "1-747-951-9541 x963"
                         },
                         new
                         {
                             Id = 38,
-                            AccountId = 2,
-                            Email = "Kristopher.Bosco67@hotmail.com",
-                            Name = "Dannie Beatty",
-                            Phone = "1-533-362-3223 x0861"
+                            AccountId = 10,
+                            Email = "Daphne.Fisher@hotmail.com",
+                            Name = "Sonia Rath",
+                            Phone = "(285) 749-8917 x969"
                         },
                         new
                         {
                             Id = 39,
-                            AccountId = 11,
-                            Email = "Rod.Lynch6@yahoo.com",
-                            Name = "Constantin Kautzer",
-                            Phone = "321-417-1047 x15337"
+                            AccountId = 14,
+                            Email = "Haylie53@hotmail.com",
+                            Name = "Friedrich Hoeger",
+                            Phone = "1-272-403-5594 x349"
                         },
                         new
                         {
                             Id = 40,
-                            AccountId = 22,
-                            Email = "Chet.Schimmel32@hotmail.com",
-                            Name = "Charity Haley",
-                            Phone = "576.596.4442 x721"
+                            AccountId = 18,
+                            Email = "Sterling_Romaguera87@hotmail.com",
+                            Name = "Silas Kling",
+                            Phone = "(863) 652-4704 x190"
                         },
                         new
                         {
                             Id = 41,
-                            AccountId = 7,
-                            Email = "Hettie.Ortiz@gmail.com",
-                            Name = "Bud Aufderhar",
-                            Phone = "(476) 786-4990 x3758"
+                            AccountId = 16,
+                            Email = "Katlynn_Gottlieb@gmail.com",
+                            Name = "Orland Schumm",
+                            Phone = "1-606-840-7678"
                         },
                         new
                         {
                             Id = 42,
-                            AccountId = 9,
-                            Email = "Russ_Hyatt9@yahoo.com",
-                            Name = "Tanner Wehner",
-                            Phone = "(717) 726-9281 x82196"
+                            AccountId = 20,
+                            Email = "Alysha_Kshlerin@hotmail.com",
+                            Name = "Wilton Swift",
+                            Phone = "587-337-5602"
                         },
                         new
                         {
                             Id = 43,
-                            AccountId = 24,
-                            Email = "Dagmar_Schuster@yahoo.com",
-                            Name = "Larry Marquardt",
-                            Phone = "614-944-2193"
+                            AccountId = 15,
+                            Email = "Adam.Leuschke@yahoo.com",
+                            Name = "Alexa Larson",
+                            Phone = "954.442.0957 x651"
                         },
                         new
                         {
                             Id = 44,
-                            AccountId = 21,
-                            Email = "Kaleigh.Rosenbaum11@gmail.com",
-                            Name = "Antoinette Keeling",
-                            Phone = "396.323.3807 x71458"
+                            AccountId = 3,
+                            Email = "Marianne59@yahoo.com",
+                            Name = "Muriel Jast",
+                            Phone = "955-616-6847"
                         },
                         new
                         {
                             Id = 45,
-                            AccountId = 13,
-                            Email = "Camden45@yahoo.com",
-                            Name = "Omer Smith",
-                            Phone = "848.622.1977 x0673"
+                            AccountId = 8,
+                            Email = "Olin73@hotmail.com",
+                            Name = "Carolyn Wuckert",
+                            Phone = "566-765-5833 x336"
                         },
                         new
                         {
                             Id = 46,
-                            AccountId = 11,
-                            Email = "Camille65@yahoo.com",
-                            Name = "Ronny Klein",
-                            Phone = "618-578-9001"
+                            AccountId = 24,
+                            Email = "Elyssa.Mayert@yahoo.com",
+                            Name = "Micheal Marvin",
+                            Phone = "1-606-558-7112 x3135"
                         },
                         new
                         {
                             Id = 47,
-                            AccountId = 5,
-                            Email = "Jonathan.Klein@hotmail.com",
-                            Name = "Deshaun Larkin",
-                            Phone = "454.846.9740"
+                            AccountId = 13,
+                            Email = "Zula_Jerde2@yahoo.com",
+                            Name = "Schuyler Strosin",
+                            Phone = "(671) 314-0873"
                         },
                         new
                         {
                             Id = 48,
-                            AccountId = 9,
-                            Email = "Hershel.Raynor72@yahoo.com",
-                            Name = "Wilmer Schumm",
-                            Phone = "1-730-302-7399"
+                            AccountId = 19,
+                            Email = "Chloe_Quitzon39@yahoo.com",
+                            Name = "Griffin Johnston",
+                            Phone = "942.621.9056 x67171"
                         },
                         new
                         {
                             Id = 49,
-                            AccountId = 8,
-                            Email = "Zita_Rowe96@gmail.com",
-                            Name = "Rudolph Stroman",
-                            Phone = "778-598-1592"
+                            AccountId = 18,
+                            Email = "Edgar82@gmail.com",
+                            Name = "Gilbert Wuckert",
+                            Phone = "(544) 330-3577 x228"
                         },
                         new
                         {
                             Id = 50,
-                            AccountId = 23,
-                            Email = "Aditya13@hotmail.com",
-                            Name = "Jamir Gibson",
-                            Phone = "(927) 803-5952 x514"
+                            AccountId = 15,
+                            Email = "Korey_Fritsch38@yahoo.com",
+                            Name = "Doug Greenholt",
+                            Phone = "395-269-1613 x7708"
                         },
                         new
                         {
                             Id = 51,
-                            AccountId = 14,
-                            Email = "Jamir.McDermott@gmail.com",
-                            Name = "Reinhold Mitchell",
-                            Phone = "1-241-833-9040 x16938"
+                            AccountId = 1,
+                            Email = "Austen13@hotmail.com",
+                            Name = "Chaz O'Conner",
+                            Phone = "(896) 218-0156"
                         },
                         new
                         {
                             Id = 52,
-                            AccountId = 1,
-                            Email = "Marlee_Maggio@gmail.com",
-                            Name = "Felipa Mitchell",
-                            Phone = "1-594-831-6788 x146"
+                            AccountId = 14,
+                            Email = "Tavares45@yahoo.com",
+                            Name = "Ezekiel Becker",
+                            Phone = "1-967-287-8018"
                         },
                         new
                         {
                             Id = 53,
-                            AccountId = 10,
-                            Email = "Adrienne4@yahoo.com",
-                            Name = "Abbie Hoeger",
-                            Phone = "(253) 890-9747 x776"
+                            AccountId = 11,
+                            Email = "Eulalia.Hilll32@gmail.com",
+                            Name = "Keegan Buckridge",
+                            Phone = "263-387-3583 x186"
                         },
                         new
                         {
                             Id = 54,
-                            AccountId = 20,
-                            Email = "Mariam.Reilly79@hotmail.com",
-                            Name = "Gust Runolfsson",
-                            Phone = "900.234.1390 x4984"
+                            AccountId = 16,
+                            Email = "Lyric.Runolfsson56@hotmail.com",
+                            Name = "Justine Konopelski",
+                            Phone = "1-440-468-9544 x10337"
                         },
                         new
                         {
                             Id = 55,
-                            AccountId = 6,
-                            Email = "Manley_Champlin79@hotmail.com",
-                            Name = "Darron Ratke",
-                            Phone = "400.722.9647 x0843"
+                            AccountId = 14,
+                            Email = "Mark_Jenkins@gmail.com",
+                            Name = "Janessa Lang",
+                            Phone = "321.344.8945"
                         },
                         new
                         {
                             Id = 56,
-                            AccountId = 16,
-                            Email = "Lauriane4@gmail.com",
-                            Name = "Kenna Hane",
-                            Phone = "(304) 708-2761 x7169"
+                            AccountId = 17,
+                            Email = "Keaton38@gmail.com",
+                            Name = "Graham Kshlerin",
+                            Phone = "(311) 349-7294 x6144"
                         },
                         new
                         {
                             Id = 57,
-                            AccountId = 16,
-                            Email = "Taryn_Price75@yahoo.com",
-                            Name = "Stefanie Kovacek",
-                            Phone = "1-252-221-4113 x397"
+                            AccountId = 3,
+                            Email = "Malcolm.Klein74@gmail.com",
+                            Name = "Natalia Bosco",
+                            Phone = "1-380-702-9546"
                         },
                         new
                         {
                             Id = 58,
-                            AccountId = 25,
-                            Email = "Paxton52@gmail.com",
-                            Name = "Arno McLaughlin",
-                            Phone = "515-799-5502"
+                            AccountId = 23,
+                            Email = "Leonard_Walter@hotmail.com",
+                            Name = "Mario DuBuque",
+                            Phone = "697-283-9090 x9882"
                         },
                         new
                         {
                             Id = 59,
-                            AccountId = 16,
-                            Email = "Milan_Beier26@gmail.com",
-                            Name = "Joan Bergnaum",
-                            Phone = "1-368-526-4227 x5892"
+                            AccountId = 12,
+                            Email = "Callie.McClure@yahoo.com",
+                            Name = "Candace Prosacco",
+                            Phone = "(756) 621-1665"
                         },
                         new
                         {
                             Id = 60,
-                            AccountId = 19,
-                            Email = "Kolby_Block65@yahoo.com",
-                            Name = "Rocky Graham",
-                            Phone = "505.504.0617 x82023"
+                            AccountId = 20,
+                            Email = "Kenny45@hotmail.com",
+                            Name = "Chase Hansen",
+                            Phone = "868.580.8904"
                         },
                         new
                         {
                             Id = 61,
-                            AccountId = 20,
-                            Email = "Jake65@gmail.com",
-                            Name = "Grady Mertz",
-                            Phone = "550.593.0250"
+                            AccountId = 6,
+                            Email = "Kade.Harvey@yahoo.com",
+                            Name = "Erik Jakubowski",
+                            Phone = "776-833-3770 x567"
                         },
                         new
                         {
                             Id = 62,
-                            AccountId = 5,
-                            Email = "Megane_Hodkiewicz@hotmail.com",
-                            Name = "Ida Reilly",
-                            Phone = "627-363-5281"
+                            AccountId = 1,
+                            Email = "Giovanna.Parker@hotmail.com",
+                            Name = "Emily Thompson",
+                            Phone = "(667) 456-6594"
                         },
                         new
                         {
                             Id = 63,
                             AccountId = 8,
-                            Email = "Imani3@yahoo.com",
-                            Name = "Suzanne Denesik",
-                            Phone = "1-537-236-0696"
+                            Email = "Mohammad_Rath@gmail.com",
+                            Name = "Alize Funk",
+                            Phone = "878-645-8324 x2321"
                         },
                         new
                         {
                             Id = 64,
-                            AccountId = 19,
-                            Email = "Lilly.Cassin@yahoo.com",
-                            Name = "Bell Fisher",
-                            Phone = "817-911-6239"
+                            AccountId = 18,
+                            Email = "Joy97@yahoo.com",
+                            Name = "Justice Cole",
+                            Phone = "(445) 764-6946"
                         },
                         new
                         {
                             Id = 65,
-                            AccountId = 3,
-                            Email = "Cristopher6@yahoo.com",
-                            Name = "Angel Pagac",
-                            Phone = "982.650.3445"
+                            AccountId = 2,
+                            Email = "Natalie12@hotmail.com",
+                            Name = "Wilfrid Ratke",
+                            Phone = "424.413.2802"
                         },
                         new
                         {
                             Id = 66,
-                            AccountId = 16,
-                            Email = "Nettie44@yahoo.com",
-                            Name = "Christy Collins",
-                            Phone = "647-612-1287"
+                            AccountId = 18,
+                            Email = "Savanna_Kemmer58@gmail.com",
+                            Name = "Bernadine Kuphal",
+                            Phone = "(465) 669-0809"
                         },
                         new
                         {
                             Id = 67,
-                            AccountId = 16,
-                            Email = "Maximus16@gmail.com",
-                            Name = "Eudora Wehner",
-                            Phone = "211.501.1589 x4143"
+                            AccountId = 24,
+                            Email = "Kaelyn.Lindgren@yahoo.com",
+                            Name = "Cierra Veum",
+                            Phone = "1-408-443-4805 x20811"
                         },
                         new
                         {
                             Id = 68,
-                            AccountId = 25,
-                            Email = "Irving49@yahoo.com",
-                            Name = "Birdie Pfannerstill",
-                            Phone = "1-699-629-1201 x7142"
+                            AccountId = 21,
+                            Email = "Pedro.Denesik@yahoo.com",
+                            Name = "Tomas Reichert",
+                            Phone = "1-987-537-2685"
                         },
                         new
                         {
                             Id = 69,
-                            AccountId = 2,
-                            Email = "Kevon.Green28@gmail.com",
-                            Name = "Diego Pfeffer",
-                            Phone = "581-843-8970"
+                            AccountId = 19,
+                            Email = "Pattie68@hotmail.com",
+                            Name = "Jaylin Bailey",
+                            Phone = "351-778-4377 x3959"
                         },
                         new
                         {
                             Id = 70,
-                            AccountId = 14,
-                            Email = "Judge61@hotmail.com",
-                            Name = "Soledad Skiles",
-                            Phone = "1-643-454-2696 x891"
+                            AccountId = 11,
+                            Email = "Neha34@gmail.com",
+                            Name = "Noemy Kovacek",
+                            Phone = "324.863.0040 x56828"
                         },
                         new
                         {
                             Id = 71,
-                            AccountId = 6,
-                            Email = "Enola_Collier@hotmail.com",
-                            Name = "Savanna Wehner",
-                            Phone = "641.588.3816 x88442"
+                            AccountId = 21,
+                            Email = "Tamia56@hotmail.com",
+                            Name = "Devon Crooks",
+                            Phone = "(257) 439-2601 x1482"
                         },
                         new
                         {
                             Id = 72,
-                            AccountId = 25,
-                            Email = "Kelly.Will7@hotmail.com",
-                            Name = "Kaylin Baumbach",
-                            Phone = "466-420-3125"
+                            AccountId = 13,
+                            Email = "Doug_Schaden91@yahoo.com",
+                            Name = "Carole Crist",
+                            Phone = "(671) 275-5269 x5123"
                         },
                         new
                         {
                             Id = 73,
-                            AccountId = 8,
-                            Email = "Madilyn.Lemke62@gmail.com",
-                            Name = "Leopoldo Crooks",
-                            Phone = "1-663-557-3275 x9244"
+                            AccountId = 22,
+                            Email = "Agustina_Williamson@hotmail.com",
+                            Name = "Maximillia McGlynn",
+                            Phone = "1-393-237-4707 x19222"
                         },
                         new
                         {
                             Id = 74,
-                            AccountId = 4,
-                            Email = "Leatha_Kris21@hotmail.com",
-                            Name = "Osvaldo Leuschke",
-                            Phone = "(843) 413-2478 x1370"
+                            AccountId = 15,
+                            Email = "Stephanie.Crist70@yahoo.com",
+                            Name = "Rhianna Anderson",
+                            Phone = "590.674.1162 x74489"
                         },
                         new
                         {
                             Id = 75,
-                            AccountId = 12,
-                            Email = "Walker_Kuhlman@hotmail.com",
-                            Name = "Carolanne Renner",
-                            Phone = "(883) 914-8801 x8473"
+                            AccountId = 21,
+                            Email = "Jeffry_Christiansen@yahoo.com",
+                            Name = "Willow Bartell",
+                            Phone = "1-956-684-6898 x10636"
                         },
                         new
                         {
                             Id = 76,
-                            AccountId = 17,
-                            Email = "Geraldine90@gmail.com",
-                            Name = "Teresa Hoeger",
-                            Phone = "541.230.6326 x22639"
+                            AccountId = 15,
+                            Email = "Edgardo.Ruecker@hotmail.com",
+                            Name = "Ransom Heaney",
+                            Phone = "(892) 394-3065"
                         },
                         new
                         {
                             Id = 77,
-                            AccountId = 21,
-                            Email = "Durward_OKon6@gmail.com",
-                            Name = "Price Herzog",
-                            Phone = "876.758.2278"
+                            AccountId = 20,
+                            Email = "Davin_Renner26@yahoo.com",
+                            Name = "Anthony Schimmel",
+                            Phone = "1-397-770-2239 x4304"
                         },
                         new
                         {
                             Id = 78,
-                            AccountId = 7,
-                            Email = "Gust.Goyette73@gmail.com",
-                            Name = "Germaine Rau",
-                            Phone = "1-410-717-7690 x92142"
+                            AccountId = 25,
+                            Email = "Susana.Corkery27@gmail.com",
+                            Name = "Deondre Hoeger",
+                            Phone = "261.600.4867 x4252"
                         },
                         new
                         {
                             Id = 79,
                             AccountId = 23,
-                            Email = "Hellen_Connelly2@yahoo.com",
-                            Name = "Max Swift",
-                            Phone = "941.587.6478"
+                            Email = "Brianne.Cruickshank39@gmail.com",
+                            Name = "Isabel Kshlerin",
+                            Phone = "875.514.2638 x747"
                         },
                         new
                         {
                             Id = 80,
-                            AccountId = 2,
-                            Email = "Matilda_Willms68@gmail.com",
-                            Name = "Marjorie DuBuque",
-                            Phone = "635.798.2537 x853"
+                            AccountId = 20,
+                            Email = "River.Lang74@hotmail.com",
+                            Name = "Janelle Walker",
+                            Phone = "320-221-3082 x7470"
                         },
                         new
                         {
                             Id = 81,
-                            AccountId = 24,
-                            Email = "Emiliano_Padberg@hotmail.com",
-                            Name = "Ozella Turner",
-                            Phone = "642.316.3133 x323"
+                            AccountId = 19,
+                            Email = "Jonathon1@gmail.com",
+                            Name = "Hugh Smitham",
+                            Phone = "1-942-366-3144 x2645"
                         },
                         new
                         {
                             Id = 82,
-                            AccountId = 8,
-                            Email = "Kristoffer86@yahoo.com",
-                            Name = "Edwina Hoppe",
-                            Phone = "1-331-311-6572 x53897"
+                            AccountId = 9,
+                            Email = "Josue_Gerlach29@gmail.com",
+                            Name = "Kirstin Schmeler",
+                            Phone = "(856) 812-6244 x16155"
                         },
                         new
                         {
                             Id = 83,
-                            AccountId = 19,
-                            Email = "Pierre.Adams90@hotmail.com",
-                            Name = "Jillian Ortiz",
-                            Phone = "(541) 296-2319"
+                            AccountId = 11,
+                            Email = "Robbie.Stamm@gmail.com",
+                            Name = "Suzanne Marquardt",
+                            Phone = "(336) 980-6188"
                         },
                         new
                         {
                             Id = 84,
-                            AccountId = 3,
-                            Email = "Shawn28@gmail.com",
-                            Name = "Norene Sporer",
-                            Phone = "1-240-883-7490 x26253"
+                            AccountId = 15,
+                            Email = "Heloise_Auer8@yahoo.com",
+                            Name = "Adolf Green",
+                            Phone = "246.545.4008 x575"
                         },
                         new
                         {
                             Id = 85,
-                            AccountId = 15,
-                            Email = "Uriah_Boyer@hotmail.com",
-                            Name = "Bailee Hansen",
-                            Phone = "(481) 635-6963 x588"
+                            AccountId = 4,
+                            Email = "Gideon.Kassulke@hotmail.com",
+                            Name = "Zelda Hagenes",
+                            Phone = "220-673-5940"
                         },
                         new
                         {
                             Id = 86,
-                            AccountId = 15,
-                            Email = "Geovanni62@hotmail.com",
-                            Name = "Maximillian Hilll",
-                            Phone = "(947) 569-8481"
+                            AccountId = 20,
+                            Email = "Raquel.Mills@yahoo.com",
+                            Name = "Alexandre Parker",
+                            Phone = "1-242-974-6784"
                         },
                         new
                         {
                             Id = 87,
-                            AccountId = 10,
-                            Email = "Alicia19@yahoo.com",
-                            Name = "Ewell Heller",
-                            Phone = "1-738-601-6722 x673"
+                            AccountId = 22,
+                            Email = "Ubaldo99@yahoo.com",
+                            Name = "Marquise King",
+                            Phone = "810-610-8627"
                         },
                         new
                         {
                             Id = 88,
-                            AccountId = 2,
-                            Email = "Dorcas.Kessler25@gmail.com",
-                            Name = "Helmer Larkin",
-                            Phone = "(540) 617-9009 x65982"
+                            AccountId = 25,
+                            Email = "Christiana.Kutch@yahoo.com",
+                            Name = "Burdette Pfeffer",
+                            Phone = "815-590-3435 x084"
                         },
                         new
                         {
                             Id = 89,
-                            AccountId = 12,
-                            Email = "Brock1@hotmail.com",
-                            Name = "Braulio Farrell",
-                            Phone = "895.362.0926"
+                            AccountId = 2,
+                            Email = "Royal47@yahoo.com",
+                            Name = "Nicolette Rempel",
+                            Phone = "836.972.2356 x3132"
                         },
                         new
                         {
                             Id = 90,
-                            AccountId = 12,
-                            Email = "Elisha81@hotmail.com",
-                            Name = "Fiona O'Keefe",
-                            Phone = "1-725-874-1433 x57444"
+                            AccountId = 3,
+                            Email = "Kyra51@yahoo.com",
+                            Name = "Minerva Batz",
+                            Phone = "890.532.3428 x40127"
                         },
                         new
                         {
                             Id = 91,
-                            AccountId = 3,
-                            Email = "Tiana.Stark@hotmail.com",
-                            Name = "Cydney Cole",
-                            Phone = "790-915-7148 x5912"
+                            AccountId = 7,
+                            Email = "Jessy_Marquardt55@hotmail.com",
+                            Name = "Merlin Deckow",
+                            Phone = "585.204.6133 x19111"
                         },
                         new
                         {
                             Id = 92,
-                            AccountId = 14,
-                            Email = "Ellsworth.McDermott21@hotmail.com",
-                            Name = "Florence Nader",
-                            Phone = "1-564-828-8170 x8271"
+                            AccountId = 20,
+                            Email = "Cale3@hotmail.com",
+                            Name = "Isai Carter",
+                            Phone = "269-314-9381 x055"
                         },
                         new
                         {
                             Id = 93,
-                            AccountId = 25,
-                            Email = "Iva_Halvorson84@gmail.com",
-                            Name = "Kyleigh Bosco",
-                            Phone = "(771) 641-9906 x2665"
+                            AccountId = 3,
+                            Email = "Herminia.Keebler@hotmail.com",
+                            Name = "Hazle Ziemann",
+                            Phone = "1-979-374-1329 x7228"
                         },
                         new
                         {
                             Id = 94,
-                            AccountId = 10,
-                            Email = "Gabriella95@yahoo.com",
-                            Name = "Rachael Rosenbaum",
-                            Phone = "1-594-482-5765"
+                            AccountId = 18,
+                            Email = "Abbigail_Stracke5@hotmail.com",
+                            Name = "Lupe Beer",
+                            Phone = "1-539-465-0227"
                         },
                         new
                         {
                             Id = 95,
-                            AccountId = 2,
-                            Email = "Gertrude_Metz8@yahoo.com",
-                            Name = "Maggie Zemlak",
-                            Phone = "681.242.7631"
+                            AccountId = 16,
+                            Email = "Blaze_Bartoletti@gmail.com",
+                            Name = "Erwin Kerluke",
+                            Phone = "(532) 454-2412 x9871"
                         },
                         new
                         {
                             Id = 96,
-                            AccountId = 13,
-                            Email = "Donavon_Wisoky@yahoo.com",
-                            Name = "Kaleb Kihn",
-                            Phone = "(428) 741-3091"
+                            AccountId = 3,
+                            Email = "Laron11@yahoo.com",
+                            Name = "Lou Block",
+                            Phone = "212-841-1268"
                         },
                         new
                         {
                             Id = 97,
-                            AccountId = 15,
-                            Email = "Adriel40@gmail.com",
-                            Name = "Philip Abbott",
-                            Phone = "562.311.3786 x4354"
+                            AccountId = 18,
+                            Email = "Haskell_Beier@yahoo.com",
+                            Name = "Raphaelle Dibbert",
+                            Phone = "783-491-0848 x065"
                         },
                         new
                         {
                             Id = 98,
-                            AccountId = 14,
-                            Email = "Dylan_Brakus@yahoo.com",
-                            Name = "Paul Larson",
-                            Phone = "900.239.6677 x3376"
+                            AccountId = 25,
+                            Email = "Meda_Rosenbaum17@hotmail.com",
+                            Name = "Nola Fritsch",
+                            Phone = "796.614.1800 x883"
                         },
                         new
                         {
                             Id = 99,
-                            AccountId = 1,
-                            Email = "Sammie_Bergstrom@gmail.com",
-                            Name = "Albina Carter",
-                            Phone = "(307) 656-5502 x4192"
+                            AccountId = 8,
+                            Email = "Bertram_Heathcote@hotmail.com",
+                            Name = "Savanna Brown",
+                            Phone = "695-278-2009 x41542"
                         },
                         new
                         {
                             Id = 100,
-                            AccountId = 20,
-                            Email = "Jamison_Dare41@yahoo.com",
-                            Name = "Misael Keeling",
-                            Phone = "723-751-2786 x232"
+                            AccountId = 7,
+                            Email = "Shania78@gmail.com",
+                            Name = "Adah Crooks",
+                            Phone = "(247) 839-0816 x204"
                         });
                 });
 
@@ -1197,272 +1200,272 @@ namespace Lab2.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            ActualRevenue = 68936.0,
-                            Description = "Quas et alias sunt nihil beatae perferendis ducimus repellendus minima voluptates libero porro.",
+                            ActualRevenue = 441327.0,
+                            Description = "Mollitia omnis minima ut totam laborum explicabo qui tempora quisquam provident repudiandae voluptas molestiae.",
                             LeadId = 1,
-                            Status = 2,
-                            Title = "Doloremque eligendi dolores."
+                            Status = 0,
+                            Title = "Pariatur velit est architecto explicabo."
                         },
                         new
                         {
                             Id = 2,
-                            ActualRevenue = 195596.0,
-                            Description = "Temporibus rerum in suscipit quae dolore sed dolor voluptas animi modi laudantium aut voluptas et quis ipsum ut nihil aspernatur tempore consequuntur molestias iusto nam.",
+                            ActualRevenue = 337305.0,
+                            Description = "Voluptates magnam molestias voluptate quia possimus est omnis quibusdam velit commodi facere maxime minima ducimus.",
                             LeadId = 2,
-                            Status = 1,
-                            Title = "Animi commodi id."
+                            Status = 2,
+                            Title = "Ea est officiis quis."
                         },
                         new
                         {
                             Id = 3,
-                            ActualRevenue = 295393.0,
-                            Description = "Et repellat deleniti et dicta quas earum rerum est repellat aperiam rerum possimus reprehenderit expedita dolorem eius beatae.",
+                            ActualRevenue = 242423.0,
+                            Description = "Nulla natus minus non dolorem facere non quae nisi magnam molestiae laboriosam accusantium nisi autem omnis asperiores necessitatibus provident tenetur soluta rem quo itaque at perferendis.",
                             LeadId = 3,
-                            Status = 0,
-                            Title = "Quia aut quis consectetur."
+                            Status = 1,
+                            Title = "Corporis laudantium quia in officiis."
                         },
                         new
                         {
                             Id = 4,
-                            ActualRevenue = 348296.0,
-                            Description = "Voluptatibus quae tempore autem odio ut itaque est ullam est saepe sed qui qui aliquam repudiandae enim vel non quae doloribus eaque voluptatibus.",
+                            ActualRevenue = 229295.0,
+                            Description = "Adipisci ullam mollitia non ea saepe et commodi explicabo ullam qui ipsa doloribus eum nihil non qui quae.",
                             LeadId = 4,
-                            Status = 0,
-                            Title = "Maxime earum minus ea."
+                            Status = 1,
+                            Title = "Veritatis corrupti alias architecto nulla eveniet."
                         },
                         new
                         {
                             Id = 5,
-                            ActualRevenue = 324261.0,
-                            Description = "Sunt itaque dolorum nostrum iure dignissimos voluptatem delectus tenetur harum dolorem mollitia id aspernatur.",
+                            ActualRevenue = 56494.0,
+                            Description = "Ea eum et occaecati quis sed fugiat illo ut quas quam voluptatem officia totam dolores quaerat repellendus praesentium non voluptatem id nostrum molestias et aut.",
                             LeadId = 5,
-                            Status = 2,
-                            Title = "Occaecati corrupti ex eos nesciunt."
+                            Status = 0,
+                            Title = "Vero omnis voluptas nemo."
                         },
                         new
                         {
                             Id = 6,
-                            ActualRevenue = 356248.0,
-                            Description = "Tempore et qui nesciunt maxime architecto enim sed ut et atque in sapiente ea ut sed eaque rerum rerum aliquid.",
+                            ActualRevenue = 416766.0,
+                            Description = "Magni cum omnis officiis quia hic fugiat aspernatur voluptatem et dolore tempora est nulla hic odio animi et odio quidem optio rerum animi commodi neque.",
                             LeadId = 6,
                             Status = 0,
-                            Title = "Qui saepe suscipit."
+                            Title = "Odit nulla a aut atque."
                         },
                         new
                         {
                             Id = 7,
-                            ActualRevenue = 51275.0,
-                            Description = "Architecto quaerat reprehenderit magni possimus expedita deserunt saepe sint aspernatur quia maiores est et assumenda saepe quaerat tenetur veritatis.",
+                            ActualRevenue = 469000.0,
+                            Description = "Facilis rem saepe debitis quo qui sint et rerum quisquam eaque laborum deserunt officia esse alias ipsa ut natus culpa quasi ea.",
                             LeadId = 7,
-                            Status = 1,
-                            Title = "Et ullam et."
+                            Status = 0,
+                            Title = "Nisi facilis amet enim recusandae natus."
                         },
                         new
                         {
                             Id = 8,
-                            ActualRevenue = 384342.0,
-                            Description = "Ullam quam doloribus pariatur fuga et autem ut molestiae inventore et minima.",
+                            ActualRevenue = 491551.0,
+                            Description = "Nostrum provident impedit architecto incidunt quasi tempore non ut nisi architecto totam ullam consequatur sit.",
                             LeadId = 8,
-                            Status = 1,
-                            Title = "Accusamus molestiae tempore earum minima earum."
+                            Status = 0,
+                            Title = "Reiciendis ut vitae esse."
                         },
                         new
                         {
                             Id = 9,
-                            ActualRevenue = 348529.0,
-                            Description = "Quisquam blanditiis consequatur nesciunt magni quia consequatur vero deleniti odit perferendis adipisci qui expedita voluptas labore quaerat eum consequatur ad dignissimos fugit repudiandae et libero odio non quae.",
+                            ActualRevenue = 302204.0,
+                            Description = "Ratione magni natus distinctio est aut ipsum magnam similique eveniet similique quaerat voluptatem eveniet nulla dolorum.",
                             LeadId = 9,
-                            Status = 0,
-                            Title = "Aut nostrum quia quam ut et."
+                            Status = 2,
+                            Title = "Cupiditate est quos repellat corporis."
                         },
                         new
                         {
                             Id = 10,
-                            ActualRevenue = 480275.0,
-                            Description = "Qui quas ut ratione temporibus voluptas perspiciatis deleniti architecto quibusdam sunt excepturi ipsam libero hic.",
+                            ActualRevenue = 461015.0,
+                            Description = "Aut in suscipit dignissimos qui minus sit iure quaerat sunt aperiam id consequatur maxime odio eius nemo sapiente facilis aut facilis.",
                             LeadId = 10,
-                            Status = 0,
-                            Title = "Eligendi autem similique sit."
+                            Status = 1,
+                            Title = "Deleniti exercitationem recusandae dignissimos ipsum."
                         },
                         new
                         {
                             Id = 11,
-                            ActualRevenue = 178092.0,
-                            Description = "Aliquid non cumque aliquam aperiam minus aut sint nostrum expedita ea voluptas placeat aspernatur necessitatibus cupiditate hic perferendis dolorum natus.",
+                            ActualRevenue = 226555.0,
+                            Description = "Expedita velit minus eius voluptas consectetur beatae id ut sunt ut exercitationem beatae magnam neque rerum.",
                             LeadId = 11,
-                            Status = 0,
-                            Title = "Sapiente esse est."
+                            Status = 2,
+                            Title = "Quidem consequuntur cupiditate quia temporibus quis."
                         },
                         new
                         {
                             Id = 12,
-                            ActualRevenue = 459333.0,
-                            Description = "Eum est iure qui ut rerum libero reiciendis aspernatur aut perspiciatis distinctio.",
+                            ActualRevenue = 79537.0,
+                            Description = "Sequi nihil ut sunt sit beatae odit est eos architecto sunt consequatur numquam corporis asperiores.",
                             LeadId = 12,
-                            Status = 0,
-                            Title = "Deleniti modi corporis cupiditate sed."
+                            Status = 2,
+                            Title = "Quod facilis quo nihil mollitia."
                         },
                         new
                         {
                             Id = 13,
-                            ActualRevenue = 436238.0,
-                            Description = "Nulla doloribus officia eos voluptatem perspiciatis provident exercitationem tempore omnis ex ex delectus voluptatem dolorum quos ad ut eum tenetur velit.",
+                            ActualRevenue = 271036.0,
+                            Description = "Et pariatur officiis odio ut rerum odio consequuntur accusantium necessitatibus ratione animi qui aut natus.",
                             LeadId = 13,
-                            Status = 1,
-                            Title = "Animi deleniti et."
+                            Status = 2,
+                            Title = "Labore laborum non magnam vero reprehenderit."
                         },
                         new
                         {
                             Id = 14,
-                            ActualRevenue = 325811.0,
-                            Description = "Ut non sunt aperiam odit dignissimos accusamus sunt expedita possimus rem quo.",
+                            ActualRevenue = 318128.0,
+                            Description = "Ipsum explicabo et omnis incidunt quos commodi alias architecto officiis pariatur totam suscipit exercitationem dolorem quae praesentium odio nostrum eum molestias quae ea qui in alias qui incidunt.",
                             LeadId = 14,
                             Status = 0,
-                            Title = "Animi rerum optio fugit velit."
+                            Title = "Qui voluptatibus autem."
                         },
                         new
                         {
                             Id = 15,
-                            ActualRevenue = 483196.0,
-                            Description = "Veritatis ea exercitationem et debitis dignissimos aut et et qui omnis.",
+                            ActualRevenue = 77838.0,
+                            Description = "Omnis velit eligendi labore aliquam harum labore id recusandae inventore sed quaerat qui repellendus sit qui ad numquam dicta aut eum dolore fuga pariatur nihil ut vero numquam.",
                             LeadId = 15,
-                            Status = 2,
-                            Title = "Quae distinctio illum ut accusantium."
+                            Status = 0,
+                            Title = "Vel dolor aliquam."
                         },
                         new
                         {
                             Id = 16,
-                            ActualRevenue = 246373.0,
-                            Description = "Et esse rerum dicta facilis non et inventore deleniti est ut aperiam officiis magni error eos voluptatem totam.",
+                            ActualRevenue = 82131.0,
+                            Description = "Aliquid ea deserunt consequatur dolor perspiciatis voluptas temporibus praesentium vel quia magni architecto cum optio magni officiis illum enim dolorem nam doloremque qui hic voluptatem sed iusto.",
                             LeadId = 16,
                             Status = 0,
-                            Title = "Corrupti velit hic ipsum explicabo deserunt."
+                            Title = "Esse deserunt natus est asperiores."
                         },
                         new
                         {
                             Id = 17,
-                            ActualRevenue = 108536.0,
-                            Description = "Dolores et veritatis et fugiat error soluta eveniet dolores nihil non ut fuga mollitia sit impedit nesciunt quia non aspernatur voluptas voluptatem maiores.",
+                            ActualRevenue = 396021.0,
+                            Description = "Et vel maiores reprehenderit labore architecto natus consequuntur enim natus corrupti ad non ipsa nemo et quas at modi recusandae veniam et totam ut.",
                             LeadId = 17,
                             Status = 2,
-                            Title = "Cumque similique perspiciatis quia perspiciatis dolorem."
+                            Title = "Beatae quibusdam consectetur beatae repudiandae esse."
                         },
                         new
                         {
                             Id = 18,
-                            ActualRevenue = 422029.0,
-                            Description = "Natus molestiae sit qui voluptas aut ut repellat suscipit perspiciatis tenetur ducimus ducimus et quisquam adipisci ea reiciendis aut occaecati distinctio quia consequuntur dolorem.",
+                            ActualRevenue = 370209.0,
+                            Description = "Laboriosam hic totam suscipit est praesentium veritatis fugiat et nihil.",
                             LeadId = 18,
                             Status = 2,
-                            Title = "Corrupti ab et perspiciatis."
+                            Title = "Aliquam quia consequatur nisi magni dolores."
                         },
                         new
                         {
                             Id = 19,
-                            ActualRevenue = 179421.0,
-                            Description = "Et natus autem atque eum placeat odio et voluptatem assumenda est.",
+                            ActualRevenue = 108885.0,
+                            Description = "Exercitationem voluptatum nemo nihil eos quod reprehenderit accusamus ea laudantium ullam dignissimos aut veniam sequi sunt neque vero porro.",
                             LeadId = 19,
-                            Status = 1,
-                            Title = "Quaerat non et."
+                            Status = 2,
+                            Title = "Deserunt omnis aut ratione quia ipsam."
                         },
                         new
                         {
                             Id = 20,
-                            ActualRevenue = 84043.0,
-                            Description = "Enim veniam consequatur quam voluptas voluptatibus consequuntur voluptatem sit ipsum dolore est dolore magnam eligendi voluptatem est omnis nesciunt repudiandae eveniet nam mollitia quia ratione aperiam voluptates quos doloremque.",
+                            ActualRevenue = 110584.0,
+                            Description = "Praesentium quos nostrum ut et saepe eligendi ducimus in voluptas et quis minus sit doloremque quia reiciendis nihil iure id ipsa ad rerum omnis.",
                             LeadId = 20,
-                            Status = 2,
-                            Title = "Accusantium minima consequatur."
+                            Status = 1,
+                            Title = "Optio quibusdam sit dolorem veritatis."
                         },
                         new
                         {
                             Id = 21,
-                            ActualRevenue = 261414.0,
-                            Description = "Et reiciendis consectetur omnis possimus et sed quas minima enim voluptates enim quaerat.",
+                            ActualRevenue = 370186.0,
+                            Description = "Dolorem similique amet officia totam debitis debitis libero cumque molestias qui atque quas tempora laboriosam vel delectus sit odio facilis modi.",
                             LeadId = 21,
-                            Status = 2,
-                            Title = "Voluptates mollitia voluptas similique possimus."
+                            Status = 0,
+                            Title = "Sed vel ea."
                         },
                         new
                         {
                             Id = 22,
-                            ActualRevenue = 323079.0,
-                            Description = "Qui in tenetur et et vel esse repudiandae quia tempora quos occaecati aliquid aliquam nihil ipsa.",
+                            ActualRevenue = 82064.0,
+                            Description = "Sit sequi aspernatur dignissimos pariatur delectus est voluptatem quod natus ut quidem.",
                             LeadId = 22,
                             Status = 0,
-                            Title = "Et et deleniti reiciendis ut cum."
+                            Title = "Temporibus aut quo labore molestiae."
                         },
                         new
                         {
                             Id = 23,
-                            ActualRevenue = 302063.0,
-                            Description = "Unde aut sit voluptas consequuntur sit iusto et molestias rerum necessitatibus eum natus est.",
+                            ActualRevenue = 127651.0,
+                            Description = "Molestiae rerum aperiam vel id repellat quia suscipit nulla aut expedita harum voluptas ipsam.",
                             LeadId = 23,
                             Status = 0,
-                            Title = "Deserunt ipsam qui aperiam."
+                            Title = "Error quo id est aliquid."
                         },
                         new
                         {
                             Id = 24,
-                            ActualRevenue = 311893.0,
-                            Description = "Officia pariatur libero eos laudantium deleniti qui cum nihil et non nobis suscipit et ut.",
+                            ActualRevenue = 188330.0,
+                            Description = "Nihil dicta dolor accusamus repellat eum ipsa error omnis reprehenderit ducimus expedita ea perspiciatis quia qui omnis quia qui eos fugiat ab earum nihil rerum repudiandae.",
                             LeadId = 24,
                             Status = 0,
-                            Title = "Qui nihil dolorum voluptatem veniam ut."
+                            Title = "Voluptas aut cumque."
                         },
                         new
                         {
                             Id = 25,
-                            ActualRevenue = 171096.0,
-                            Description = "Id sunt eos qui voluptatem et cumque sunt nihil omnis quisquam voluptatum qui est dignissimos deleniti incidunt maxime saepe.",
+                            ActualRevenue = 230565.0,
+                            Description = "Maxime enim cupiditate vel mollitia omnis est molestias beatae aut a dolor natus repellat in qui dolor itaque nobis non labore quia.",
                             LeadId = 25,
                             Status = 2,
-                            Title = "Id sit quod numquam sit unde."
+                            Title = "Quo vel dicta."
                         },
                         new
                         {
                             Id = 26,
-                            ActualRevenue = 190052.0,
-                            Description = "Repellat sit a alias dicta ad iste quisquam quos nihil deleniti nostrum nesciunt accusamus dolorem ad sit aut architecto laborum asperiores est in rerum illum deleniti ducimus.",
+                            ActualRevenue = 56503.0,
+                            Description = "Sed dolor assumenda quia ut placeat similique accusamus exercitationem exercitationem repellendus corporis repellat officiis at.",
                             LeadId = 26,
-                            Status = 0,
-                            Title = "Eligendi minima et magni sit sequi."
+                            Status = 2,
+                            Title = "Eum mollitia qui numquam sunt qui."
                         },
                         new
                         {
                             Id = 27,
-                            ActualRevenue = 17295.0,
-                            Description = "Consequatur distinctio ex consequatur non quo deserunt quasi qui suscipit ducimus saepe eaque nisi assumenda voluptatibus nam natus nostrum.",
+                            ActualRevenue = 313458.0,
+                            Description = "Consectetur eaque id et sit iusto perferendis rem voluptatum nemo eius et amet eum cumque iure eligendi dicta odio quae.",
                             LeadId = 27,
-                            Status = 1,
-                            Title = "In expedita veniam deserunt."
+                            Status = 2,
+                            Title = "Aut dicta nam adipisci placeat incidunt."
                         },
                         new
                         {
                             Id = 28,
-                            ActualRevenue = 278908.0,
-                            Description = "Qui facilis beatae delectus et animi molestiae omnis atque magnam praesentium itaque aut ex maxime voluptas in.",
+                            ActualRevenue = 274026.0,
+                            Description = "Dolor et officiis et consequatur eos tempora natus iste non labore sunt corrupti dolorum et facere nesciunt.",
                             LeadId = 28,
-                            Status = 0,
-                            Title = "Incidunt ea dolor ex quos cum."
+                            Status = 2,
+                            Title = "Harum ipsam ea consequatur."
                         },
                         new
                         {
                             Id = 29,
-                            ActualRevenue = 298990.0,
-                            Description = "Delectus facilis at ut voluptas eaque facilis sapiente provident tenetur aut consectetur voluptatem corrupti fuga odio vitae magnam laborum expedita error quo molestiae recusandae illum vitae repellat ipsa et.",
+                            ActualRevenue = 96525.0,
+                            Description = "Odio et natus ut qui repudiandae illum iste excepturi esse nobis tempore sed porro dolorem.",
                             LeadId = 29,
-                            Status = 1,
-                            Title = "Quas aut nulla voluptatibus molestias."
+                            Status = 2,
+                            Title = "Et ut exercitationem et."
                         },
                         new
                         {
                             Id = 30,
-                            ActualRevenue = 179215.0,
-                            Description = "Aut ut nihil labore architecto in voluptas dolore laboriosam repudiandae at recusandae enim ea voluptate autem sed voluptas animi sed quia fuga quaerat sit dolor rerum et.",
+                            ActualRevenue = 84706.0,
+                            Description = "Dolores dolores dignissimos et provident perspiciatis delectus vel rerum corrupti optio enim.",
                             LeadId = 30,
                             Status = 1,
-                            Title = "Nam sed aut rerum non."
+                            Title = "Deleniti quas id aut nihil."
                         });
                 });
 
@@ -1510,42 +1513,42 @@ namespace Lab2.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            DealId = 16,
-                            PricePerUnit = 39.0,
-                            ProductId = 6,
-                            Quantity = 11
+                            DealId = 27,
+                            PricePerUnit = 66.0,
+                            ProductId = 5,
+                            Quantity = 84
                         },
                         new
                         {
                             Id = 2,
-                            DealId = 10,
-                            PricePerUnit = 45.0,
-                            ProductId = 6,
-                            Quantity = 5
+                            DealId = 28,
+                            PricePerUnit = 89.0,
+                            ProductId = 10,
+                            Quantity = 75
                         },
                         new
                         {
                             Id = 3,
-                            DealId = 14,
-                            PricePerUnit = 75.0,
-                            ProductId = 7,
-                            Quantity = 45
+                            DealId = 17,
+                            PricePerUnit = 26.0,
+                            ProductId = 4,
+                            Quantity = 63
                         },
                         new
                         {
                             Id = 4,
-                            DealId = 3,
-                            PricePerUnit = 82.0,
-                            ProductId = 8,
-                            Quantity = 27
+                            DealId = 8,
+                            PricePerUnit = 45.0,
+                            ProductId = 5,
+                            Quantity = 81
                         },
                         new
                         {
                             Id = 5,
-                            DealId = 29,
-                            PricePerUnit = 38.0,
-                            ProductId = 4,
-                            Quantity = 93
+                            DealId = 26,
+                            PricePerUnit = 75.0,
+                            ProductId = 1,
+                            Quantity = 17
                         });
                 });
 
@@ -1610,324 +1613,326 @@ namespace Lab2.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            AccountId = 21,
-                            Description = "Et sunt harum quasi et corrupti quia error aut deleniti dicta hic voluptas.",
-                            EndedDate = new DateTime(2022, 11, 4, 13, 37, 24, 367, DateTimeKind.Local).AddTicks(3802),
-                            EstimatedRevenue = 130724.0,
-                            Source = 4,
-                            Status = 2,
-                            Title = "Similique fugit ut et cum nobis."
+                            AccountId = 8,
+                            Description = "Sequi amet voluptatem nisi rerum quod beatae aut autem dolores nam rerum sint minima minima incidunt aliquid aperiam excepturi accusamus ad repudiandae non illum assumenda repudiandae.",
+                            EstimatedRevenue = 492788.0,
+                            Source = 1,
+                            Status = 0,
+                            Title = "Et similique in ea deserunt provident."
                         },
                         new
                         {
                             Id = 2,
-                            AccountId = 8,
-                            Description = "Excepturi nihil ut voluptatibus sint officiis ea reiciendis fugit dolor quo omnis debitis qui fuga eius rerum quasi magni esse ipsa eos porro reprehenderit distinctio nulla.",
-                            EstimatedRevenue = 220520.0,
-                            Source = 1,
-                            Status = 1,
-                            Title = "Quia numquam accusantium."
+                            AccountId = 24,
+                            Description = "Corrupti aut et aut aut consequatur voluptatem pariatur molestias ut aut sequi est ex aperiam eum quis fugiat sed a tempore incidunt atque dicta excepturi cupiditate odit eaque corrupti repellendus.",
+                            EndedDate = new DateTime(2022, 11, 4, 19, 14, 44, 946, DateTimeKind.Local).AddTicks(402),
+                            EstimatedRevenue = 147855.0,
+                            Source = 3,
+                            Status = 2,
+                            Title = "Neque id laborum."
                         },
                         new
                         {
                             Id = 3,
-                            AccountId = 2,
-                            Description = "Ut quas autem quo voluptatem et et explicabo autem sed facere nihil dolor hic sit cum aut sed aliquid vero rerum eos quis libero vel.",
-                            EndedDate = new DateTime(2022, 12, 27, 16, 24, 16, 904, DateTimeKind.Local).AddTicks(2842),
-                            EstimatedRevenue = 341806.0,
+                            AccountId = 17,
+                            Description = "Saepe enim et animi sit ad sint animi itaque id aspernatur quo minus quam qui sunt omnis consequatur ipsum dolorum incidunt aspernatur omnis consequatur adipisci et eum aut enim.",
+                            EstimatedRevenue = 66573.0,
                             Source = 4,
-                            Status = 2,
-                            Title = "Autem eos ratione dolores magni."
+                            Status = 0,
+                            Title = "Ut distinctio placeat qui maxime."
                         },
                         new
                         {
                             Id = 4,
-                            AccountId = 1,
-                            Description = "Mollitia porro quae qui excepturi vel non eius sint pariatur qui eos cum nesciunt adipisci est sequi dolorum et consequatur quisquam animi.",
-                            EstimatedRevenue = 197821.0,
-                            Source = 3,
-                            Status = 1,
-                            Title = "Quo natus pariatur."
+                            AccountId = 6,
+                            Description = "Aut eum magni velit porro sapiente et ea laboriosam reprehenderit tenetur sed harum vel consequuntur cum et esse in id quis exercitationem nisi eligendi laborum beatae eveniet.",
+                            EndedDate = new DateTime(2022, 8, 16, 0, 39, 23, 793, DateTimeKind.Local).AddTicks(2707),
+                            EstimatedRevenue = 168649.0,
+                            Source = 0,
+                            Status = 2,
+                            Title = "Eius ut qui."
                         },
                         new
                         {
                             Id = 5,
-                            AccountId = 22,
-                            Description = "Et id minima sed est modi dolores consectetur veritatis esse quia.",
-                            EndedDate = new DateTime(2023, 2, 21, 19, 56, 55, 922, DateTimeKind.Local).AddTicks(7479),
-                            EstimatedRevenue = 96795.0,
-                            Source = 4,
-                            Status = 2,
-                            Title = "Est dignissimos dicta reprehenderit."
+                            AccountId = 3,
+                            Description = "Rerum tempore porro qui eum maiores tempora vel natus consequatur illo id dolorum error ea reiciendis sit vitae quia voluptatem iure voluptas.",
+                            DisqualifiedDescription = "Eligendi modi vel architecto quia ipsum commodi provident ut tempore.",
+                            DisqualifiedReason = 3,
+                            EndedDate = new DateTime(2023, 1, 3, 11, 48, 7, 45, DateTimeKind.Local).AddTicks(7975),
+                            EstimatedRevenue = 261654.0,
+                            Source = 1,
+                            Status = 3,
+                            Title = "Sint odit quod."
                         },
                         new
                         {
                             Id = 6,
-                            AccountId = 8,
-                            Description = "Qui modi autem id ut et dignissimos quia iusto incidunt ea nemo dolore enim incidunt pariatur quia molestiae nulla facilis temporibus illo ea eligendi et.",
-                            EstimatedRevenue = 399619.0,
-                            Source = 1,
+                            AccountId = 19,
+                            Description = "Quod nobis voluptas voluptatibus est blanditiis laudantium dolor temporibus assumenda autem suscipit aliquam voluptas id adipisci.",
+                            EstimatedRevenue = 356002.0,
+                            Source = 3,
                             Status = 0,
-                            Title = "Fuga cum nemo aliquam repellat placeat."
+                            Title = "Debitis exercitationem esse."
                         },
                         new
                         {
                             Id = 7,
-                            AccountId = 19,
-                            Description = "Eos illum corporis non non natus est in qui quam voluptas laudantium quasi maiores ut voluptate ut.",
-                            EstimatedRevenue = 475097.0,
-                            Source = 3,
+                            AccountId = 11,
+                            Description = "Blanditiis quia provident nobis deleniti praesentium quis sint aut maxime aut repellat qui consequatur ut aliquam perferendis rerum qui sunt vitae tempora vero molestias odit.",
+                            EstimatedRevenue = 463431.0,
+                            Source = 0,
                             Status = 0,
-                            Title = "Reprehenderit et illo doloremque odio."
+                            Title = "Rerum repellat ipsa."
                         },
                         new
                         {
                             Id = 8,
-                            AccountId = 17,
-                            Description = "Voluptatum ut autem et voluptates neque dicta quam delectus id velit laboriosam id aut et qui officia pariatur voluptatem natus est sunt non.",
-                            EstimatedRevenue = 78708.0,
-                            Source = 3,
-                            Status = 0,
-                            Title = "Perspiciatis dolorum exercitationem reprehenderit deleniti ut."
+                            AccountId = 9,
+                            Description = "Culpa aspernatur et asperiores voluptas dolores a tempore corrupti quidem libero quasi odit error maiores vero debitis eligendi optio enim sed unde possimus est odit saepe enim quaerat praesentium.",
+                            EstimatedRevenue = 458607.0,
+                            Source = 0,
+                            Status = 1,
+                            Title = "Officiis et qui debitis."
                         },
                         new
                         {
                             Id = 9,
-                            AccountId = 13,
-                            Description = "Consequatur expedita magnam odio ea debitis dolorem voluptate eligendi est quae quo eligendi et eos molestias odio dicta incidunt et nesciunt.",
-                            EndedDate = new DateTime(2022, 11, 12, 8, 1, 51, 928, DateTimeKind.Local).AddTicks(2148),
-                            EstimatedRevenue = 473598.0,
-                            Source = 1,
-                            Status = 2,
-                            Title = "Rerum omnis in."
+                            AccountId = 22,
+                            Description = "Rerum vel dolorem omnis quos non ratione recusandae praesentium magnam deleniti laboriosam ipsam aspernatur culpa illum occaecati corrupti quidem id aperiam commodi iusto dolorum debitis.",
+                            EstimatedRevenue = 388176.0,
+                            Source = 0,
+                            Status = 1,
+                            Title = "Qui et enim aut quam temporibus."
                         },
                         new
                         {
                             Id = 10,
-                            AccountId = 22,
-                            Description = "Doloremque voluptatibus totam itaque minima vel illum voluptatem fugiat nihil vero ipsa cum deleniti ut dolorem aut et molestiae autem natus quia nobis quia dignissimos porro temporibus suscipit consequatur.",
-                            DisqualifiedDescription = "Dolorem omnis qui suscipit amet voluptatem natus soluta et est qui amet nam beatae iste tempore.",
-                            DisqualifiedReason = 2,
-                            EndedDate = new DateTime(2022, 10, 20, 7, 16, 40, 861, DateTimeKind.Local).AddTicks(4390),
-                            EstimatedRevenue = 110685.0,
-                            Source = 4,
-                            Status = 3,
-                            Title = "Error excepturi similique iure."
+                            AccountId = 24,
+                            Description = "Rerum dolorum ipsa nemo dolore iure asperiores magnam culpa sed asperiores beatae enim aliquid omnis cumque excepturi quam rem molestiae itaque nesciunt quia voluptatem quaerat alias saepe repellendus.",
+                            EndedDate = new DateTime(2022, 8, 21, 2, 12, 31, 877, DateTimeKind.Local).AddTicks(7688),
+                            EstimatedRevenue = 262266.0,
+                            Source = 2,
+                            Status = 2,
+                            Title = "Excepturi autem debitis."
                         },
                         new
                         {
                             Id = 11,
-                            AccountId = 22,
-                            Description = "Sunt autem nihil ipsum soluta a exercitationem recusandae quibusdam provident accusamus aliquid voluptatem quia quos assumenda sit et recusandae non beatae qui distinctio et et cupiditate voluptatum in iusto eos.",
-                            EstimatedRevenue = 328876.0,
-                            Source = 3,
+                            AccountId = 12,
+                            Description = "Corporis voluptatibus eveniet voluptas eius velit quo deleniti eligendi architecto mollitia aut fugiat quisquam non ex consequatur quis doloribus rerum itaque distinctio qui deserunt magnam odio aut quos quia iste.",
+                            EstimatedRevenue = 140503.0,
+                            Source = 2,
                             Status = 1,
-                            Title = "Recusandae voluptatem ea et."
+                            Title = "Dolores suscipit et ex voluptas et."
                         },
                         new
                         {
                             Id = 12,
-                            AccountId = 6,
-                            Description = "Incidunt aperiam rerum est velit natus eum a sequi reiciendis dolorum non.",
-                            EndedDate = new DateTime(2022, 12, 27, 10, 18, 24, 985, DateTimeKind.Local).AddTicks(7240),
-                            EstimatedRevenue = 447775.0,
-                            Source = 0,
-                            Status = 2,
-                            Title = "A in et."
+                            AccountId = 1,
+                            Description = "Ut ipsam vel est porro necessitatibus ex cum odio quas enim iusto dolores.",
+                            EstimatedRevenue = 121426.0,
+                            Source = 4,
+                            Status = 1,
+                            Title = "Possimus libero ut et enim."
                         },
                         new
                         {
                             Id = 13,
-                            AccountId = 16,
-                            Description = "Qui non quis dolores sapiente cupiditate vel et natus doloremque nulla voluptates mollitia tempore libero voluptatem culpa molestiae aliquid.",
-                            EndedDate = new DateTime(2023, 4, 10, 17, 1, 45, 395, DateTimeKind.Local).AddTicks(2023),
-                            EstimatedRevenue = 85958.0,
-                            Source = 4,
+                            AccountId = 7,
+                            Description = "Aut magni aut atque eos pariatur qui dicta autem ab expedita et rem optio quia molestiae qui iusto vitae voluptatem atque error illo inventore quas autem.",
+                            EndedDate = new DateTime(2023, 6, 19, 1, 40, 21, 672, DateTimeKind.Local).AddTicks(8527),
+                            EstimatedRevenue = 357714.0,
+                            Source = 0,
                             Status = 2,
-                            Title = "Animi velit architecto iure."
+                            Title = "Quo est consequuntur."
                         },
                         new
                         {
                             Id = 14,
-                            AccountId = 14,
-                            Description = "Magni debitis ut suscipit qui dicta suscipit est quisquam dolor neque iste sed vitae quisquam culpa nihil illum fugiat et in accusamus nisi.",
-                            EstimatedRevenue = 193233.0,
+                            AccountId = 8,
+                            Description = "Odio et autem quam voluptate eligendi reiciendis in iste harum libero consequatur aspernatur sed eum consequatur.",
+                            EstimatedRevenue = 326010.0,
                             Source = 4,
                             Status = 1,
-                            Title = "Alias perferendis repellendus."
+                            Title = "Repudiandae asperiores expedita."
                         },
                         new
                         {
                             Id = 15,
-                            AccountId = 13,
-                            Description = "Eaque eos vel minima quam asperiores quasi iste earum voluptates.",
-                            EndedDate = new DateTime(2023, 5, 24, 7, 38, 23, 47, DateTimeKind.Local).AddTicks(9280),
-                            EstimatedRevenue = 78617.0,
+                            AccountId = 21,
+                            Description = "Totam id architecto et voluptates vitae suscipit totam consequatur unde nostrum omnis culpa eaque ea veritatis id quidem.",
+                            EstimatedRevenue = 121902.0,
                             Source = 1,
-                            Status = 2,
-                            Title = "Qui voluptas odio."
+                            Status = 1,
+                            Title = "Rerum ullam aut."
                         },
                         new
                         {
                             Id = 16,
-                            AccountId = 9,
-                            Description = "Eos et velit et rerum quasi harum aut omnis quod rem quos ex nesciunt nam eaque voluptatem sunt reprehenderit placeat soluta eveniet voluptatum rerum quo odit vel vel quo.",
-                            EstimatedRevenue = 24407.0,
-                            Source = 1,
-                            Status = 1,
-                            Title = "Non qui repellendus itaque."
+                            AccountId = 16,
+                            Description = "Et fugiat ex suscipit sint in ab voluptatem voluptas porro.",
+                            EstimatedRevenue = 402208.0,
+                            Source = 0,
+                            Status = 0,
+                            Title = "Sequi ut quia rerum recusandae nobis."
                         },
                         new
                         {
                             Id = 17,
-                            AccountId = 11,
-                            Description = "Eum aliquam non quam asperiores quam reprehenderit ducimus facere vel ad reprehenderit.",
-                            DisqualifiedDescription = "Molestiae non id consequatur nobis ea laudantium aut animi libero repellat.",
-                            DisqualifiedReason = 2,
-                            EndedDate = new DateTime(2023, 4, 19, 13, 19, 45, 271, DateTimeKind.Local).AddTicks(310),
-                            EstimatedRevenue = 110616.0,
-                            Source = 1,
-                            Status = 3,
-                            Title = "Reiciendis dolorem tempora."
+                            AccountId = 10,
+                            Description = "Ratione sed distinctio inventore odio laborum deserunt omnis et consequatur aut nisi voluptatem error quasi maiores.",
+                            EndedDate = new DateTime(2022, 11, 22, 22, 46, 13, 80, DateTimeKind.Local).AddTicks(9596),
+                            EstimatedRevenue = 191732.0,
+                            Source = 2,
+                            Status = 2,
+                            Title = "Repellendus dolores qui."
                         },
                         new
                         {
                             Id = 18,
-                            AccountId = 13,
-                            Description = "Sunt unde incidunt est neque sit omnis excepturi nobis quo consectetur earum aut fugiat non porro.",
-                            EstimatedRevenue = 143460.0,
-                            Source = 3,
-                            Status = 1,
-                            Title = "Aut unde est nesciunt non."
+                            AccountId = 22,
+                            Description = "Ut nihil quod officia maiores perspiciatis dolorum odio quae ipsa provident aut qui id voluptatem qui aspernatur odit delectus sunt.",
+                            EstimatedRevenue = 103236.0,
+                            Source = 1,
+                            Status = 0,
+                            Title = "Quisquam tempora libero."
                         },
                         new
                         {
                             Id = 19,
-                            AccountId = 13,
-                            Description = "Suscipit provident at exercitationem asperiores nisi reiciendis possimus inventore quia voluptatem autem esse velit et et quasi ut eaque ut.",
-                            EstimatedRevenue = 449958.0,
+                            AccountId = 2,
+                            Description = "Veritatis quibusdam deserunt quisquam qui ut dolore debitis neque tempore quia molestiae fugit quia rem veniam adipisci nesciunt doloremque est unde.",
+                            DisqualifiedDescription = "Quia dolorem tempora voluptates aut possimus in et dolores quaerat recusandae adipisci perspiciatis tempore ut blanditiis sit eum perspiciatis aut.",
+                            DisqualifiedReason = 3,
+                            EndedDate = new DateTime(2022, 11, 8, 2, 13, 4, 327, DateTimeKind.Local).AddTicks(7670),
+                            EstimatedRevenue = 64330.0,
                             Source = 1,
-                            Status = 1,
-                            Title = "Eum ipsa aliquid."
+                            Status = 3,
+                            Title = "Quibusdam sint quas vero culpa odit."
                         },
                         new
                         {
                             Id = 20,
-                            AccountId = 19,
-                            Description = "Nisi dolorem perferendis earum consequatur modi maiores eligendi similique dicta dolore iusto consectetur accusamus voluptatum quo id dignissimos aliquam illo odio dolor nemo sit eaque dolorem deserunt dignissimos.",
-                            EstimatedRevenue = 289500.0,
-                            Source = 0,
-                            Status = 1,
-                            Title = "Natus deleniti rerum rem dolor in."
+                            AccountId = 20,
+                            Description = "Id dolor libero possimus quis velit sed consequuntur aut ab mollitia cumque doloribus vel iste pariatur deserunt soluta voluptatibus aut voluptatem.",
+                            EndedDate = new DateTime(2023, 5, 23, 14, 36, 18, 190, DateTimeKind.Local).AddTicks(4142),
+                            EstimatedRevenue = 348365.0,
+                            Source = 2,
+                            Status = 2,
+                            Title = "Cumque sed distinctio unde voluptates vero."
                         },
                         new
                         {
                             Id = 21,
-                            AccountId = 19,
-                            Description = "Ut et temporibus nesciunt aut quae cum dolore voluptatibus omnis velit ducimus et ut nemo enim quia tempora officia accusantium temporibus sed impedit.",
-                            DisqualifiedDescription = "Explicabo exercitationem dicta aut quam fugit soluta modi rerum asperiores.",
-                            DisqualifiedReason = 3,
-                            EndedDate = new DateTime(2022, 10, 26, 23, 15, 56, 919, DateTimeKind.Local).AddTicks(7934),
-                            EstimatedRevenue = 138823.0,
-                            Source = 3,
-                            Status = 3,
-                            Title = "Qui recusandae quibusdam."
+                            AccountId = 15,
+                            Description = "Ab est et non est ut voluptas dolor iusto facere similique sunt magni delectus repudiandae qui numquam voluptas adipisci velit dolorem quasi enim quisquam rerum labore vel saepe aut.",
+                            EstimatedRevenue = 80675.0,
+                            Source = 0,
+                            Status = 0,
+                            Title = "Fuga et facere voluptas."
                         },
                         new
                         {
                             Id = 22,
-                            AccountId = 18,
-                            Description = "Magni officia non enim qui totam debitis eos reiciendis quia id et earum doloribus iusto fugiat quisquam non quibusdam dolorem odio soluta enim consequatur et qui et placeat dolorum.",
-                            EndedDate = new DateTime(2022, 9, 14, 12, 15, 46, 663, DateTimeKind.Local).AddTicks(4704),
-                            EstimatedRevenue = 141182.0,
-                            Source = 3,
-                            Status = 2,
-                            Title = "Aperiam non nulla architecto aut eum."
+                            AccountId = 17,
+                            Description = "Assumenda quia nam quos nisi illum culpa aut minus nulla nesciunt labore et aut voluptas consequuntur omnis numquam sed autem eos.",
+                            DisqualifiedDescription = "Vero perferendis nihil neque aspernatur id cupiditate non nobis doloremque animi rerum alias quam corporis vero repellendus ut iusto quae.",
+                            DisqualifiedReason = 3,
+                            EndedDate = new DateTime(2023, 8, 2, 4, 46, 53, 760, DateTimeKind.Local).AddTicks(7044),
+                            EstimatedRevenue = 308687.0,
+                            Source = 1,
+                            Status = 3,
+                            Title = "Aut aut amet nisi."
                         },
                         new
                         {
                             Id = 23,
-                            AccountId = 13,
-                            Description = "Perspiciatis aliquid architecto rerum ipsa quidem quisquam corrupti qui qui et ducimus sit minima magnam voluptates quidem voluptatem cum illum est.",
-                            EndedDate = new DateTime(2022, 8, 30, 4, 53, 26, 880, DateTimeKind.Local).AddTicks(7547),
-                            EstimatedRevenue = 114225.0,
-                            Source = 1,
+                            AccountId = 3,
+                            Description = "Fuga voluptatem repellendus dolores aut sint odit ea hic sit expedita praesentium sit harum voluptatem omnis laudantium laboriosam pariatur voluptas nostrum quam voluptates corporis enim quaerat ut earum animi.",
+                            EndedDate = new DateTime(2023, 5, 19, 22, 46, 27, 700, DateTimeKind.Local).AddTicks(6343),
+                            EstimatedRevenue = 243148.0,
+                            Source = 3,
                             Status = 2,
-                            Title = "Sed officiis velit occaecati beatae labore."
+                            Title = "Officia officia consequatur saepe."
                         },
                         new
                         {
                             Id = 24,
-                            AccountId = 12,
-                            Description = "Illum quidem voluptatibus quia et mollitia dolore laboriosam rerum aut quisquam ad consequatur voluptatibus.",
-                            EstimatedRevenue = 79516.0,
-                            Source = 1,
-                            Status = 0,
-                            Title = "Voluptatem sed consequuntur quo."
+                            AccountId = 25,
+                            Description = "Quisquam doloremque provident qui quis et soluta laudantium quae sint optio sed inventore culpa qui suscipit omnis cumque harum vel rerum illo eaque sequi soluta.",
+                            EstimatedRevenue = 102491.0,
+                            Source = 0,
+                            Status = 1,
+                            Title = "Dicta quo dolores est praesentium architecto."
                         },
                         new
                         {
                             Id = 25,
-                            AccountId = 2,
-                            Description = "Minus rem libero voluptatem nemo praesentium et nostrum consequatur asperiores id.",
-                            EstimatedRevenue = 364443.0,
-                            Source = 4,
-                            Status = 1,
-                            Title = "Placeat quae enim nobis."
+                            AccountId = 1,
+                            Description = "Ipsa pariatur facilis qui consequatur qui qui aut quos non molestias.",
+                            EndedDate = new DateTime(2023, 6, 11, 21, 24, 39, 38, DateTimeKind.Local).AddTicks(6269),
+                            EstimatedRevenue = 469755.0,
+                            Source = 3,
+                            Status = 2,
+                            Title = "Vel voluptatem et."
                         },
                         new
                         {
                             Id = 26,
-                            AccountId = 2,
-                            Description = "Non nesciunt sed corporis quam libero rerum voluptas ducimus aliquid sunt rem.",
-                            EstimatedRevenue = 445719.0,
+                            AccountId = 4,
+                            Description = "Voluptatem ut saepe laboriosam nihil velit atque nulla quia nostrum beatae saepe voluptas laboriosam consectetur vero eius iusto quisquam voluptate laborum beatae eius vel nostrum.",
+                            EstimatedRevenue = 482890.0,
                             Source = 1,
                             Status = 1,
-                            Title = "Veniam tempora expedita ea esse debitis."
+                            Title = "Nisi a ullam omnis doloribus veniam."
                         },
                         new
                         {
                             Id = 27,
-                            AccountId = 7,
-                            Description = "Vitae ex in neque totam fugit est quasi omnis doloremque quasi ipsa autem at fugiat velit pariatur distinctio maxime rerum impedit.",
-                            DisqualifiedDescription = "Quam et et atque exercitationem nihil quos deserunt laborum voluptatibus earum veniam ea non neque itaque nisi corporis quod dolore deserunt ad.",
-                            DisqualifiedReason = 2,
-                            EndedDate = new DateTime(2023, 2, 12, 5, 17, 30, 629, DateTimeKind.Local).AddTicks(4770),
-                            EstimatedRevenue = 343571.0,
-                            Source = 0,
+                            AccountId = 8,
+                            Description = "Quam a tempora ullam beatae dignissimos aliquam mollitia quia consectetur modi id est aut quia nihil beatae praesentium aperiam.",
+                            DisqualifiedDescription = "Sit sunt assumenda consectetur ad unde excepturi neque repellendus facilis nulla nobis quidem occaecati dolor officiis similique architecto dignissimos enim omnis aut veritatis id.",
+                            DisqualifiedReason = 1,
+                            EndedDate = new DateTime(2023, 7, 15, 3, 24, 56, 696, DateTimeKind.Local).AddTicks(222),
+                            EstimatedRevenue = 95124.0,
+                            Source = 2,
                             Status = 3,
-                            Title = "Harum minus in rerum sit."
+                            Title = "Eum perferendis et eos tempora adipisci."
                         },
                         new
                         {
                             Id = 28,
-                            AccountId = 15,
-                            Description = "Dolorum totam quae quae rerum in aperiam doloremque dolores aliquam repellat quis fugit.",
-                            EstimatedRevenue = 143055.0,
+                            AccountId = 16,
+                            Description = "Dolor illo unde dolor qui dolores voluptatem corrupti iure dignissimos aspernatur et cum dolor a laboriosam cum rem consequatur voluptatem provident laborum voluptas aut fugit.",
+                            DisqualifiedDescription = "Enim eum pariatur dolores sit commodi labore cum tempore nemo placeat sint repellendus saepe.",
+                            DisqualifiedReason = 3,
+                            EndedDate = new DateTime(2022, 12, 3, 19, 14, 8, 72, DateTimeKind.Local).AddTicks(666),
+                            EstimatedRevenue = 184445.0,
                             Source = 4,
-                            Status = 1,
-                            Title = "Officia perferendis tenetur qui."
+                            Status = 3,
+                            Title = "Dolores aliquam quam."
                         },
                         new
                         {
                             Id = 29,
-                            AccountId = 5,
-                            Description = "Sint quis sed culpa cumque voluptatem molestiae adipisci sapiente eius est sunt doloremque ad ut.",
-                            EstimatedRevenue = 368261.0,
+                            AccountId = 9,
+                            Description = "Dolorum quo dolorem ut qui incidunt est ullam voluptatum odit illo ut consequatur ipsum quia aut.",
+                            EndedDate = new DateTime(2023, 8, 6, 5, 17, 35, 911, DateTimeKind.Local).AddTicks(624),
+                            EstimatedRevenue = 176137.0,
                             Source = 1,
-                            Status = 1,
-                            Title = "At repellat facere error consectetur."
+                            Status = 2,
+                            Title = "Impedit unde doloribus corrupti nobis."
                         },
                         new
                         {
                             Id = 30,
-                            AccountId = 4,
-                            Description = "Animi vel quis qui dignissimos quos quam sit quod qui veritatis et porro eaque sit expedita labore incidunt accusantium distinctio optio eveniet eligendi est et quo et praesentium ut.",
-                            EndedDate = new DateTime(2023, 7, 1, 11, 10, 55, 73, DateTimeKind.Local).AddTicks(4815),
-                            EstimatedRevenue = 10574.0,
-                            Source = 3,
-                            Status = 2,
-                            Title = "Aspernatur aut non."
+                            AccountId = 21,
+                            Description = "Velit autem consequuntur eius in repellat quia quia architecto magni aut aliquam quia voluptatum sed nemo doloribus quia laboriosam accusamus eaque illum impedit velit est voluptatibus.",
+                            EstimatedRevenue = 283903.0,
+                            Source = 1,
+                            Status = 1,
+                            Title = "Deserunt omnis quasi ea."
                         });
                 });
 
@@ -1982,91 +1987,91 @@ namespace Lab2.Infrastructure.Migrations
                         {
                             Id = 1,
                             IsAvailable = true,
-                            Name = "Tasty Soft Bike",
-                            Price = 233.0,
-                            ProductCode = "PRO-64506890",
+                            Name = "Awesome Wooden Gloves",
+                            Price = 373.0,
+                            ProductCode = "PRO-62205085",
                             Type = 0
                         },
                         new
                         {
                             Id = 2,
                             IsAvailable = true,
-                            Name = "Incredible Fresh Car",
-                            Price = 681.0,
-                            ProductCode = "PRO-93220361",
-                            Type = 1
+                            Name = "Fantastic Soft Soap",
+                            Price = 129.0,
+                            ProductCode = "PRO-89560631",
+                            Type = 0
                         },
                         new
                         {
                             Id = 3,
                             IsAvailable = true,
-                            Name = "Incredible Plastic Keyboard",
-                            Price = 796.0,
-                            ProductCode = "PRO-68069629",
-                            Type = 0
+                            Name = "Tasty Plastic Cheese",
+                            Price = 933.0,
+                            ProductCode = "PRO-28174189",
+                            Type = 1
                         },
                         new
                         {
                             Id = 4,
                             IsAvailable = true,
-                            Name = "Unbranded Granite Pizza",
-                            Price = 693.0,
-                            ProductCode = "PRO-92525672",
+                            Name = "Rustic Wooden Computer",
+                            Price = 630.0,
+                            ProductCode = "PRO-14389795",
                             Type = 1
                         },
                         new
                         {
                             Id = 5,
                             IsAvailable = true,
-                            Name = "Sleek Steel Computer",
-                            Price = 392.0,
-                            ProductCode = "PRO-20818142",
-                            Type = 1
+                            Name = "Intelligent Soft Table",
+                            Price = 854.0,
+                            ProductCode = "PRO-12961757",
+                            Type = 0
                         },
                         new
                         {
                             Id = 6,
                             IsAvailable = true,
-                            Name = "Handcrafted Plastic Soap",
-                            Price = 54.0,
-                            ProductCode = "PRO-21881220",
-                            Type = 0
+                            Name = "Sleek Granite Bacon",
+                            Price = 13.0,
+                            ProductCode = "PRO-58764626",
+                            Type = 1
                         },
                         new
                         {
                             Id = 7,
                             IsAvailable = true,
-                            Name = "Generic Concrete Towels",
-                            Price = 544.0,
-                            ProductCode = "PRO-31901055",
+                            Name = "Generic Cotton Keyboard",
+                            Price = 297.0,
+                            ProductCode = "PRO-63291148",
                             Type = 1
                         },
                         new
                         {
                             Id = 8,
                             IsAvailable = true,
-                            Name = "Refined Fresh Gloves",
-                            Price = 212.0,
-                            ProductCode = "PRO-65830697",
-                            Type = 0
+                            Name = "Refined Concrete Bike",
+                            Price = 978.0,
+                            ProductCode = "PRO-19863870",
+                            Type = 1
                         },
                         new
                         {
                             Id = 9,
                             IsAvailable = true,
-                            Name = "Handmade Fresh Chair",
-                            Price = 959.0,
-                            ProductCode = "PRO-77811059",
-                            Type = 1
+                            Name = "Unbranded Cotton Bacon",
+                            Price = 663.0,
+                            ProductCode = "PRO-41985212",
+                            Type = 0
                         },
                         new
                         {
                             Id = 10,
                             IsAvailable = true,
-                            Name = "Handmade Concrete Tuna",
-                            Price = 398.0,
-                            ProductCode = "PRO-35785101",
-                            Type = 0
+                            Name = "Awesome Concrete Towels",
+                            Price = 509.0,
+                            ProductCode = "PRO-00806077",
+                            Type = 1
                         });
                 });
 
@@ -2204,16 +2209,16 @@ namespace Lab2.Infrastructure.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9ad77664-1700-480f-bc93-8325f59a5613",
+                            ConcurrencyStamp = "8b27eb77-b3d0-4a18-9af4-3b5c6db5d795",
                             Email = "superadmin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "superadmin",
                             NormalizedEmail = "SUPERADMIN@GMAIL.COM",
                             NormalizedUserName = "SUPERADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJb8vQaZuc4NBCG+eKrHVtTM3sxXbyCDZrLK71z4UBNlq7TQ+cbV8NvHs9HFeZhHSg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENTThNZtbO4T5HjRhpjwH/qgKlh3SHekFyAI2vb6tXdnyIvNHuSe99iEE+RkSq5XKA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7423d90f-5f22-4a57-96bf-78fe5bb3a751",
+                            SecurityStamp = "c7ec9813-4453-4847-ab9e-a0be99b1e870",
                             TwoFactorEnabled = false,
                             UserName = "superadmin@gmail.com"
                         },
@@ -2221,16 +2226,16 @@ namespace Lab2.Infrastructure.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "efbf8f52-dfc3-4ab4-aa0d-f71fc701035d",
+                            ConcurrencyStamp = "a2762fb6-cff5-428b-a1fc-c1f4eb48c7ea",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             Name = "admin",
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEPCf4C9hUhiIHhDBC7nZD5u5WMkA1uVV8676pyx+nSkJt7M57ab84Fhfxv/GK7HlA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEL8D3c3ECsYL8wazc6slvj0CKEu8MrECJ7BB0vqQ6UNIo/cB/idfaoQ0S8FfkHEnxA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d7ee6f0e-0c3a-4a34-8062-5bda26de238c",
+                            SecurityStamp = "1f577229-7a12-4540-9d7c-ca1c7a674746",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         },
@@ -2238,131 +2243,141 @@ namespace Lab2.Infrastructure.Migrations
                         {
                             Id = 3,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bdd4accf-0213-4af6-a930-34835d10a236",
-                            Email = "Tevin.Marvin@gmail.com",
+                            ConcurrencyStamp = "c4ae39d5-977c-4eeb-b6fc-c981e2ccb008",
+                            Email = "Moshe.Willms@hotmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Arnold Bogan",
+                            Name = "Ashley Bogisich",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "c8666ba9-856e-4b04-8da8-4a8e568eb131",
                             TwoFactorEnabled = false,
-                            UserName = "Tevin.Marvin@gmail.com"
+                            UserName = "Moshe.Willms@hotmail.com"
                         },
                         new
                         {
                             Id = 4,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "95f108fc-4823-4af3-8059-8bb1d008c1c2",
-                            Email = "Ophelia_Kunde@hotmail.com",
+                            ConcurrencyStamp = "53638482-da9f-435a-864c-ec2e1f55523d",
+                            Email = "Susanna39@hotmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Norberto Murazik",
+                            Name = "Maymie Schuppe",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "bbc97412-29e8-4615-a496-8338770b8ee0",
                             TwoFactorEnabled = false,
-                            UserName = "Ophelia_Kunde@hotmail.com"
+                            UserName = "Susanna39@hotmail.com"
                         },
                         new
                         {
                             Id = 5,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c0883cae-7673-4727-9064-d3745d8a66d2",
-                            Email = "Kendra70@gmail.com",
+                            ConcurrencyStamp = "a63a7ea0-53ad-4164-b143-c2aba401aad1",
+                            Email = "Kolby.Tremblay49@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Cornell Koch",
+                            Name = "Mabel Jacobson",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "c00e9c2f-2c6c-4d67-9773-605b27c7167a",
                             TwoFactorEnabled = false,
-                            UserName = "Kendra70@gmail.com"
+                            UserName = "Kolby.Tremblay49@gmail.com"
                         },
                         new
                         {
                             Id = 6,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "769000b3-26c9-4a95-8e6c-071d8f395f13",
-                            Email = "Kareem_Zulauf@gmail.com",
+                            ConcurrencyStamp = "6c3accb5-5d2f-4ed5-a342-e673ea82ec77",
+                            Email = "Jovany68@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Molly Reilly",
+                            Name = "Casper Rodriguez",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "7ede1a1b-c2ad-4cd1-bbab-ca4339c7bf66",
                             TwoFactorEnabled = false,
-                            UserName = "Kareem_Zulauf@gmail.com"
+                            UserName = "Jovany68@gmail.com"
                         },
                         new
                         {
                             Id = 7,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9c28dec7-5a5e-4839-9bb1-90df5382fed3",
-                            Email = "Rowan.Stehr@yahoo.com",
+                            ConcurrencyStamp = "1546ee3c-cb73-4fde-8435-d08dfb0af35a",
+                            Email = "Ari_Effertz@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Elaina Beatty",
+                            Name = "Icie Moore",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "bcdfdbce-6f13-412e-b095-9e5578e3c152",
                             TwoFactorEnabled = false,
-                            UserName = "Rowan.Stehr@yahoo.com"
+                            UserName = "Ari_Effertz@gmail.com"
                         },
                         new
                         {
                             Id = 8,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c1cd6dc2-312a-4709-ae7d-2731177324f0",
-                            Email = "Rocio_Mills12@yahoo.com",
+                            ConcurrencyStamp = "f7bb7793-8adb-4cb9-9b3d-3e55a08f5d72",
+                            Email = "Ayana_Corkery@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Lina Lind",
+                            Name = "Yvette Feeney",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "5120e26c-7d4c-4d91-8bd4-b1ab4c515a7e",
                             TwoFactorEnabled = false,
-                            UserName = "Rocio_Mills12@yahoo.com"
+                            UserName = "Ayana_Corkery@gmail.com"
                         },
                         new
                         {
                             Id = 9,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "cf588190-c838-41ab-bb49-9c22cfb22b8a",
-                            Email = "Fanny.Koelpin@gmail.com",
+                            ConcurrencyStamp = "fda7635a-410d-4033-82aa-d45f66434a29",
+                            Email = "Annamarie.Frami40@yahoo.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Raleigh Barton",
+                            Name = "Buster Tromp",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "2e8ac2ec-d038-480d-8f31-8216492f9b44",
                             TwoFactorEnabled = false,
-                            UserName = "Fanny.Koelpin@gmail.com"
+                            UserName = "Annamarie.Frami40@yahoo.com"
                         },
                         new
                         {
                             Id = 10,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "97422762-ef05-42f8-b1e3-fd3647ce2a43",
-                            Email = "Maximillian_Kreiger@gmail.com",
+                            ConcurrencyStamp = "463de104-0491-404c-ae19-9b9c916212ee",
+                            Email = "Perry.Ruecker@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Hattie Runolfsson",
+                            Name = "Leland Kuphal",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "0cad77e2-bad9-4701-a29a-4b06e17a2010",
                             TwoFactorEnabled = false,
-                            UserName = "Maximillian_Kreiger@gmail.com"
+                            UserName = "Perry.Ruecker@gmail.com"
                         },
                         new
                         {
                             Id = 11,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "69602abb-86df-4eaa-80a3-efcbd5f4744a",
-                            Email = "Jennifer.Howell@yahoo.com",
+                            ConcurrencyStamp = "a8177100-caff-4ad4-8a44-19c6581351b1",
+                            Email = "Alfredo_Crist@gmail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Brandon Kessler",
+                            Name = "Magdalena Bartoletti",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "64a06b2a-a722-4e54-afaf-9dee9fe54824",
                             TwoFactorEnabled = false,
-                            UserName = "Jennifer.Howell@yahoo.com"
+                            UserName = "Alfredo_Crist@gmail.com"
                         },
                         new
                         {
                             Id = 12,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b4a6749b-9e90-4606-9286-c061bd3c2a14",
-                            Email = "Ethan3@hotmail.com",
+                            ConcurrencyStamp = "3d640efe-0dd9-423c-b74c-e6aef6af2eeb",
+                            Email = "Kimberly.Krajcik@yahoo.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "Pasquale Bartoletti",
+                            Name = "Meaghan Corwin",
                             PhoneNumberConfirmed = false,
+                            SecurityStamp = "550ea0f6-a4fb-4039-ba35-4e932877600e",
                             TwoFactorEnabled = false,
-                            UserName = "Ethan3@hotmail.com"
+                            UserName = "Kimberly.Krajcik@yahoo.com"
                         });
                 });
 

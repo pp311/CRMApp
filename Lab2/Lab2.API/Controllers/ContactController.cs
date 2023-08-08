@@ -1,7 +1,8 @@
+using Lab2.Application.Commons.Permissions;
 using Lab2.Application.DTOs.Contact;
 using Lab2.Application.DTOs.QueryParameters;
 using Lab2.Application.Interfaces;
-using Lab2.Application.Permissions;
+using Lab2.Commons.Attributes;
 using Lab2.Domain.Constant;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

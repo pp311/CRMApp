@@ -10,7 +10,7 @@ namespace Lab2.Infrastructure.Repositories
 {
     public class DealProductRepository : RepositoryBase<DealProduct>, IDealProductRepository
     {
-        public DealProductRepository(CRMDbContext context) : base(context)
+        public DealProductRepository(CrmDbContext context) : base(context)
         {
         }
 
