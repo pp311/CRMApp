@@ -23,6 +23,7 @@ public static class ApplicationServiceExtension
         services.AddScoped<ILeadService, LeadService>();
         services.AddScoped<IDealProductService, DealProductService>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IAuthService, AuthService>(); 
         
         services.AddScoped<ITokenService, TokenService>();

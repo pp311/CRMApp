@@ -2,13 +2,12 @@ using System.Security.Claims;
 using Lab2.Domain.Entities;
 using Lab2.Infrastructure.Identity;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Lab2.Infrastructure.Data;
 
-public class CRMDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
+public class CRMDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int>
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
     public CRMDbContext(DbContextOptions<CRMDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
@@ -20,6 +19,7 @@ public class CRMDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CRMDbContext).Assembly);
+        
         modelBuilder.AddSeedData();
         modelBuilder.AddIdentitySeedData();
     }

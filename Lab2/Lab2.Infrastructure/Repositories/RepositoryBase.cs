@@ -11,7 +11,7 @@ public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : 
 
     protected DbSet<TEntity> DbSet => _dbSet ??= _context.Set<TEntity>();
 
-    protected RepositoryBase(CRMDbContext context)
+    public RepositoryBase(CRMDbContext context)
     {
         _context = context;
     }

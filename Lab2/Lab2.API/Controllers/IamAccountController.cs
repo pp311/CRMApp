@@ -47,7 +47,6 @@ public class IamAccountController : ControllerBase
     }
     
     [HttpPut("{userId:int}")]
-    [Authorize(Policy = AuthPolicy.AdminOrOwner)]
     [HasPermission(PermissionPolicy.UserPermission.Edit)]
     public async Task<IActionResult> UpdateUser(int userId, [FromBody] UpdateUserDto dto)
     {
@@ -71,7 +70,6 @@ public class IamAccountController : ControllerBase
     }
     
     [HttpPost("{userId:int}/change-password")]
-    [Authorize(Policy = AuthPolicy.AdminOrOwner)]
     [HasPermission(PermissionPolicy.UserPermission.Edit)]
     public async Task<IActionResult> ChangePassword(int userId, [FromBody] ChangePasswordDto dto)
     {

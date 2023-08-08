@@ -5,10 +5,13 @@ using Lab2.Application.DTOs.Deal;
 using Lab2.Application.DTOs.DealProduct;
 using Lab2.Application.DTOs.Lead;
 using Lab2.Application.DTOs.Product;
+using Lab2.Application.DTOs.Role;
 using Lab2.Application.DTOs.User;
+using Lab2.Application.Permissions;
 using Lab2.Domain.DomainModels;
 using Lab2.Domain.Entities;
 using Lab2.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace Lab2.Infrastructure.MappingProfiles;
 
@@ -53,5 +56,12 @@ public class MappingProfile : Profile
             .ForMember(u => u.UserName, opt => opt.MapFrom(dto => dto.Email));
         CreateMap<CreateUserDto, User>();
         CreateMap<UpdateUserDto, User>();
+        
+        CreateMap<UpdateRoleDto, Role>()
+            .ForMember(r => r.Claims, opt => opt.MapFrom(dto => dto.Permissions.Select(p => new RoleClaim{ClaimType = CustomClaimTypes.Permission, ClaimValue = p})));
+        CreateMap<Role, GetRoleDto>()
+            .ForMember(dto => dto.Permissions, opt => opt.MapFrom(role => role.Claims.Select(p => p.ClaimValue)));
+        CreateMap<ApplicationRole, Role>().ReverseMap();
+        CreateMap<IdentityRoleClaim<int>, RoleClaim>().ReverseMap();
     }
 }

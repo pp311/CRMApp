@@ -2,6 +2,7 @@ using AutoMapper;
 using Lab2.Application.Interfaces;
 using Lab2.Domain.Entities;
 using Lab2.Domain.Enums.Sorting;
+using Lab2.Domain.Exceptions;
 using Lab2.Infrastructure.Specifications;
 using Lab2.Infrastructure.Specifications.User;
 using Microsoft.AspNetCore.Identity;
@@ -43,7 +44,7 @@ public class UserManagerService : IUserManagerService
         var createUserResult = await _userManager.CreateAsync(appUser, password);
         
         if (!createUserResult.Succeeded)
-            throw new Exception(createUserResult.Errors.First().Description);
+            throw new InvalidUpdateException(createUserResult.Errors.First().Description);
         
         return _mapper.Map<User>(appUser); 
     }
@@ -51,25 +52,25 @@ public class UserManagerService : IUserManagerService
     public async Task AddToRoleAsync(int userId, string role)
     {
         var appUser = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new Exception($"User with id {userId} not found");
+            ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         var addToRoleResult = await _userManager.AddToRoleAsync(appUser, role);
         
         if (!addToRoleResult.Succeeded)
-            throw new Exception(addToRoleResult.Errors.First().Description);
+            throw new InvalidUpdateException(addToRoleResult.Errors.First().Description);
     }
 
     public async Task<User> UpdateAsync(User user)
     {
         var appUser = await _userManager.FindByIdAsync(user.Id.ToString())
-            ?? throw new Exception($"User with id {user.Id} not found");
+            ?? throw new EntityNotFoundException($"User with id {user.Id} not found");
 
         _mapper.Map(user, appUser);
         
         var updateResult = await _userManager.UpdateAsync(appUser);
         
         if (!updateResult.Succeeded)
-            throw new Exception(updateResult.Errors.First().Description);
+            throw new InvalidUpdateException(updateResult.Errors.First().Description);
         
         return _mapper.Map<User>(appUser);
     }
@@ -77,18 +78,18 @@ public class UserManagerService : IUserManagerService
     public async Task DeleteAsync(int userId)
     {
         var appUser = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new Exception($"User with id {userId} not found");
+            ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         var deleteResult = await _userManager.DeleteAsync(appUser);
         
         if (!deleteResult.Succeeded)
-            throw new Exception(deleteResult.Errors.First().Description);
+            throw new InvalidUpdateException(deleteResult.Errors.First().Description);
     }
 
     public async Task<bool> CheckPasswordAsync(int userId, string password)
     {
         var appUser = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new Exception($"User with id {userId} not found");
+            ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         return await _userManager.CheckPasswordAsync(appUser, password);
     }
@@ -96,12 +97,12 @@ public class UserManagerService : IUserManagerService
     public async Task ChangePasswordAsync(int userId, string oldPassword, string newPassword)
     {
         var appUser = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new Exception($"User with id {userId} not found");
+            ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         var changePasswordResult = await _userManager.ChangePasswordAsync(appUser, oldPassword, newPassword);
         
         if (!changePasswordResult.Succeeded)
-            throw new Exception(changePasswordResult.Errors.First().Description);
+            throw new InvalidUpdateException(changePasswordResult.Errors.First().Description);
     }
 
     public async Task<User?> FindByRefreshTokenAsync(string refreshToken)
@@ -123,14 +124,14 @@ public class UserManagerService : IUserManagerService
     public async Task UpdateRefreshTokenAsync(int userId, string? refreshToken, DateTime? refreshTokenExpiresUtc)
     {
         var appUser = await _userManager.FindByIdAsync(userId.ToString())
-            ?? throw new Exception($"User with id {userId} not found");
+            ?? throw new EntityNotFoundException($"User with id {userId} not found");
         
         (appUser.RefreshToken, appUser.RefreshTokenLifetime) = (refreshToken, refreshTokenExpiresUtc);
         
         var updateResult = await _userManager.UpdateAsync(appUser);
         
         if (!updateResult.Succeeded)
-            throw new Exception(updateResult.Errors.First().Description);
+            throw new InvalidUpdateException(updateResult.Errors.First().Description);
     }
 
     public async Task<(IEnumerable<User> Items, int TotalCount)> GetUserPagedListAsync(string? search,

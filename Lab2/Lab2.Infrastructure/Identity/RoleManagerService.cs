@@ -1,6 +1,6 @@
-using System.Security.Claims;
+using AutoMapper;
 using Lab2.Application.Interfaces;
-using Lab2.Application.Permissions;
+using Lab2.Domain.Entities;
 using Lab2.Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -9,56 +9,50 @@ namespace Lab2.Infrastructure.Identity;
 
 public class RoleManagerService : IRoleManagerService
 {
-    private readonly RoleManager<IdentityRole<int>> _roleManager;
+    private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly IMapper _mapper;
     
-    public RoleManagerService(RoleManager<IdentityRole<int>> roleManager)
+    public RoleManagerService(RoleManager<ApplicationRole> roleManager, IMapper mapper)
     {
         _roleManager = roleManager;
+        _mapper = mapper;
     }
     
-    public async Task<IEnumerable<string?>> GetRolesAsync()
+    public async Task<IEnumerable<Role>> GetAllRolesWithPermissionsAsync()
     {
-        return await _roleManager.Roles.Select(x => x.Name).ToListAsync();
+        var roles = await _roleManager.Roles.AsNoTracking().Include(ar => ar.Claims).ToListAsync();
+        return _mapper.Map<List<Role>>(roles);
     }
 
-    public async Task<IEnumerable<string>> GetPermissionsByRoleAsync(string roleName)
+    public async Task<Role?> GetByIdAsync(int roleId)
     {
-        var role = await _roleManager.FindByNameAsync(roleName)
-                   ?? throw new EntityNotFoundException($"Role {roleName} not found");
-        
-        var claims = await _roleManager.GetClaimsAsync(role); 
-        return claims.Select(x => x.Value); 
+        var role = await _roleManager.Roles
+                        .Include(ar => ar.Claims)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(ar => ar.Id == roleId);
+        return _mapper.Map<Role>(role);
     }
 
-    public async Task CreateAsync(string roleName)
+    public async Task<Role?> GetByNameAsync(string roleName)
     {
-        if(await _roleManager.RoleExistsAsync(roleName))
-            throw new EntityAlreadyExistsException($"Role {roleName} already exists");
-        
-        await _roleManager.CreateAsync(new IdentityRole<int>(roleName));    
+        var role = await _roleManager.Roles
+                        .Include(ar => ar.Claims)
+                        .FirstOrDefaultAsync(ar => ar.Name == roleName);
+        return _mapper.Map<Role>(role);
     }
 
-    public async Task DeleteAsync(string roleName)
+    public async Task<Role> UpdateAsync(Role role)
     {
-        var role = await _roleManager.FindByNameAsync(roleName)
-                   ?? throw new EntityNotFoundException($"Role {roleName} not found");
+        var appRole = await _roleManager.Roles.Include(ar => ar.Claims).FirstOrDefaultAsync(ar => ar.Id == role.Id)
+                          ?? throw new EntityNotFoundException($"Role with id {role.Id} not found");
         
-        await _roleManager.DeleteAsync(role); 
-    }
-
-    public async Task AddPermissionToRoleAsync(string roleName, string permission)
-    {
-        var role = await _roleManager.FindByNameAsync(roleName)
-                   ?? throw new EntityNotFoundException($"Role {roleName} not found");
+        appRole.Name = role.Name;
+        appRole.Claims = _mapper.Map<List<IdentityRoleClaim<int>>>(role.Claims);
         
-        await _roleManager.AddClaimAsync(role, new Claim(CustomClaimTypes.Permission, permission));
-    }
-
-    public async Task RemovePermissionFromRoleAsync(string roleName, string permission)
-    {
-        var role = await _roleManager.FindByNameAsync(roleName)
-                   ?? throw new EntityNotFoundException($"Role {roleName} not found");
+        var result = await _roleManager.UpdateAsync(appRole);    
+        if(!result.Succeeded)
+            throw new InvalidUpdateException(result.Errors.First().Description);
         
-        await _roleManager.RemoveClaimAsync(role, new Claim(CustomClaimTypes.Permission, permission));
+        return _mapper.Map<Role>(appRole);
     }
 }

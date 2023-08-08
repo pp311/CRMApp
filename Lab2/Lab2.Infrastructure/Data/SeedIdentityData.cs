@@ -14,7 +14,7 @@ public static class SeedIdentityData
         var roles = GetDefaultRoles();
         foreach (var role in roles)
         {
-            modelBuilder.Entity<IdentityRole<int>>().HasData(role);
+            modelBuilder.Entity<ApplicationRole>().HasData(role);
         }
         
         var superAdmin = GetSuperAdmin();
@@ -59,9 +59,9 @@ public static class SeedIdentityData
         }
     }
 
-    private static List<IdentityRole<int>> GetDefaultRoles()
+    private static List<ApplicationRole> GetDefaultRoles()
     {
-        var roles = new List<IdentityRole<int>>
+        var roles = new List<ApplicationRole>
         {
             new() { Id = 1, Name = AppRole.SuperAdmin.ToString(), NormalizedName = AppRole.SuperAdmin.ToString().ToUpper() },
             new() { Id = 2, Name = AppRole.Admin.ToString(), NormalizedName = AppRole.Admin.ToString().ToUpper() },

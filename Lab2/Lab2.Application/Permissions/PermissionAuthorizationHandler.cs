@@ -15,14 +15,16 @@ public class PermissionAuthorizationHandler : AuthorizationHandler<PermissionReq
     protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                    PermissionRequirement requirement)
     {
-        var role = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+        var roleName = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
         
+        if (roleName == null)
+            return;
+        
+        var role = await _roleManager.GetByNameAsync(roleName);
         if (role == null)
             return;
         
-        var permissions = await _roleManager.GetPermissionsByRoleAsync(role);
-        Console.WriteLine(requirement.Permission);
-        if (permissions.Contains(requirement.Permission))
+        if (role.Claims.Select(c => c.ClaimValue).Contains(requirement.Permission))
             context.Succeed(requirement);
     }
 }

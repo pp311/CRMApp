@@ -22,6 +22,7 @@ public static class InfrastructureServiceExtension
         services.AddDbContext<CRMDbContext>(options =>
         {
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+            options.EnableSensitiveDataLogging();
         });
     }
 
@@ -34,6 +35,7 @@ public static class InfrastructureServiceExtension
         services.AddScoped<ILeadRepository, LeadRepository>();
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IDealProductRepository, DealProductRepository>();
+        services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
     }
 
     public static void ConfigureInfrastructureServices(this IServiceCollection services)
